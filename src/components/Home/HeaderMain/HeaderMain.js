@@ -1,0 +1,168 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../../../App';
+// import { useHistory } from 'react-router-dom';
+import header from '../../../images/Photos/header.png'
+
+const HeaderMain = () => {
+    // const history = useHistory();
+
+    // const handleLoginRoute = () => {
+
+    //     history.push("/student/allstudent");
+    // };
+    const [loggedInUser] = useContext(UserContext);
+    console.log(localStorage.getItem('admin'))
+    const [adminButton, setAdminButton] = useState(false);
+    const [studentButton, setStudentButton] = useState(false);
+    const [teacherButton, setTeacherButton] = useState(false);
+    // useEffect(() => {
+    //     if (localStorage.getItem("admin")) {
+    //         setAdminButton(localStorage.getItem("admin"));
+    //     }
+
+    // }, [])
+    function MyComponent1() {
+        useEffect(() => {
+            if (localStorage.getItem("studentAccess")) {
+                setStudentButton(localStorage.getItem("studentAccess"));
+            }
+
+        }, [])
+    }
+    function MyComponent2() {
+        useEffect(() => {
+            fetch('http://localhost:5000/isStudent', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ email: loggedInUser.email })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        setStudentButton(true);
+                    }
+                });
+        }, [])
+    }
+    if (localStorage.getItem("studentAccess")) {
+        MyComponent1();
+    }
+    else {
+        MyComponent2();
+    }
+    function MyComponent3() {
+        useEffect(() => {
+            if (localStorage.getItem("admin")) {
+                setAdminButton(localStorage.getItem("admin"));
+            }
+
+        }, [])
+    }
+    function MyComponent4() {
+        useEffect(() => {
+            fetch('http://localhost:5000/isAdmin', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ email: loggedInUser.email })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        setAdminButton(true);
+                    }
+                });
+        }, [])
+    }
+    if (localStorage.getItem("admin")) {
+        MyComponent3();
+    }
+    else {
+        MyComponent4();
+    }
+    function MyComponent5() {
+        useEffect(() => {
+            if (localStorage.getItem("teacherAccess")) {
+                setTeacherButton(localStorage.getItem("teacherAccess"));
+            }
+
+        }, [])
+    }
+    function MyComponent6() {
+        useEffect(() => {
+            fetch('http://localhost:5000/isTeacher', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ email: loggedInUser.email })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        fetch('http://localhost:5000/semesterById', {
+                            method: 'POST',
+                            headers: { 'content-type': 'application/json' },
+                            body: JSON.stringify({ id: data[0]._id })
+                        })
+                            .then(res => res.json())
+                            .then(result => {
+                                if (result.length > 0) {
+                                    setTeacherButton(true);
+                                }
+
+                            });
+
+                    }
+                });
+        }, [])
+    }
+    if (localStorage.getItem("teacherAccess")) {
+        MyComponent5();
+    }
+    else {
+        MyComponent6();
+    }
+    return (
+        <div className="">
+            <main style={{ height: 'auto' }} className="d-flex align-items-center">
+                <div className="col-md-4 offset-md-1 ">
+                    <div className="d-flex">
+
+                        <div class="title-bar "></div>
+                        <div className="app-title">
+                            <div className="animated infinite pulse">
+                                <h1 style={{ color: '#111430' }}><b>IST<br />Exam Management <br />System</b></h1>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <br />
+                    <br />
+                    <div style={{ display: teacherButton ? 'block' : 'none' }}>
+                        <Link to='/' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Teacher Dashboard</div></Link>
+
+                    </div>
+                    <div style={{ display: studentButton ? 'block' : 'none' }}>
+                        <Link to='/' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Student Dashboard</div></Link>
+
+                    </div>
+                    <div style={{ display: adminButton ? 'block' : 'none' }}>
+                        <Link to='/admin/allstudent' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Admin Dashboard</div></Link>
+
+                    </div>
+
+
+
+                </div>
+                <div className="col-md-6">
+                    <img src={header} alt="" className="img-fluid " />
+                </div>
+
+            </main >
+            <p style={{ marginTop: '9vh' }} className="text-center color-yellow"><small>Copyright Team BackbencherZz {(new Date()).getFullYear()} All Rights Reserved</small></p>
+        </div>
+    );
+};
+
+export default HeaderMain;

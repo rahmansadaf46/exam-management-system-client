@@ -1,0 +1,7 @@
+.profile-underline{
+    margin: 0 auto;
+    width: 235px;
+    height: 6px;
+    background-image: linear-gradient(30deg, #f1c54b, orange);
+    border-radius: 100px;
+}

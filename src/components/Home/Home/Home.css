@@ -1,0 +1,28 @@
+.header-container{
+    background-color:  #F0FFF0;
+}
+.color-yellow{
+  color: #FB9937;
+}
+.screen-body {
+    display: flex;
+}
+.screen-body-item {
+    flex: 1;
+    padding: 50px;
+}
+.screen-body-item.left {
+    display: flex;
+    flex-direction: column;
+  
+}
+.app-title {
+    padding-left: 25px;
+}
+.title-bar{
+    margin: auto 0;
+    width: 6px;
+    height: 150px ;
+    background-color: #F79B3D;
+    border-radius: 500px;
+}
