@@ -416,7 +416,7 @@ const CreateExam = () => {
     }
 
 
-    console.log(mcqQuestion, teacherData);
+    console.log(mcqQuestion, teacherData, assignmentCategory);
     return (
         <>
             {

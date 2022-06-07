@@ -1,52 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
 
 
 const Practice = () => {
-    const [semester, setSemester] = useState({});
-    const [category, setCategory] = useState('')
+    // const [semester, setSemester] = useState({});
+    // const [category, setCategory] = useState('')
     const [isTeacher, setIsTeacher] = useState(false);
-    const [mcqQuestion, setMcqQuestion] = useState([{
-        questionNumber: "",
-        questionName: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        answer4: "",
-        rightAnswer: ""
-    }]);
+    // const [mcqQuestion, setMcqQuestion] = useState([{
+    //     questionNumber: "",
+    //     questionName: "",
+    //     answer1: "",
+    //     answer2: "",
+    //     answer3: "",
+    //     answer4: "",
+    //     rightAnswer: ""
+    // }]);
 
     const [loading] = useState(false);
 
-    const { register, errors } = useForm();
+    // const { register, errors } = useForm();
     document.title = "Create Exam";
-    const onSubmit = data => {
-        console.log(data);
-        // if (data) {
-        //     setLoading(true);
-        // }
-        // // https://demo-0523.herokuapp.com/admin/addAdmin
-        // fetch('http://localhost:5000/addAdmin', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(data)
-        // })
-        //     .then(res => res.json())
-        //     .then(success => {
-        //         if (success) {
-        //             setLoading(false);
-        //             alert("Admin Added");
-        //             window.location.reload();
-        //         }
-        //     })
+    // const onSubmit = data => {
+    //     console.log(data);
+    //     // if (data) {
+    //     //     setLoading(true);
+    //     // }
+    //     // // https://demo-0523.herokuapp.com/admin/addAdmin
+    //     // fetch('http://localhost:5000/addAdmin', {
+    //     //     method: 'POST',
+    //     //     headers: { 'Content-Type': 'application/json' },
+    //     //     body: JSON.stringify(data)
+    //     // })
+    //     //     .then(res => res.json())
+    //     //     .then(success => {
+    //     //         if (success) {
+    //     //             setLoading(false);
+    //     //             alert("Admin Added");
+    //     //             window.location.reload();
+    //     //         }
+    //     //     })
 
-    }
+    // }
     useEffect(() => {
         setIsTeacher(JSON.parse(localStorage.getItem("teacherAccess")) || {});
-        setSemester(JSON.parse(localStorage.getItem("selectedSemester")) || {});
+        // setSemester(JSON.parse(localStorage.getItem("selectedSemester")) || {});
     }, [])
 
 
@@ -66,126 +66,126 @@ const Practice = () => {
 
     // }
 
-    let handleChangeMCQ = (i, e) => {
+    // let handleChangeMCQ = (i, e) => {
 
-        let newFormValues = [...mcqQuestion];
-        newFormValues[i][e.target.name] = e.target.value;
-        setMcqQuestion(newFormValues);
-    }
-
-
-
-
-    function MCQ(element, index) {
-        return <section className="mcq">
-            <div className="form-group  ">
-                <label for=""><b>Enter MCQ Question Name</b></label>
-                <input onChange={e => handleChangeMCQ(index, e)} value={element.questionName || ""} type="text" name="questionName" placeholder="Enter Question Name" className="form-control" />
-                {errors.name && <span className="">This field is required</span>}
-            </div>
-
-            <div className="form-group row mb-1 d-flex justify-content-center">
-                <div className="form-group col-6  ">
-                    <label for=""><b>Enter Answer 1</b></label>
-                    <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer1 || ""}
-                        placeholder="Enter Answer" name="answer1" className="form-control" />
-                    {errors.name && <span className="">This field is required</span>}
-                </div>
-                <div className="form-group col-6  ">
-                    <label for=""><b>Enter Answer 2</b></label>
-                    <div> <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer2 || ""} name="answer2" placeholder="Enter Answer" className="form-control" />
-                        {errors.name && <span className="">This field is required</span>}</div>
-                </div>
-            </div>
-
-            <div className="form-group row mb-1 d-flex justify-content-center">
-                <div className="form-group col-6  ">
-                    <label for=""><b>Enter Answer 3</b></label>
-                    <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer3 || ""} name="answer3" placeholder="Enter Answer" className="form-control" />
-                    {errors.name && <span className="">This field is required</span>}
-                </div>
-                <div className="form-group col-6  ">
-                    <label for=""><b>Enter Answer 4</b></label>
-                    <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer4 || ""} name="answer4" placeholder="Enter Answer" className="form-control" />
-                        {errors.name && <span className="">This field is required</span>}</div>
-                </div>
-            </div>
-            <div className="form-group row mb-1 d-flex justify-content-center">
-
-                <div className="form-group col-10  ">
-                    <label for=""><b>Enter Answer Right Answer</b></label>
-                    <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.rightAnswer || ""} name="rightAnswer" placeholder="Enter Answer" className="form-control" />
-                        {errors.name && <span className="">This field is required</span>}</div>
-                </div>
-            </div>
-        </section>;
-    }
-
-
-    function FillInTheBlank() {
-        return <section className="fill-in-the-blank">
-            <div className="form-group  ">
-                <label for=""><b>Enter Fill in the Blank Question Name</b></label>
-                <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Fill in the Blank Question Name" className="form-control" />
-                {errors.name && <span className="">This field is required</span>}
-            </div>
-
-            <div className="form-group  ">
-                <label for=""><b>Enter Blank Word</b></label>
-                <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Blank Word" className="form-control" />
-                {errors.name && <span className="">This field is required</span>}
-            </div>
-        </section>;
-    }
-
-    function McqCategory() {
-        return <div>
-            {mcqQuestion.map((element, index) => <MCQ element={element} index={index}></MCQ>)}
-
-            <FillInTheBlank></FillInTheBlank>
-        </div>
-    }
+    //     let newFormValues = [...mcqQuestion];
+    //     newFormValues[i][e.target.name] = e.target.value;
+    //     setMcqQuestion(newFormValues);
+    // }
 
 
 
-    function WrittenQuestion() {
-        return <div className="form-group">
-            <label for=""><b>Enter Question Name</b></label>
-            <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Question Name" className="form-control" />
-            {errors.name && <span className="text-danger">This field is required</span>}
 
-        </div>
-    }
+    // function MCQ(element, index) {
+    //     return <section className="mcq">
+    //         <div className="form-group  ">
+    //             <label for=""><b>Enter MCQ Question Name</b></label>
+    //             <input onChange={e => handleChangeMCQ(index, e)} value={element.questionName || ""} type="text" name="questionName" placeholder="Enter Question Name" className="form-control" />
+    //             {errors.name && <span className="">This field is required</span>}
+    //         </div>
 
-    function AssignmentQuestion() {
-        return <div className="form-group">
-            <label for=""><b>Enter Assignment Name</b></label>
-            <input type="text" ref={register({ required: true })} name="assignment" placeholder="Enter Assignment Name" className="form-control" />
-            {errors.name && <span className="text-danger">This field is required</span>}
+    //         <div className="form-group row mb-1 d-flex justify-content-center">
+    //             <div className="form-group col-6  ">
+    //                 <label for=""><b>Enter Answer 1</b></label>
+    //                 <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer1 || ""}
+    //                     placeholder="Enter Answer" name="answer1" className="form-control" />
+    //                 {errors.name && <span className="">This field is required</span>}
+    //             </div>
+    //             <div className="form-group col-6  ">
+    //                 <label for=""><b>Enter Answer 2</b></label>
+    //                 <div> <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer2 || ""} name="answer2" placeholder="Enter Answer" className="form-control" />
+    //                     {errors.name && <span className="">This field is required</span>}</div>
+    //             </div>
+    //         </div>
 
-        </div>
-    }
+    //         <div className="form-group row mb-1 d-flex justify-content-center">
+    //             <div className="form-group col-6  ">
+    //                 <label for=""><b>Enter Answer 3</b></label>
+    //                 <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer3 || ""} name="answer3" placeholder="Enter Answer" className="form-control" />
+    //                 {errors.name && <span className="">This field is required</span>}
+    //             </div>
+    //             <div className="form-group col-6  ">
+    //                 <label for=""><b>Enter Answer 4</b></label>
+    //                 <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.answer4 || ""} name="answer4" placeholder="Enter Answer" className="form-control" />
+    //                     {errors.name && <span className="">This field is required</span>}</div>
+    //             </div>
+    //         </div>
+    //         <div className="form-group row mb-1 d-flex justify-content-center">
 
-    const handleMCQ = (e) => {
-        const mcqQuestionList = {};
-        for (let x = 0; x < e.target.value; x++) {
-            mcqQuestionList[x] = {
-                questionNumber: x + 1,
-                questionName: "",
-                answer1: "",
-                answer2: "",
-                answer3: "",
-                answer4: "",
-                rightAnswer: ""
-            };
-        }
-        setMcqQuestion([mcqQuestionList])
-        console.log(mcqQuestionList);
-    }
+    //             <div className="form-group col-10  ">
+    //                 <label for=""><b>Enter Answer Right Answer</b></label>
+    //                 <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.rightAnswer || ""} name="rightAnswer" placeholder="Enter Answer" className="form-control" />
+    //                     {errors.name && <span className="">This field is required</span>}</div>
+    //             </div>
+    //         </div>
+    //     </section>;
+    // }
 
-    const handleFillInTheBlank = (e) => {
-        console.log(e.target.value);
-    }
+
+    // function FillInTheBlank() {
+    //     return <section className="fill-in-the-blank">
+    //         <div className="form-group  ">
+    //             <label for=""><b>Enter Fill in the Blank Question Name</b></label>
+    //             <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Fill in the Blank Question Name" className="form-control" />
+    //             {errors.name && <span className="">This field is required</span>}
+    //         </div>
+
+    //         <div className="form-group  ">
+    //             <label for=""><b>Enter Blank Word</b></label>
+    //             <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Blank Word" className="form-control" />
+    //             {errors.name && <span className="">This field is required</span>}
+    //         </div>
+    //     </section>;
+    // }
+
+    // function McqCategory() {
+    //     return <div>
+    //         {mcqQuestion.map((element, index) => <MCQ element={element} index={index}></MCQ>)}
+
+    //         <FillInTheBlank></FillInTheBlank>
+    //     </div>
+    // }
+
+
+
+    // function WrittenQuestion() {
+    //     return <div className="form-group">
+    //         <label for=""><b>Enter Question Name</b></label>
+    //         <input type="text" ref={register({ required: true })} name="question" placeholder="Enter Question Name" className="form-control" />
+    //         {errors.name && <span className="text-danger">This field is required</span>}
+
+    //     </div>
+    // }
+
+    // function AssignmentQuestion() {
+    //     return <div className="form-group">
+    //         <label for=""><b>Enter Assignment Name</b></label>
+    //         <input type="text" ref={register({ required: true })} name="assignment" placeholder="Enter Assignment Name" className="form-control" />
+    //         {errors.name && <span className="text-danger">This field is required</span>}
+
+    //     </div>
+    // }
+
+    // const handleMCQ = (e) => {
+    //     const mcqQuestionList = {};
+    //     for (let x = 0; x < e.target.value; x++) {
+    //         mcqQuestionList[x] = {
+    //             questionNumber: x + 1,
+    //             questionName: "",
+    //             answer1: "",
+    //             answer2: "",
+    //             answer3: "",
+    //             answer4: "",
+    //             rightAnswer: ""
+    //         };
+    //     }
+    //     setMcqQuestion([mcqQuestionList])
+    //     console.log(mcqQuestionList);
+    // }
+
+    // const handleFillInTheBlank = (e) => {
+    //     console.log(e.target.value);
+    // }
 
     const [formValues, setFormValues] = useState([{ name: "", email: "" }])
 
