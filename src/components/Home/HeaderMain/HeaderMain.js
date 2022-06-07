@@ -121,6 +121,7 @@ const HeaderMain = () => {
     else {
         MyComponent6();
     }
+    console.log(adminButton);
     return (
         <div className="">
             <main style={{ height: 'auto' }} className="d-flex align-items-center">
@@ -130,7 +131,7 @@ const HeaderMain = () => {
                         <div class="title-bar "></div>
                         <div className="app-title">
                             <div className="animated infinite pulse">
-                                <h1 style={{ color: '#111430' }}><b>IST<br />Exam Management <br />System</b></h1>
+                                <h2 style={{ color: '#111430' }}><b><span style={{ color: 'orange' }}>IST</span><br />Online Exam  <br />Hall</b></h2>
 
                             </div>
 
@@ -140,14 +141,14 @@ const HeaderMain = () => {
                     <br />
                     <br />
                     <div style={{ display: teacherButton ? 'block' : 'none' }}>
-                        <Link to='/' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Teacher Dashboard</div></Link>
+                        <Link to='/department' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Teacher Dashboard</div></Link>
 
                     </div>
                     <div style={{ display: studentButton ? 'block' : 'none' }}>
                         <Link to='/' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Student Dashboard</div></Link>
 
                     </div>
-                    <div style={{ display: adminButton ? 'block' : 'none' }}>
+                    <div style={{ display: adminButton === true ? 'block' : 'none' }}>
                         <Link to='/admin/allstudent' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Admin Dashboard</div></Link>
 
                     </div>

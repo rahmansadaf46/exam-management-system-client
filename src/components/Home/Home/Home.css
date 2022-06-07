@@ -1,28 +1,35 @@
-.header-container{
-    background-color:  #F0FFF0;
+.header-container {
+    background-color: #F0FFF0;
 }
-.color-yellow{
-  color: #FB9937;
+
+.color-yellow {
+    color: #FB9937;
 }
+
 .screen-body {
     display: flex;
 }
+
 .screen-body-item {
     flex: 1;
     padding: 50px;
 }
+
 .screen-body-item.left {
     display: flex;
     flex-direction: column;
-  
+
 }
-.app-title {
+
+.app-title h2 {
     padding-left: 25px;
+    font-size: 40px;
 }
-.title-bar{
+
+.title-bar {
     margin: auto 0;
     width: 6px;
-    height: 150px ;
+    height: 140px;
     background-color: #F79B3D;
     border-radius: 500px;
 }

@@ -11,3 +11,8 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.semester-header h2 {
+  color: #7537fb;
+  text-align: center;
+}

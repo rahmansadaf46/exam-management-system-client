@@ -29,7 +29,7 @@ const AllStudentsData = ({ students, department, dept }) => {
 
                                     <tr key={student._id} style={{ background: 'white' }}>
                                         <td >{index + 1}.</td>
-                                        <td className="avatar-img"><img className="avatar" src={`data:image/png;base64,${student.image.img}`} alt="avatar" /> </td>
+                                        <td className="avatar-img"><img className="avatar" src={`http://localhost:5000/student/${student.image}`} alt="avatar" /> </td>
                                         <td className="text-uppercase"><span className="mt-5">{student.name}</span></td>
                                         <td>{student.roll}</td>
                                         <td>{student.department}</td>

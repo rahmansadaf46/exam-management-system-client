@@ -68,7 +68,7 @@ const StudentProfile = () => {
                                         {
                                             student.name ? <div className="row pt-2 ">
                                                 <div className="col-md-5 pl-5 ml-5">
-                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={`data:image/png;base64,${student.image.img}`} alt="" />
+                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={`http://localhost:5000/student/${student.image}`} alt="" />
                                                     <h2 style={{ color: '#111430' }} className="text-uppercase text-center mt-3">{student.name}</h2>
                                                 </div>
                                                 <div className="col-md-6 mt-4">

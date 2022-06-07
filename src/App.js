@@ -19,6 +19,11 @@ import NoMatch from './components/NotAccess/NoMatch/NoMatch';
 import AddSession from './components/Admin/AddSession/AddSession';
 import AddTeacher from './components/Admin/AddTeacher/AddTeacher';
 import AddSemester from './components/Admin/AddSemester/AddSemester';
+import TeacherList from './components/Admin/TeacherList/TeacherList';
+import Semester from './components/Semester/Semester';
+import SemesterDashboard from './components/Teacher/SemesterDashboard/SemesterDashboard';
+import CreateExam from './components/Teacher/CreateExam/CreateExam';
+import Practice from './components/Teacher/Practice/Practice';
 
 export const UserContext = createContext();
 
@@ -44,11 +49,23 @@ function App() {
           <Route path="/login">
             <Login></Login>
           </Route>
+          <PrivateRoute path="/semester/:department">
+            <Semester></Semester>
+          </PrivateRoute>
           <PrivateRoute path="/department">
             <Department></Department>
           </PrivateRoute>
+          <PrivateRoute path="/semesterDashboard">
+            <SemesterDashboard></SemesterDashboard>
+          </PrivateRoute>
+          <PrivateRoute path="/createExam">
+            <CreateExam></CreateExam>
+          </PrivateRoute>
           <PrivateRoute path="/admin/allstudent">
             <StudentsInfo></StudentsInfo>
+          </PrivateRoute>
+          <PrivateRoute path="/admin/teacherList">
+            <TeacherList></TeacherList>
           </PrivateRoute>
           <PrivateRoute path="/admin/department/:department">
             <StudentByDepartment />
@@ -73,6 +90,9 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/admin/profile/:id">
             <StudentProfile></StudentProfile>
+          </PrivateRoute>
+          <PrivateRoute path="/practice">
+            <Practice></Practice>
           </PrivateRoute>
           <Route path="*">
             <NoMatch />
