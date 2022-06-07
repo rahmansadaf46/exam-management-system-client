@@ -56,7 +56,7 @@ const CreateExam = () => {
             }
             else if (mcqCategory === 'mcqFillInTheBlanks') {
 
-                if (data.questionQuantity > data.totalQuestion) {
+                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
                     window.alert("Please Enter Right Question Quantity");
                     validation = false;
                 }
@@ -80,7 +80,7 @@ const CreateExam = () => {
             }
             else if (mcqCategory === 'onlyMcq') {
 
-                if (data.questionQuantity > data.totalQuestion) {
+                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
                     window.alert("Please Enter Right Question Quantity");
                     validation = false;
                 }
@@ -104,7 +104,7 @@ const CreateExam = () => {
             }
             else if (mcqCategory === 'onlyFillInTheBlanks') {
 
-                if (data.questionQuantity > data.totalQuestion) {
+                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
                     window.alert("Please Enter Right Question Quantity");
                     validation = false;
                 }
@@ -126,16 +126,16 @@ const CreateExam = () => {
                 }
                 console.log(data.totalQuestion, data.questionQuantity)
             }
-            else {
-                if (data.questionQuantity > data.totalQuestion) {
-                    window.alert("Please Enter Right Question Quantity");
-                    validation = false;
-                }
-                else {
+            // else {
+            //     if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
+            //         window.alert("Please Enter Right Question Quantity");
+            //         validation = false;
+            //     }
+            //     else {
 
-                }
-                // console.log(data.totalQuestion, data.questionQuantity)
-            }
+            //     }
+            //     // console.log(data.totalQuestion, data.questionQuantity)
+            // }
             // console.log(mcqCategoryValue)
         }
         data.teacherName = teacherData[0].name;
@@ -238,9 +238,24 @@ const CreateExam = () => {
 
 
     let handleChangeMCQ = (i, e) => {
-        // console.log(i)
+        // console.log(e.target.name)
         let newFormValues = [...mcqQuestion];
         newFormValues[i][e.target.name] = e.target.value;
+        if (e.target.name === "rightAnswer") {
+            console.log(e.target.value)
+            if (e.target.value === 'answer1') {
+                newFormValues[i].rightAnswer = newFormValues[i].answer1;
+            }
+            if (e.target.value === 'answer2') {
+                newFormValues[i].rightAnswer = newFormValues[i].answer2;
+            }
+            if (e.target.value === 'answer3') {
+                newFormValues[i].rightAnswer = newFormValues[i].answer3;
+            }
+            if (e.target.value === 'answer4') {
+                newFormValues[i].rightAnswer = newFormValues[i].answer4;
+            }
+        }
         setMcqQuestion(newFormValues);
     }
 
@@ -248,6 +263,7 @@ const CreateExam = () => {
         // console.log(i)
         let newFormValues = [...fillInTheGapsQuestion];
         newFormValues[i][e.target.name] = e.target.value;
+        // newFormValues[i].rightAnswer = newFormValues[i].rightAnswer.toLowerCase();
         setFillInTheGapsQuestion(newFormValues);
     }
     let addFormFieldsFillInTheBlanks = () => {
@@ -400,7 +416,7 @@ const CreateExam = () => {
     }
 
 
-    console.log(semester, teacherData);
+    console.log(mcqQuestion, teacherData);
     return (
         <>
             {
