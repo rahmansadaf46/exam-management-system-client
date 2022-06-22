@@ -22,7 +22,7 @@ const AddSession = () => {
         }
         const session = yearSelected;
         data.department = currentDepartment;
-        data.session = `${session}-${session + 1}`
+        data.session = session;
         console.log(data)
         // https://demo-0523.herokuapp.com/admin/addAdmin
         fetch('http://localhost:5000/addSession', {
@@ -114,7 +114,7 @@ const AddSession = () => {
                                                         <YearPicker
                                                             // yearArray={['2019', '2020']}
                                                             value={yearSelected}
-                                                            onSelect={(e) => { setYear(e) }}
+                                                            onSelect={(e) => { setYear(`${e}-${e + 1}`) }}
                                                             hideInput={false}
                                                         //     activeIcon={src url}
                                                         // icon={src url}

@@ -6,30 +6,31 @@ import Sidebar from '../Sidebar/Sidebar';
 
 const AddDepartment = () => {
     const { register, handleSubmit, errors } = useForm();
-    const [file, setFile] = useState(null);
+    // const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     document.title = "Add Department";
 
 
 
-    const handleFileChange = (e) => {
-        const newFile = e.target.files[0];
-        setFile(newFile);
-    }
+    // const handleFileChange = (e) => {
+    //     const newFile = e.target.files[0];
+    //     setFile(newFile);
+    // }
 
 
     const onSubmit = data => {
         if (data) {
             setLoading(true);
         }
-        const formData = new FormData()
-        formData.append('file', file);
-        formData.append('department', data.department);
-
+        // const formData = new FormData()
+        // formData.append('file', file);
+        // formData.append('department', data.department);
+        console.log(data)
         fetch('http://localhost:5000/addDepartment', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(data => {
@@ -71,11 +72,11 @@ const AddDepartment = () => {
                                                             {errors.name && <span className="text-danger">This field is required</span>}
                                                         </div>
                                                     </div>
-                                                    <div className="form-group">
+                                                    {/* <div className="form-group">
                                                         <label for=""><b>Upload Image</b></label>
                                                         <br />
                                                         <input onChange={handleFileChange} type="file" id="exampleInputPassword1" placeholder="Picture" />
-                                                    </div>
+                                                    </div> */}
                                                     <button style={{ padding: '10px 40px', background: '#111430' }} type="submit" className="btn text-white">Submit</button>
                                                 </form>
                                             </div>

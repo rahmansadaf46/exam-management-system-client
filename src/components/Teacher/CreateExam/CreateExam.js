@@ -12,7 +12,7 @@ const CreateExam = () => {
     const [semester, setSemester] = useState({});
     const [category, setCategory] = useState('');
     const [mcqCategory, setMcqCategory] = useState('');
-    const [assignmentCategory, setAssignmentCategory] = useState('');
+    // const [assignmentCategory, setAssignmentCategory] = useState('');
     const [quantityView, setQuantityView] = useState(false);
     const [questionQuantity, setQuestionQuantity] = useState(0);
     const [isTeacher, setIsTeacher] = useState(false);
@@ -38,7 +38,42 @@ const CreateExam = () => {
         questionNumber: 1,
         questionName: "",
     }]);
-
+    const [assignmentData, setAssignmentData] = useState([{
+        assignmentDetails: "",
+        assignmentCategory: "",
+    }]);
+    const [vivaData, setVivaData] = useState([{
+        vivaDetails: "",
+        attendanceLink: "",
+        hostLink: "",
+    }]);
+    const setQuestionEmpty = () => {
+        setMcqQuestion([{
+            category: "mcq",
+            questionNumber: 1,
+            questionName: "",
+            answer1: "",
+            answer2: "",
+            answer3: "",
+            answer4: "",
+            rightAnswer: ""
+        }])
+        setFillInTheGapsQuestion([{
+            category: "fillInTheGaps",
+            questionNumber: 1,
+            questionName: "",
+            rightAnswer: ""
+        }])
+        setAssignmentData([{
+            assignmentDetails: "",
+            assignmentCategory: "",
+        }])
+        setVivaData([{
+            vivaDetails: "",
+            attendanceLink: "",
+            hostLink: "",
+        }])
+    }
     const [loading] = useState(false);
 
     const { register, handleSubmit, errors } = useForm();
@@ -47,9 +82,13 @@ const CreateExam = () => {
     const onSubmit = data => {
         let validation = true;
         let categoryValue = category;
-        if (categoryValue === 'mcq') {
+        console.log(categoryValue);
+        if (categoryValue === '') {
+            validation = false;
+            window.alert("Please enter Category");
+        }
 
-            // let mcqCategoryValue = mcqCategory;
+        else if (categoryValue === 'mcq') {
             if (mcqCategory === "") {
                 validation = false;
                 window.alert("Please enter MCQ Category");
@@ -70,13 +109,12 @@ const CreateExam = () => {
                         validation = false;
                     }
                     else {
-                        window.alert(' All question inserted')
-                        console.log(question, questionValues, valueChecking)
+
                         data.question = question;
+                        data.mcqCategory = mcqCategory;
                     }
 
                 }
-                // console.log(data.totalQuestion, data.questionQuantity)
             }
             else if (mcqCategory === 'onlyMcq') {
 
@@ -85,7 +123,6 @@ const CreateExam = () => {
                     validation = false;
                 }
                 else {
-                    // const question = mcqQuestion.concat(fillInTheGapsQuestion)
                     const question = mcqQuestion.map(data => Object.values(data));
                     const questionValues = Array.prototype.concat.apply([], question)
                     const valueChecking = questionValues.some(el => el === '');
@@ -94,13 +131,13 @@ const CreateExam = () => {
                         validation = false;
                     }
                     else {
-                        window.alert(' All question inserted')
-                        console.log(mcqQuestion, questionValues, valueChecking);
+
                         data.question = mcqQuestion;
+                        data.mcqCategory = mcqCategory;
                     }
 
                 }
-                console.log(data.totalQuestion, data.questionQuantity)
+                // console.log(data.totalQuestion, data.questionQuantity)
             }
             else if (mcqCategory === 'onlyFillInTheBlanks') {
 
@@ -118,25 +155,63 @@ const CreateExam = () => {
                         validation = false;
                     }
                     else {
-                        window.alert(' All question inserted')
-                        console.log(fillInTheGapsQuestion, questionValues, valueChecking)
+
+                        // console.log(fillInTheGapsQuestion, questionValues, valueChecking)
                         data.question = fillInTheGapsQuestion;
+                        data.mcqCategory = mcqCategory;
                     }
 
                 }
-                console.log(data.totalQuestion, data.questionQuantity)
+                // console.log(data.totalQuestion, data.questionQuantity)
             }
-            // else {
-            //     if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-            //         window.alert("Please Enter Right Question Quantity");
-            //         validation = false;
-            //     }
-            //     else {
+        }
+        else if (categoryValue === 'written') {
+            if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
+                window.alert("Please Enter Right Question Quantity");
+                validation = false;
+            }
+            else {
+                const question = writtenExamQuestion.map(data => Object.values(data));
+                const questionValues = Array.prototype.concat.apply([], question)
+                const valueChecking = questionValues.some(el => el === '');
+                if (valueChecking) {
+                    window.alert('Please insert all question');
+                    validation = false;
+                }
+                else {
 
-            //     }
-            //     // console.log(data.totalQuestion, data.questionQuantity)
-            // }
-            // console.log(mcqCategoryValue)
+                    data.question = writtenExamQuestion;
+                }
+            }
+        }
+        else if (categoryValue === 'assignment') {
+            const question = assignmentData.map(data => Object.values(data));
+            const questionValues = Array.prototype.concat.apply([], question)
+            const valueChecking = questionValues.some(el => el === '');
+            console.log(valueChecking)
+            if (valueChecking) {
+                window.alert('Please insert all data');
+                validation = false;
+            }
+            else {
+
+                data.question = assignmentData;
+            }
+        }
+        else if (categoryValue === 'viva') {
+            const question = vivaData.map(data => Object.values(data));
+            const questionValues = Array.prototype.concat.apply([], question)
+            const valueChecking = questionValues.some(el => el === '');
+            console.log(vivaData)
+            console.log(valueChecking)
+            if (valueChecking) {
+                window.alert('Please insert all data');
+                validation = false;
+            }
+            else {
+
+                data.question = vivaData;
+            }
         }
         data.teacherName = teacherData[0].name;
         data.email = teacherData[0].email;
@@ -144,25 +219,26 @@ const CreateExam = () => {
         console.log(validation)
         if (validation) {
             console.log(data);
+            fetch('http://localhost:5000/addQuestion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(success => {
+                    if (success) {
+                        // setLoading(false);
+                        alert("Exam Created Successfully");
+                        window.location.reload();
+                    }
+                })
+
         }
 
         // if (data) {
         //     setLoading(true);
         // }
         // // https://demo-0523.herokuapp.com/admin/addAdmin
-        // fetch('http://localhost:5000/addAdmin', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(data)
-        // })
-        //     .then(res => res.json())
-        //     .then(success => {
-        //         if (success) {
-        //             setLoading(false);
-        //             alert("Admin Added");
-        //             window.location.reload();
-        //         }
-        //     })
 
     }
     useEffect(() => {
@@ -171,8 +247,20 @@ const CreateExam = () => {
         setTeacherData(JSON.parse(localStorage.getItem("teacherData")) || []);
 
     }, [])
-
-
+    let handleChangeAssignment = (e) => {
+        // console.log(i)
+        let newFormValues = [...assignmentData];
+        newFormValues[0][e.target.name] = e.target.value;
+        // newFormValues[i].rightAnswer = newFormValues[i].rightAnswer.toLowerCase();
+        setAssignmentData(newFormValues);
+    }
+    let handleChangeViva = (e) => {
+        // console.log(i)
+        let newFormValues = [...vivaData];
+        newFormValues[0][e.target.name] = e.target.value;
+        // newFormValues[i].rightAnswer = newFormValues[i].rightAnswer.toLowerCase();
+        setVivaData(newFormValues);
+    }
     let handleChange = (e) => {
         // console.log(e)
         setCategory(e)
@@ -191,7 +279,7 @@ const CreateExam = () => {
             setQuantityView(false);
             setQuestionQuantity(0);
         }
-
+        setQuestionEmpty();
     }
     let handleChangeMCQCategory = (e) => {
         // console.log(e)
@@ -214,48 +302,20 @@ const CreateExam = () => {
         else {
             setQuestionQuantity(0);
         }
-        setMcqQuestion([{
-            category: "mcq",
-            questionNumber: 1,
-            questionName: "",
-            answer1: "",
-            answer2: "",
-            answer3: "",
-            answer4: "",
-            rightAnswer: ""
-        }])
-        setFillInTheGapsQuestion([{
-            category: "fillInTheGaps",
-            questionNumber: 1,
-            questionName: "",
-            rightAnswer: ""
-        }])
+        setQuestionEmpty();
     }
-    let handleChangeAssignmentCategory = (e) => {
-        // console.log(e)
-        setAssignmentCategory(e);
-    }
+
+    // let handleChangeAssignmentCategory = (e) => {
+    //     // console.log(e)
+    //     setAssignmentCategory(e);
+    // }
 
 
     let handleChangeMCQ = (i, e) => {
         // console.log(e.target.name)
         let newFormValues = [...mcqQuestion];
         newFormValues[i][e.target.name] = e.target.value;
-        if (e.target.name === "rightAnswer") {
-            console.log(e.target.value)
-            if (e.target.value === 'answer1') {
-                newFormValues[i].rightAnswer = newFormValues[i].answer1;
-            }
-            if (e.target.value === 'answer2') {
-                newFormValues[i].rightAnswer = newFormValues[i].answer2;
-            }
-            if (e.target.value === 'answer3') {
-                newFormValues[i].rightAnswer = newFormValues[i].answer3;
-            }
-            if (e.target.value === 'answer4') {
-                newFormValues[i].rightAnswer = newFormValues[i].answer4;
-            }
-        }
+
         setMcqQuestion(newFormValues);
     }
 
@@ -359,42 +419,6 @@ const CreateExam = () => {
 
 
 
-    function AssignmentQuestion() {
-        return <div className="form-group">
-            <label for=""><b>Enter Assignment Details</b></label>
-            <textarea type="text" ref={register({ required: true })} name="assignment" placeholder="Enter Assignment Details" className="form-control" />
-            {errors.name && <span className="text-danger">This field is required</span>}
-
-        </div>
-    }
-
-
-    function VivaQuestion(props) {
-        return <div>
-            <div style={{ fontSize: "20px" }} className="form-group text-center ">
-                <a className="text-success" target="blank" href="https://ist-online-viva.netlify.app/create">Generate a link</a>
-            </div>
-            <div className="form-group">
-                <label for=""><b>Enter Attendance Link</b></label>
-                <input type="text" ref={props.register({ required: true })} name="attendanceLink" placeholder="Enter Viva Details" className="form-control" />
-                {errors.name && <span className="text-danger">This field is required</span>}
-
-            </div>
-            <div className="form-group">
-                <label for=""><b>Enter Host Link</b></label>
-                <input type="text" ref={props.register({ required: true })} name="hostLink" placeholder="Enter Viva Details" className="form-control" />
-                {errors.name && <span className="text-danger">This field is required</span>}
-
-            </div>
-            <div className="form-group">
-                <label for=""><b>Enter Viva Details</b></label>
-                <textarea type="text" ref={props.register({ required: true })} name="vivaExam" placeholder="Enter Viva Details" className="form-control" />
-                {errors.name && <span className="text-danger">This field is required</span>}
-
-            </div>
-        </div>
-    }
-
     let addFormFields = () => {
         setMcqQuestion([...mcqQuestion, {
             category: 'mcq',
@@ -416,7 +440,7 @@ const CreateExam = () => {
     }
 
 
-    console.log(mcqQuestion, teacherData, assignmentCategory);
+    console.log(assignmentData, mcqQuestion);
     return (
         <>
             {
@@ -439,7 +463,7 @@ const CreateExam = () => {
                                                             <div className="form-group">
                                                                 <label for=""><b>Exam Name</b></label>
                                                                 <textarea type="text" ref={register({ required: true })} name="examName" placeholder="Enter Exam Name" className="form-control" />
-                                                                {errors.name && <span className="text-danger">This field is required</span>}
+                                                                {errors.examName && <span className="text-danger">This field is required</span>}
 
                                                             </div>
                                                             <div>
@@ -473,14 +497,14 @@ const CreateExam = () => {
                                                             <div className="row justify-content-center">
                                                                 <div className="form-group">
                                                                     <label for=""><b>Enter Start Time</b></label>
-                                                                    <input style={{ width: '95%' }} type="datetime-local" ref={register({ required: true })} name="time" className="form-control" />
-                                                                    {errors.name && <span className="text-danger">This field is required</span>}
+                                                                    <input style={{ width: '95%' }} type="datetime-local" min={new Date().toISOString().slice(0, -8)} ref={register({ required: true })} name="time" className="form-control" />
+                                                                    {errors.time && <span className="text-danger">This field is required</span>}
 
                                                                 </div>
                                                                 <div className="form-group">
                                                                     <label for=""><b>Enter Duration(In Minutes)</b></label>
                                                                     <input type="number" ref={register({ required: true })} name="duration" placeholder="Enter Duration" className="form-control" />
-                                                                    {errors.name && <span className="text-danger">This field is required</span>}
+                                                                    {errors.duration && <span className="text-danger">This field is required</span>}
 
                                                                 </div>
                                                             </div>
@@ -517,7 +541,7 @@ const CreateExam = () => {
                                                                     <div className="form-group">
                                                                         <label for=""><b>Enter The Quantity of Questions</b></label>
                                                                         <input type="text" ref={register({ required: true })} name="questionQuantity" placeholder="Enter Quantity" className="form-control" />
-                                                                        {errors.name && <span className="text-danger">This field is required</span>}
+                                                                        {errors.questionQuantity && <span className="text-danger">This field is required</span>}
 
                                                                     </div>
                                                                 </div>
@@ -525,7 +549,7 @@ const CreateExam = () => {
                                                                     <div className="form-group">
                                                                         <label for=""><b>Total Question</b></label>
                                                                         <input value={questionQuantity} type="text" ref={register({ required: true })} readOnly name="totalQuestion" placeholder="Total Question" className="form-control" />
-                                                                        {errors.name && <span className="text-danger">This field is required</span>}
+                                                                        {errors.totalQuestion && <span className="text-danger">This field is required</span>}
 
                                                                     </div>
                                                                 </div>
@@ -582,19 +606,46 @@ const CreateExam = () => {
                                                                         <div className="text-right">
                                                                             <button className="button add btn btn-dark btn-sm " type="button" onClick={() => addFormFieldsWrittenExam()}>Add Question</button>
                                                                         </div></>}
-                                                                    {category === 'assignment' && <AssignmentQuestion></AssignmentQuestion>}
-                                                                    {category === 'assignment' && <div className="form-group">
-                                                                        <label for=""><b>Select Assignment Category</b></label>
-                                                                        <select
-                                                                            onChange={(event) => handleChangeAssignmentCategory(event.target.value)}
-                                                                            // value={currentDepartment} 
-                                                                            className="form-control">
-                                                                            <option value="">Select Assignment Category</option>
-                                                                            <option value="file">File Submission</option>
-                                                                            <option value="link">Link Submission</option>
-                                                                        </select>
+                                                                    {category === 'assignment' && <><div className="form-group">
+                                                                        <label for=""><b>Enter Assignment Details</b></label>
+                                                                        <textarea type="text" value={assignmentData[0].assignmentDetails || ""} onChange={e => handleChangeAssignment(e)} name="assignmentDetails" placeholder="Enter Assignment Details" className="form-control" />
+                                                                        {errors.name && <span className="text-danger">This field is required</span>}
+
+                                                                    </div><div className="form-group">
+                                                                            <label for="assignmentCategory"><b>Select Assignment Category</b></label>
+                                                                            <select
+                                                                                onChange={(event) => handleChangeAssignment(event)}
+                                                                                value={assignmentData[0].assignmentCategory || ""}
+                                                                                name="assignmentCategory"
+                                                                                className="form-control">
+                                                                                <option value="">Select Assignment Category</option>
+                                                                                <option value="File Submission">File Submission</option>
+                                                                                <option value="Link Submission">Link Submission</option>
+                                                                            </select>
+                                                                        </div></>}
+                                                                    {category === 'viva' && <div>
+                                                                        <div style={{ fontSize: "20px" }} className="form-group text-center ">
+                                                                            <a className="text-success" target="blank" href="https://ist-online-viva.netlify.app/create">Generate a link</a>
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label for=""><b>Enter Attendance Link</b></label>
+                                                                            <input type="text" value={vivaData[0].attendanceLink || ""} onChange={e => handleChangeViva(e)} name="attendanceLink" placeholder="Attendance Link" className="form-control" />
+                                                                            {errors.name && <span className="text-danger">This field is required</span>}
+
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label for=""><b>Enter Host Link</b></label>
+                                                                            <input type="text" value={vivaData[0].hostLink || ""} onChange={e => handleChangeViva(e)} name="hostLink" placeholder="Viva Link" className="form-control" />
+                                                                            {errors.name && <span className="text-danger">This field is required</span>}
+
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label for=""><b>Enter Viva Details</b></label>
+                                                                            <textarea type="text" value={vivaData[0].vivaDetails || ""} onChange={e => handleChangeViva(e)} name="vivaDetails" placeholder="Enter Viva Details" className="form-control" />
+                                                                            {errors.name && <span className="text-danger">This field is required</span>}
+
+                                                                        </div>
                                                                     </div>}
-                                                                    {category === 'viva' && <VivaQuestion register={register}></VivaQuestion>}
 
 
 

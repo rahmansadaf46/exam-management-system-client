@@ -57,6 +57,12 @@ const TeacherSidebar = () => {
 
                 </li>
                 <li>
+                    <Link style={{ textDecoration: 'none' }} to="/questionList" className="">
+                        <span><FontAwesomeIcon icon={faBars} /> Question List</span>
+                    </Link>
+
+                </li>
+                <li>
                     <Link style={{ textDecoration: 'none' }} to="/department" className="">
                         <span><FontAwesomeIcon icon={faBars} /> Department List</span>
                     </Link>

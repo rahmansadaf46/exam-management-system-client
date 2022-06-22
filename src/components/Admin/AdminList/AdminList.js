@@ -5,12 +5,11 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import { UserContext } from '../../../App';
-import AllTeachersData from '../AllTeachersData/AllTeachersData';
 
-const TeacherList = () => {
+const AdminList = () => {
     // const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
-    const [teachers, setTeachers] = useState([]);
+    const [admin, setAdmin] = useState([]);
     // const [teacherNF, setTeacherNF] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -19,7 +18,7 @@ const TeacherList = () => {
 
 
     // const onSubmit = data => {
-    //     setTeachers([]);
+    //     setAdmin([]);
     //     // fetch('http://localhost:5000/studentsByRoll?roll=' + data.Roll)
     //     fetch('http://localhost:5000/studentsByRoll', {
     //         method: 'POST',
@@ -34,7 +33,7 @@ const TeacherList = () => {
     //             if (roll.length > 0) {
     //                 setRollNF(false);
     //             }
-    //             setTeachers(roll);
+    //             setAdmin(roll);
     //         })
     //         .catch(error => {
     //             console.error(error)
@@ -44,15 +43,15 @@ const TeacherList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/teachers')
+        fetch('http://localhost:5000/adminList')
             .then(res => res.json())
             .then(data => {
                 // if (data) {
                 //     localStorage.setItem('teacherList', JSON.stringify(data));
 
                 // }
-                // console.log(data);
-                setTeachers(data);
+                console.log(data);
+                setAdmin(data);
             })
     }, [])
 
@@ -82,6 +81,26 @@ const TeacherList = () => {
     else {
         MyComponent4();
     }
+
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete?')) {
+
+            fetch(`http://localhost:5000/deleteAdmin/${id}`, {
+                method: 'DELETE'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    // localStorage.removeItem("student");
+                    alert('Admin Deleted')
+                    if (result) {
+                        window.location.reload();
+                        // history.goBack()
+                    }
+
+                })
+        }
+
+    }
     return (
         <>
             {
@@ -105,11 +124,49 @@ const TeacherList = () => {
                                             </div>
                                         </form>
                                     </div> */}
+                                    <h3 className="text-center text-warning">Admin List</h3>
                                     <br />
                                     <br />
-                                    <div >
-                                        <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>
-                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>} */}
+
+                                    <div className="d-flex justify-content-center" >
+                                        <div className='w-50'>
+
+                                            {
+                                                admin.length === 0 ? <img className="rounded mx-auto d-block " style={{ width: '30%', height: '30%' }} src="https://cdn.lowgif.com/small/745b4d14b1057edd-ajax-loading-gif-11-gif-images-download.gif" alt="" />
+                                                    : <table className="table table-borderless">
+                                                        <thead style={{ background: '#FB9937', }}>
+                                                            <tr>
+                                                                <th className="text-black text-left" scope="col">Sr No.</th>
+                                                                <th className="text-black" scope="col">Email</th>
+                                                                <th className="text-black" scope="col"></th>
+                                                            </tr>
+                                                        </thead>
+
+
+                                                        <tbody >
+
+                                                            {
+                                                                admin.map((data, index) =>
+
+                                                                    <tr key={data._id} style={{ background: 'white' }}>
+                                                                        <td >{index + 1}.</td>
+
+                                                                        <td className=""><span className="mt-5">{data.email}</span></td>
+                                                                        <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data._id)} className="btn btn-danger btn-sm">Remove</button></td>
+                                                                    </tr>
+                                                                )
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+                                            }
+
+
+
+                                        </div>
+                                        {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
+                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
 
                                     </div>
                                 </div>
@@ -122,4 +179,4 @@ const TeacherList = () => {
     );
 };
 
-export default TeacherList;
+export default AdminList;

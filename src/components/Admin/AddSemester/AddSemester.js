@@ -119,40 +119,40 @@ const AddSemester = () => {
                 // }
                 // setDept(data)
             })
-        fetch('http://localhost:5000/semesterById', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ id: "62853a74a4e3964754f770f1" })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.length > 0) {
-                    console.log(data)
-                }
+        // fetch('http://localhost:5000/semesterById', {
+        //     method: 'POST',
+        //     headers: { 'content-type': 'application/json' },
+        //     body: JSON.stringify({ id: "62853a74a4e3964754f770f1" })
+        // })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         if (data.length > 0) {
+        //             console.log(data)
+        //         }
 
-            });
-        fetch('http://localhost:5000/isTeacher', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: "darklordvampz@gmail.com" })
-        })
-            .then(res => res.json())
-            .then(data => {
-                // console.log(data)
-                // localStorage.setItem('admin', JSON.stringify(data));
-                // setIsAdmin(data);
-            });
-        fetch('http://localhost:5000/isStudent', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: "rahmansadaf46@gmail.com" })
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-                // localStorage.setItem('admin', JSON.stringify(data));
-                // setIsAdmin(data);
-            });
+        //     });
+        // fetch('http://localhost:5000/isTeacher', {
+        //     method: 'POST',
+        //     headers: { 'content-type': 'application/json' },
+        //     body: JSON.stringify({ email: "darklordvampz@gmail.com" })
+        // })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         // console.log(data)
+        //         // localStorage.setItem('admin', JSON.stringify(data));
+        //         // setIsAdmin(data);
+        //     });
+        // fetch('http://localhost:5000/isStudent', {
+        //     method: 'POST',
+        //     headers: { 'content-type': 'application/json' },
+        //     body: JSON.stringify({ email: "rahmansadaf46@gmail.com" })
+        // })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data)
+        //         // localStorage.setItem('admin', JSON.stringify(data));
+        //         // setIsAdmin(data);
+        //     });
 
     }, [])
     const customStyles = {

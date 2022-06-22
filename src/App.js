@@ -24,6 +24,12 @@ import Semester from './components/Semester/Semester';
 import SemesterDashboard from './components/Teacher/SemesterDashboard/SemesterDashboard';
 import CreateExam from './components/Teacher/CreateExam/CreateExam';
 import Practice from './components/Teacher/Practice/Practice';
+import QuestionList from './components/Teacher/QuestionList/QuestionList';
+import QuestionProfile from './components/Teacher/QuestionProfile/QuestionProfile';
+import AllSemester from './components/Admin/AllSemester/AllSemester';
+import SemesterDetails from './components/Admin/SemesterDetails/SemesterDetails';
+import DepartmentList from './components/Admin/DepartmentList/DepartmentList';
+import AdminList from './components/Admin/AdminList/AdminList';
 
 export const UserContext = createContext();
 
@@ -55,6 +61,12 @@ function App() {
           <PrivateRoute path="/department">
             <Department></Department>
           </PrivateRoute>
+          <PrivateRoute path="/admin/departmentList">
+            <DepartmentList></DepartmentList>
+          </PrivateRoute>
+          <PrivateRoute path="/admin/adminList">
+            <AdminList></AdminList>
+          </PrivateRoute>
           <PrivateRoute path="/semesterDashboard">
             <SemesterDashboard></SemesterDashboard>
           </PrivateRoute>
@@ -66,6 +78,12 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/admin/teacherList">
             <TeacherList></TeacherList>
+          </PrivateRoute>
+          <PrivateRoute path="/admin/semesterList">
+            <AllSemester></AllSemester>
+          </PrivateRoute>
+          <PrivateRoute path="/semesterProfile/:id">
+            <SemesterDetails></SemesterDetails>
           </PrivateRoute>
           <PrivateRoute path="/admin/department/:department">
             <StudentByDepartment />
@@ -93,6 +111,12 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/practice">
             <Practice></Practice>
+          </PrivateRoute>
+          <PrivateRoute path="/questionList">
+            <QuestionList></QuestionList>
+          </PrivateRoute>
+          <PrivateRoute path="/question/:id">
+            <QuestionProfile></QuestionProfile>
           </PrivateRoute>
           <Route path="*">
             <NoMatch />

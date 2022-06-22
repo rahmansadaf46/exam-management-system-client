@@ -5,12 +5,11 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import { UserContext } from '../../../App';
-import AllTeachersData from '../AllTeachersData/AllTeachersData';
 
-const TeacherList = () => {
+const DepartmentList = () => {
     // const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
-    const [teachers, setTeachers] = useState([]);
+    const [department, setDepartment] = useState([]);
     // const [teacherNF, setTeacherNF] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -19,7 +18,7 @@ const TeacherList = () => {
 
 
     // const onSubmit = data => {
-    //     setTeachers([]);
+    //     setDepartment([]);
     //     // fetch('http://localhost:5000/studentsByRoll?roll=' + data.Roll)
     //     fetch('http://localhost:5000/studentsByRoll', {
     //         method: 'POST',
@@ -34,7 +33,7 @@ const TeacherList = () => {
     //             if (roll.length > 0) {
     //                 setRollNF(false);
     //             }
-    //             setTeachers(roll);
+    //             setDepartment(roll);
     //         })
     //         .catch(error => {
     //             console.error(error)
@@ -44,15 +43,15 @@ const TeacherList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/teachers')
+        fetch('http://localhost:5000/departments')
             .then(res => res.json())
             .then(data => {
                 // if (data) {
                 //     localStorage.setItem('teacherList', JSON.stringify(data));
 
                 // }
-                // console.log(data);
-                setTeachers(data);
+                console.log(data);
+                setDepartment(data);
             })
     }, [])
 
@@ -105,11 +104,49 @@ const TeacherList = () => {
                                             </div>
                                         </form>
                                     </div> */}
+                                    <h3 className="text-center text-warning">Department List</h3>
                                     <br />
                                     <br />
-                                    <div >
-                                        <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>
-                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>} */}
+
+                                    <div className="d-flex justify-content-center" >
+                                        <div className='w-25'>
+
+                                            {
+                                                department.length === 0 ? <img className="rounded mx-auto d-block " style={{ width: '30%', height: '30%' }} src="https://cdn.lowgif.com/small/745b4d14b1057edd-ajax-loading-gif-11-gif-images-download.gif" alt="" />
+                                                    : <table className="table table-borderless">
+                                                        <thead style={{ background: '#FB9937', }}>
+                                                            <tr>
+                                                                <th className="text-black text-left" scope="col">Sr No.</th>
+                                                                <th className="text-black" scope="col">Department Name</th>
+
+                                                            </tr>
+                                                        </thead>
+
+
+                                                        <tbody >
+
+                                                            {
+                                                                department.map((data, index) =>
+
+                                                                    <tr key={data._id} style={{ background: 'white' }}>
+                                                                        <td >{index + 1}.</td>
+
+                                                                        <td className="text-uppercase"><span className="mt-5">{data.department}</span></td>
+
+                                                                    </tr>
+                                                                )
+                                                            }
+
+                                                        </tbody>
+
+                                                    </table>
+                                            }
+
+
+
+                                        </div>
+                                        {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
+                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
 
                                     </div>
                                 </div>
@@ -122,4 +159,4 @@ const TeacherList = () => {
     );
 };
 
-export default TeacherList;
+export default DepartmentList;
