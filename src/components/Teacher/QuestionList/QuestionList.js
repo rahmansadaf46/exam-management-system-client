@@ -31,7 +31,7 @@ const QuestionList = () => {
 
                 const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
                 console.log(filterResult)
-                setQuestionList(filterResult);
+                setQuestionList(filterResult.reverse());
 
             });
     }, [])
@@ -45,7 +45,7 @@ const QuestionList = () => {
         },
         {
             name: 'Category',
-            selector: row => row.category,
+            selector: row => <span >{row.category === 'mcq' ? <><span className='text-uppercase'>{row.category}</span> ({row.mcqCategory === 'mcqFillInTheBlanks'?<>MCQ and Fill in the Blanks</>:row.mcqCategory === 'onlyFillInTheBlanks'?<>Only Fill in the Blanks</>:<>Only MCQ</>})</> : <><span className='text-uppercase'>{row.category}</span></>}</span>,
         },
         {
             name: 'Action',
@@ -79,7 +79,27 @@ const QuestionList = () => {
     //         year: '1984',
     //     },
     // ]
-
+    const customStyles = {
+        rows: {
+            style: {
+                minHeight: "32px",
+            },
+        },
+        headCells: {
+            style: {
+                fontSize: "18px",
+                color: '#fff',
+                // fontWeight: "bold",
+                backgroundColor: '#FB9937',
+            },
+        },
+        cells: {
+            style: {
+                fontSize: "15px",
+                padding: "15px 20px",
+            },
+        },
+    };
     return (
         <>
             {
@@ -93,12 +113,16 @@ const QuestionList = () => {
                             <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-4">
                                 <div className=" ">
                                     <div className="semester-header"><h2>Question List</h2></div>
-                                    <div className="container mx-5 px-5 mt-5">
+                                    <div className="container mx-5 px-5 mt-5 mb-5">
                                         <DataTable
                                             columns={columns}
                                             data={questionList}
                                             pagination
-
+                                            striped
+                                            highlightOnHover
+                                            customStyles={customStyles}
+                                            progressPending={questionList.length === 0}
+                                            paginationRowsPerPageOptions={[5, 10, 15]}
                                         />
                                     </div>
                                 </div>

@@ -30,6 +30,8 @@ import AllSemester from './components/Admin/AllSemester/AllSemester';
 import SemesterDetails from './components/Admin/SemesterDetails/SemesterDetails';
 import DepartmentList from './components/Admin/DepartmentList/DepartmentList';
 import AdminList from './components/Admin/AdminList/AdminList';
+import UpdateQuestion from './components/Teacher/UpdateQuestion/UpdateQuestion';
+import TeacherProfile from './components/Admin/TeacherProfile/TeacherProfile';
 
 export const UserContext = createContext();
 
@@ -73,6 +75,9 @@ function App() {
           <PrivateRoute path="/createExam">
             <CreateExam></CreateExam>
           </PrivateRoute>
+          <PrivateRoute path="/updateQuestion/:id">
+            <UpdateQuestion></UpdateQuestion>
+          </PrivateRoute>
           <PrivateRoute path="/admin/allstudent">
             <StudentsInfo></StudentsInfo>
           </PrivateRoute>
@@ -90,6 +95,9 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/admin/addTeacher">
             <AddTeacher />
+          </PrivateRoute>
+          <PrivateRoute path="/admin/teacher/:id">
+            <TeacherProfile></TeacherProfile>
           </PrivateRoute>
           <PrivateRoute path="/admin/enrollment">
             <EnrollStudent />

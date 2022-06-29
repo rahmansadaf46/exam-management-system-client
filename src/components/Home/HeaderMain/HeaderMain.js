@@ -54,7 +54,7 @@ const HeaderMain = () => {
     function MyComponent3() {
         useEffect(() => {
             if (localStorage.getItem("admin")) {
-                setAdminButton(localStorage.getItem("admin"));
+                setAdminButton(true);
             }
 
         }, [])

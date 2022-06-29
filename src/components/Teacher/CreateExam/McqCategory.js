@@ -54,7 +54,7 @@ const McqCategory = ({ index, element, handleChangeMCQ, removeFormFields }) => {
                         <label for=""><b>Enter Right Answer</b></label>
                         <div> <select
                             onChange={(event) => handleChangeMCQ(index, event)}
-                            // value={currentDepartment}
+                            value={element.rightAnswer}
                             name="rightAnswer"
                             className="form-control">
                             <option value="">Select Right Answer</option>

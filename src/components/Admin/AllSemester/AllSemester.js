@@ -88,7 +88,7 @@ const AllSemester = () => {
         headCells: {
             style: {
                 fontSize: "18px",
-                color: '#fff',
+                color: 'black',
                 // fontWeight: "bold",
                 backgroundColor: '#FB9937',
             },
@@ -125,7 +125,7 @@ const AllSemester = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="container mx-5 px-5 mt-3">
+                                    <div className="container mx-5 px-5 mt-3 mb-5">
                                         <DataTable
                                             columns={columns}
                                             data={search(semesterList)}

@@ -5,7 +5,9 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import { UserContext } from '../../../App';
-import AllTeachersData from '../AllTeachersData/AllTeachersData';
+// import AllTeachersData from '../AllTeachersData/AllTeachersData';
+import DataTable from 'react-data-table-component';
+import { Link } from 'react-router-dom';
 
 const TeacherList = () => {
     // const { register, handleSubmit, errors } = useForm();
@@ -13,7 +15,7 @@ const TeacherList = () => {
     const [teachers, setTeachers] = useState([]);
     // const [teacherNF, setTeacherNF] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-
+    const [query, setQuery] = useState('')
     document.title = "All Teacher";
 
 
@@ -51,7 +53,7 @@ const TeacherList = () => {
                 //     localStorage.setItem('teacherList', JSON.stringify(data));
 
                 // }
-                // console.log(data);
+                console.log(data);
                 setTeachers(data);
             })
     }, [])
@@ -82,6 +84,95 @@ const TeacherList = () => {
     else {
         MyComponent4();
     }
+
+    const columns = [
+        {
+            name: 'Sr No.',
+            cell: (data, index) => (
+               <span>{index+1}.</span>
+            ),
+        },
+        {
+            name: '',
+            width:'50px',
+            cell: (data, index) => (
+                <><td className="avatar-img mr-4"><img className="avatar" src={`http://localhost:5000/teacher/${data.image}`} alt="avatar" /> </td>
+                 </>
+               
+             ),
+        },
+        {
+            name: 'Name',
+            cell: (data, index) => (
+                <>
+                 <td >{data.name}</td></>
+               
+             ),
+        },
+        {
+            name: 'Department',
+            selector: row => row.department,
+        },
+        {
+            name: 'Email',
+            width:'350px',
+            selector: row => row.email,
+        },
+        {
+            name: '',
+            cell: (data) => (
+                <div>
+                    <Link
+                        className="btn btn-sm btn-success m-1"
+                        to={`/admin/teacher/${data._id}`}
+                        onClick={() => {
+                            console.log(data._id);
+                        }}
+                    >
+                        See Details
+                    </Link>
+                    {" "}
+
+                </div>
+            ),
+        },
+    ];
+    const search = (rows) => {
+        if (rows) {
+            const columns = rows[0] && Object?.keys(rows[0]);
+            return rows?.filter((row) =>
+                columns?.some(
+                    (column) =>
+                        row[column]
+                            ?.toString()
+                            .toLowerCase()
+                            .indexOf(query?.toLowerCase()) > -1
+                )
+            )
+        }
+    }
+
+    const customStyles = {
+        rows: {
+            style: {
+                minHeight: "32px",
+            },
+        },
+        headCells: {
+            style: {
+                fontSize: "18px",
+                color: 'black',
+                // fontWeight: "bold",
+                backgroundColor: '#FB9937',
+            },
+        },
+        cells: {
+            style: {
+                fontSize: "15px",
+                padding: "15px 20px",
+            },
+        },
+    };
     return (
         <>
             {
@@ -93,6 +184,18 @@ const TeacherList = () => {
                                 <Sidebar></Sidebar>
                             </div>
                             <div style={{ backgroundColor: '#F4F7FC' }} className="col-md-10 pt-4 min-vh-100 ">
+                            <div className="container  form-inline  d-flex justify-content-end mt-3">
+                                        <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label>
+                                        <input
+                                            style={{ borderRadius: "100px" }}
+                                            className="form-control ml-2 p-1"
+                                            type="text"
+                                            value={query}
+                                            onChange={(e) => {
+                                                setQuery(e.target.value);
+                                            }}
+                                        />
+                                    </div>
                                 <div className="col-md-12">
                                     {/* <div className="pr-5">
                                         <form style={{ width: '300px', position: 'absolute', right: '0' }} className=" d-flex" onSubmit={handleSubmit(onSubmit)}>
@@ -106,9 +209,19 @@ const TeacherList = () => {
                                         </form>
                                     </div> */}
                                     <br />
-                                    <br />
-                                    <div >
-                                        <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>
+                                    <div  className='container'>
+                                    <DataTable
+                                            columns={columns}
+                                            data={search(teachers)}
+                                            pagination
+                                            defaultSortAsc={true}
+                                            striped
+                                            highlightOnHover
+                                            customStyles={customStyles}
+                                            progressPending={teachers.length === 0}
+                                            paginationRowsPerPageOptions={[5, 10, 15]}
+                                        />
+                                        {/* <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData> */}
                                         {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AllTeachersData key={teachers._id} teachers={teachers}></AllTeachersData>} */}
 
                                     </div>
