@@ -12,7 +12,7 @@ const HeaderMain = () => {
     //     history.push("/student/allstudent");
     // };
     const [loggedInUser] = useContext(UserContext);
-    console.log(localStorage.getItem('admin'))
+    // console.log(localStorage.getItem('admin'))
     const [adminButton, setAdminButton] = useState(false);
     const [studentButton, setStudentButton] = useState(false);
     const [teacherButton, setTeacherButton] = useState(false);
@@ -22,6 +22,41 @@ const HeaderMain = () => {
     //     }
 
     // }, [])
+    // const query =`  
+    // {
+    //     category {
+    //           products{ 
+    //       id
+    //         name
+    //         inStock
+    //         gallery
+    //         description
+    //         category
+    //         attributes{
+    //           id
+    //           name
+    //           type
+    //           items{
+    //             displayValue
+    //             value
+    //             id
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // `
+    // useEffect(()=>{
+    //     fetch('http://localhost:4000/', {
+    //             method: 'POST',
+    //             headers: { 'content-type': 'application/json' },
+    //             body: JSON.stringify({ query: query })
+    //         })
+    //             .then(res => res.json())
+    //             .then(data => {
+    //                 console.log(data);
+    //             });
+    // },[])
     function MyComponent1() {
         useEffect(() => {
             if (localStorage.getItem("studentAccess")) {
@@ -40,6 +75,18 @@ const HeaderMain = () => {
                 .then(res => res.json())
                 .then(data => {
                     if (data.length > 0) {
+                        console.log(data);
+                        // fetch(`http://localhost:5000/semester/${data}`)
+                        // .then(res => res.json())
+                        // .then(result => {
+                        //    console.log(result);
+                        // });
+                        fetch(`http://localhost:5000/semesterStudent/${data[0].session}/${data[0].department}`)
+                        .then(res => res.json())
+                        .then(result => {
+                           console.log(result);
+                           localStorage.setItem("semesterData", JSON.stringify(result));
+                        });
                         setStudentButton(true);
                     }
                 });
@@ -53,7 +100,7 @@ const HeaderMain = () => {
     }
     function MyComponent3() {
         useEffect(() => {
-            if (localStorage.getItem("admin")) {
+            if (JSON.parse(localStorage.getItem("admin")) === true) {
                 setAdminButton(true);
             }
 
@@ -121,7 +168,16 @@ const HeaderMain = () => {
     else {
         MyComponent6();
     }
-    console.log(adminButton);
+    // console.log(  );
+    // useEffect(() => {
+    //     const data = JSON.parse(localStorage.getItem('studentData'));
+    //     // console.log(data[0]);
+    //     fetch(`http://localhost:5000/semesterStudent/${data[0].session}/${data[0].department}`)
+    //                     .then(res => res.json())
+    //                     .then(result => {
+    //                        console.log(result);
+    //                     });
+    // }, [])
     return (
         <div className="">
             <main style={{ height: 'auto' }} className="d-flex align-items-center">
@@ -145,7 +201,7 @@ const HeaderMain = () => {
 
                     </div>
                     <div style={{ display: studentButton ? 'block' : 'none' }}>
-                        <Link to='/' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Student Dashboard</div></Link>
+                        <Link to='/studentDashboard' style={{ background: '#111430', padding: '10px' }} className="btn text-white"><div className="button-yellow">Student Dashboard</div></Link>
 
                     </div>
                     <div style={{ display: adminButton === true ? 'block' : 'none' }}>

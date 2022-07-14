@@ -32,6 +32,8 @@ import DepartmentList from './components/Admin/DepartmentList/DepartmentList';
 import AdminList from './components/Admin/AdminList/AdminList';
 import UpdateQuestion from './components/Teacher/UpdateQuestion/UpdateQuestion';
 import TeacherProfile from './components/Admin/TeacherProfile/TeacherProfile';
+import StudentDashboard from './components/Student/StudentDashboard/StudentDashboard';
+import Exam from './components/Student/Exam/Exam';
 
 export const UserContext = createContext();
 
@@ -125,6 +127,12 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/question/:id">
             <QuestionProfile></QuestionProfile>
+          </PrivateRoute>
+          <PrivateRoute path="/studentDashboard">
+            <StudentDashboard></StudentDashboard>
+          </PrivateRoute>
+          <PrivateRoute path="/exam">
+            <Exam></Exam>
           </PrivateRoute>
           <Route path="*">
             <NoMatch />
