@@ -51,9 +51,9 @@ const TeacherSidebar = () => {
 
                 </li>
                 <li>
-                    <Link style={{ textDecoration: 'none' }} to="/createExam" className="">
+                    <a style={{ textDecoration: 'none' }} href="/createExam"  className="">
                         <span><FontAwesomeIcon icon={faPlus} /> Create Exam</span>
-                    </Link>
+                    </a>
 
                 </li>
                 <li>

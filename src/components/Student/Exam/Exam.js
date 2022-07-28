@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 // import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import StudentHeader from '../StudentHeader/StudentHeader';
@@ -110,7 +111,7 @@ const Exam = () => {
                                                 <h5><span className="text-warning">Teacher:</span> {exam.teacherName}</h5>
                                                 <h5><span className="text-warning">Date:</span> {exam?.time?.split('T')[0]}</h5>
                                                 <h5><span className="text-warning">Start Time:</span> {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${exam?.time?.split('T')[1]?.split(':')[0] - 12}:${exam?.time?.split('T')[1]?.split(':')[1]}`) : (exam?.time?.split('T')[1])} {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5>
-                                                <a href="/exam" className="text-success">Start Exam</a>
+                                                <Link to={`examPage/${exam._id}`}className="text-success">Start Exam</Link>
                                             </div>
                                             )  
                                         }

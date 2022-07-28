@@ -118,15 +118,16 @@ const QuestionProfile = () => {
                                                 <h5><span className="text-warning">Start Time:</span> {question?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${question?.time?.split('T')[1]?.split(':')[0] - 12}:${question?.time?.split('T')[1]?.split(':')[1]}`) : (question?.time?.split('T')[1])} {question?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5>
                                                 <h5><span className="text-warning">End Time:</span> {question.endTime}</h5>
                                                 <h5><span className="text-warning">Duration:</span> {question.duration} min</h5>
+                                                <h5><span className="text-warning">Full Mark:</span> {question?.question.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0)}</h5>
                                                 <div>
                                                     {question?.category === 'mcq' || question?.category === 'written' ? <>
                                                         <h5><span className="text-warning">Total Question:</span> {question.totalQuestion} </h5>
-                                                        <h5><span className="text-warning">Question will be show:</span> {question.questionQuantity} </h5></> : <></>}
+                                                        </> : <></>}
                                                 </div>
                                             </div>
                                             <div>
                                                 
-                                            <Link class="btn btn-warning mr-3" to={`/updateQuestion/${question._id}`} type="submit">Update Details</Link>
+                                            <Link class="btn btn-warning mr-3" to={`/updateQuestion/${question._id}`} type="submit">Update Question</Link>
                                             {/* <UpdateQuestionDetails modalIsOpen={modalIsOpen} question={question} updateDetails={updateDetails(question)} closeModal={closeModal}></UpdateQuestionDetails> */}
                                                 <button onClick={() => handleDelete(question._id)} class="btn btn-danger" type="submit">Delete Question</button>
                                                 
@@ -142,10 +143,13 @@ const QuestionProfile = () => {
                                                         <h5 style={{color:'purple'}}>Answer 2: <span>{data.answer2}</span>{data.rightAnswer === 'answer2' && <span className="text-success"> (Right Answer)</span>}</h5>
                                                         <h5 style={{color:'purple'}}>Answer 3: <span>{data.answer3}</span>{data.rightAnswer === 'answer3' && <span className="text-success"> (Right Answer)</span>}</h5>
                                                         <h5 style={{color:'purple'}}>Answer 4: <span>{data.answer4}</span>{data.rightAnswer === 'answer4' && <span className="text-success"> (Right Answer)</span>}</h5>
+                                                        <h5  className="text-success">Mark: <span>{data.mark}</span></h5>
                                                     </div> : <div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor: '#FFFEE2', textAlign: 'center', padding: '10px' }}>
                                                         <h5 className="text-primary">Question Number: <span>{index + 1}</span></h5>
                                                         <h5 className="text-warning">Question Name: <span>{data.questionName}</span></h5>
-                                                        <h5 className="text-success">Right Answer: <span>{data.rightAnswer}</span></h5></div>}
+                                                        <h5 className="text-success">Right Answer: <span>{data.rightAnswer}</span></h5>
+                                                        <h5  className="text-success">Mark: <span>{data.mark}</span></h5>
+                                                        </div>}
 
                                                 </div>)}
 

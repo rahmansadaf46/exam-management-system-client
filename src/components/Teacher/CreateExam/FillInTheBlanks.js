@@ -34,6 +34,14 @@ const FillInTheBlanks = ({ index, element, handleChangeFillInTheGaps, removeForm
                             </div>
                         </div>
                     </div>
+                    <div className="form-group row mb-1 d-flex justify-content-center">
+
+                    <div className="form-group col-6  ">
+                        <label for=""><b>Enter Mark</b></label>
+                        <div>  <input type="text" onChange={e => handleChangeFillInTheGaps(index, e)} value={element.mark || ""} name="mark" placeholder="Enter Mark" className="form-control" />
+                        </div>
+                    </div>
+                </div>
                     <hr />
                 </section>
             </div>

@@ -30,10 +30,11 @@ import AllSemester from './components/Admin/AllSemester/AllSemester';
 import SemesterDetails from './components/Admin/SemesterDetails/SemesterDetails';
 import DepartmentList from './components/Admin/DepartmentList/DepartmentList';
 import AdminList from './components/Admin/AdminList/AdminList';
-import UpdateQuestion from './components/Teacher/UpdateQuestion/UpdateQuestion';
+// import UpdateQuestion from './components/Teacher/UpdateQuestion/UpdateQuestion';
 import TeacherProfile from './components/Admin/TeacherProfile/TeacherProfile';
 import StudentDashboard from './components/Student/StudentDashboard/StudentDashboard';
 import Exam from './components/Student/Exam/Exam';
+import ExamPage from './components/Student/ExamPage/ExamPage';
 
 export const UserContext = createContext();
 
@@ -78,7 +79,7 @@ function App() {
             <CreateExam></CreateExam>
           </PrivateRoute>
           <PrivateRoute path="/updateQuestion/:id">
-            <UpdateQuestion></UpdateQuestion>
+            <CreateExam></CreateExam>
           </PrivateRoute>
           <PrivateRoute path="/admin/allstudent">
             <StudentsInfo></StudentsInfo>
@@ -133,6 +134,9 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/exam">
             <Exam></Exam>
+          </PrivateRoute>
+          <PrivateRoute path="/examPage/:id">
+            <ExamPage></ExamPage>
           </PrivateRoute>
           <Route path="*">
             <NoMatch />

@@ -63,8 +63,14 @@ const McqCategory = ({ index, element, handleChangeMCQ, removeFormFields }) => {
                             <option value="answer3">Answer 3</option>
                             <option value="answer4">Answer 4</option>
                         </select></div>
-                        {/* <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.rightAnswer || ""} name="rightAnswer" placeholder="Enter Answer" className="form-control" />
-                        </div> */}
+                    </div>
+                </div>
+                <div className="form-group row mb-1 d-flex justify-content-center">
+
+                    <div className="form-group col-6  ">
+                        <label for=""><b>Enter Mark</b></label>
+                        <div>  <input type="text" onChange={e => handleChangeMCQ(index, e)} value={element.mark || ""} name="mark" placeholder="Enter Mark" className="form-control" />
+                        </div>
                     </div>
                 </div>
                 <hr />

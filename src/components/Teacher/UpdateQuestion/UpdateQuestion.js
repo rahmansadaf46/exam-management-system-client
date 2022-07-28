@@ -98,6 +98,8 @@ const UpdateQuestion = () => {
                 setQuestion(data);
                 setCategory(data.category)
                if(data.category === 'mcq'){
+                setQuestionQuantity(data.totalQuestion)
+                setQuantityView(true)
                 setMcqCategory(data.mcqCategory)
                 if(data.mcqCategory === 'mcqFillInTheBlanks'){
                    const filterMCQ = data.question.filter(el=>el.category==='mcq')
@@ -112,6 +114,8 @@ const UpdateQuestion = () => {
                     setFillInTheGapsQuestion(data?.question);
                 }
                } else if(data.category === "written"){
+                setQuestionQuantity(data.totalQuestion)
+                setQuantityView(true)
                 setWrittenExamQuestion(data?.question);
                }
                else if(data.category === "assignment"){
@@ -139,12 +143,7 @@ const UpdateQuestion = () => {
             }
             else if (mcqCategory === 'mcqFillInTheBlanks') {
 
-                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-                    window.alert("Please Enter Right Question Quantity");
-                    validation = false;
-                }
-                else {
-                    const question = mcqQuestion.concat(fillInTheGapsQuestion)
+                const question = mcqQuestion.concat(fillInTheGapsQuestion)
                     const found = question.map(data => Object.values(data));
                     const questionValues = Array.prototype.concat.apply([], found)
                     const valueChecking = questionValues.some(el => el === '');
@@ -157,75 +156,53 @@ const UpdateQuestion = () => {
                         data.question = question;
                         data.mcqCategory = mcqCategory;
                     }
-
-                }
             }
             else if (mcqCategory === 'onlyMcq') {
 
-                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-                    window.alert("Please Enter Right Question Quantity");
+                const question = mcqQuestion.map(data => Object.values(data));
+                const questionValues = Array.prototype.concat.apply([], question)
+                const valueChecking = questionValues.some(el => el === '');
+                if (valueChecking) {
+                    window.alert('Please insert all question answer');
                     validation = false;
                 }
                 else {
-                    const question = mcqQuestion.map(data => Object.values(data));
-                    const questionValues = Array.prototype.concat.apply([], question)
-                    const valueChecking = questionValues.some(el => el === '');
-                    if (valueChecking) {
-                        window.alert('Please insert all question answer');
-                        validation = false;
-                    }
-                    else {
 
-                        data.question = mcqQuestion;
-                        data.mcqCategory = mcqCategory;
-                    }
-
+                    data.question = mcqQuestion;
+                    data.mcqCategory = mcqCategory;
                 }
                 // console.log(data.totalQuestion, data.questionQuantity)
             }
             else if (mcqCategory === 'onlyFillInTheBlanks') {
 
-                if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-                    window.alert("Please Enter Right Question Quantity");
+                // const question = mcqQuestion.concat(fillInTheGapsQuestion)
+                const question = fillInTheGapsQuestion.map(data => Object.values(data));
+                const questionValues = Array.prototype.concat.apply([], question)
+                const valueChecking = questionValues.some(el => el === '');
+                if (valueChecking) {
+                    window.alert('Please insert all question answer');
                     validation = false;
                 }
                 else {
-                    // const question = mcqQuestion.concat(fillInTheGapsQuestion)
-                    const question = fillInTheGapsQuestion.map(data => Object.values(data));
-                    const questionValues = Array.prototype.concat.apply([], question)
-                    const valueChecking = questionValues.some(el => el === '');
-                    if (valueChecking) {
-                        window.alert('Please insert all question answer');
-                        validation = false;
-                    }
-                    else {
 
-                        // console.log(fillInTheGapsQuestion, questionValues, valueChecking)
-                        data.question = fillInTheGapsQuestion;
-                        data.mcqCategory = mcqCategory;
-                    }
-
+                    // console.log(fillInTheGapsQuestion, questionValues, valueChecking)
+                    data.question = fillInTheGapsQuestion;
+                    data.mcqCategory = mcqCategory;
                 }
                 // console.log(data.totalQuestion, data.questionQuantity)
             }
         }
         else if (categoryValue === 'written') {
-            if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-                window.alert("Please Enter Right Question Quantity");
+            const question = writtenExamQuestion.map(data => Object.values(data));
+            const questionValues = Array.prototype.concat.apply([], question)
+            const valueChecking = questionValues.some(el => el === '');
+            if (valueChecking) {
+                window.alert('Please insert all question');
                 validation = false;
             }
             else {
-                const question = writtenExamQuestion.map(data => Object.values(data));
-                const questionValues = Array.prototype.concat.apply([], question)
-                const valueChecking = questionValues.some(el => el === '');
-                if (valueChecking) {
-                    window.alert('Please insert all question');
-                    validation = false;
-                }
-                else {
 
-                    data.question = writtenExamQuestion;
-                }
+                data.question = writtenExamQuestion;
             }
         }
         else if (categoryValue === 'assignment') {
@@ -525,16 +502,8 @@ const UpdateQuestion = () => {
                                                                 </select>
 
                                                             </div>}
-                                                            {quantityView && <>   <div className="row">
-                                                                <div className="col-6">
-                                                                    <div className="form-group">
-                                                                        <label for=""><b>Enter The Quantity of Questions</b></label>
-                                                                        <input type="text" ref={register({ required: true })} name="questionQuantity" placeholder="Enter Quantity" className="form-control" />
-                                                                        {errors.questionQuantity && <span className="text-danger">This field is required</span>}
-
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-6 mt-4">
+                                                            {quantityView && <>   <div className="d-flex justify-content-center">
+                                                                <div className="col-6 mt-2">
                                                                     <div className="form-group">
                                                                         <label for=""><b>Total Question</b></label>
                                                                         <input value={questionQuantity} type="text" ref={register({ required: true })} readOnly name="totalQuestion" placeholder="Total Question" className="form-control" />

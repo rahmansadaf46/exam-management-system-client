@@ -25,6 +25,14 @@ const WrittenExam = ({ index, element, handleWrittenExam, removeFormFieldsWritte
 
                         <textarea type="text" name="questionName" placeholder="Enter Question Name" className="form-control" value={element.questionName || ""} onChange={e => handleWrittenExam(index, e)} />
                     </div>
+                    <div className="form-group row mb-1 d-flex justify-content-center">
+
+                    <div className="form-group col-6  ">
+                        <label for=""><b>Enter Mark</b></label>
+                        <div>  <input type="text" onChange={e => handleWrittenExam(index, e)} value={element.mark || ""} name="mark" placeholder="Enter Mark" className="form-control" />
+                        </div>
+                    </div>
+                </div>
                     <hr />
                 </section>
             </div>
