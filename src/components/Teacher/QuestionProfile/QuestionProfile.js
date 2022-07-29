@@ -157,7 +157,7 @@ const QuestionProfile = () => {
                                                 {/* <h5 className="text-primary">Question Number: <span>{index+1}</span></h5> */}
                                                 <h5 className="text-warning">Assignment Name: <span>{question.question[0]?.assignmentDetails}</span></h5>
                                                 <h5 className="text-success">Assignment Category: <span>{question.question[0]?.assignmentCategory}</span> </h5>
-                                            </div> </> : question?.category === 'viva' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor: '#FFFEE2', textAlign: 'center', padding: '10px' }}>
+                                            </div> </> : question?.category === 'viva' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor: '#FFFEE2', textAlign: 'center', padding: '10px', marginBottom:'40px' }}>
                                                 {/* <h5 className="text-primary">Question Number: <span>{index+1}</span></h5> */}
                                                 <h5 className="text-warning">Viva Details: <span>{question.question[0]?.vivaDetails}</span></h5>
                                                 <br></br>

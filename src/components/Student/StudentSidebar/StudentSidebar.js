@@ -53,7 +53,7 @@ const StudentSidebar = () => {
               
                 <li>
                     <Link style={{ textDecoration: 'none' }} to="/exam" className="">
-                        <span><FontAwesomeIcon icon={faClipboard} />Exam Panel</span>
+                        <span><FontAwesomeIcon icon={faClipboard} /> Exam Panel</span>
                     </Link>
 
                 </li>

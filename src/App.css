@@ -156,3 +156,35 @@ input::-webkit-inner-spin-button {
   bottom: 0px;
   left: 0px;
 }
+
+.countdown-wrapper {
+  width: 83%;
+  display: flex;
+  justify-content: center;
+  /* margin: 0 -8px 0 -8px; */
+  background-color: #FB9937;
+  z-index: 99;
+  position: fixed;
+  top: 100px;
+  /* right: 0px; */
+  
+}
+
+.time-section {
+  padding: 0px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: white !important;
+}
+
+.time {
+  margin: 0;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.small {
+  font-size: 18px !important;
+}

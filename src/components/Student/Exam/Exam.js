@@ -66,7 +66,11 @@ const Exam = () => {
                 })
                 console.log();
                 if(filterResult.length>0){
-                    setExamList(filterResult);
+                    setExamList(filterResult.sort(function(a,b){
+                        // Turn your strings into dates, and then subtract them
+                        // to get a value that is either negative, positive, or zero.
+                        return new Date(b.time) - new Date(a.time);
+                      }).reverse());
                     // setDataEmpty(true);
                 }
                 else{
@@ -106,12 +110,12 @@ const Exam = () => {
                                     {dataEmpty && <h2 className='text-center mt-5 text-danger'>There is no upcoming exam.</h2>}
                                         {
                                             examList.length>0 && examList.map(exam =>
-                                                <div className=' text-center p-4' style={{width:'520px', border:'1px solid white', boxShadow:'2px 2px 10px black',background:'#FFFFCC', margin:'40px 0px', borderRadius:'20px'}}>
+                                                <div className=' text-center p-4' style={{width:'520px', border:'1px solid white', boxShadow:'2px 2px 10px black',background:'#FFFFCC', margin:'40px 0px', borderRadius:'10px'}}>
                                                 <h5 className="text-info">{exam.examName}</h5>
                                                 <h5><span className="text-warning">Teacher:</span> {exam.teacherName}</h5>
                                                 <h5><span className="text-warning">Date:</span> {exam?.time?.split('T')[0]}</h5>
                                                 <h5><span className="text-warning">Start Time:</span> {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${exam?.time?.split('T')[1]?.split(':')[0] - 12}:${exam?.time?.split('T')[1]?.split(':')[1]}`) : (exam?.time?.split('T')[1])} {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5>
-                                                <Link to={`examPage/${exam._id}`}className="text-success">Start Exam</Link>
+                                               {new Date() > new Date(exam?.time) && <><Link to={`examPage/${exam._id}`}className="text-success">Start Exam</Link></>} 
                                             </div>
                                             )  
                                         }

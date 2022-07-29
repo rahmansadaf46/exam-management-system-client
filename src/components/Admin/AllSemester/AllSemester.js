@@ -113,7 +113,7 @@ const AllSemester = () => {
                             <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-4">
                                 <div className=" ">
                                     <div className="text-warning text-center"><h2>Semester List</h2></div>
-                                    <div className="container mx-5 px-5 form-inline  d-flex justify-content-end">
+                                    <div className=" mx-5 px-5 form-inline  d-flex justify-content-end">
                                         <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label>
                                         <input
                                             style={{ borderRadius: "100px" }}
@@ -125,7 +125,7 @@ const AllSemester = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="container mx-5 px-5 mt-3 mb-5">
+                                    <div className=" mx-5 px-5 mt-3 mb-5">
                                         <DataTable
                                             columns={columns}
                                             data={search(semesterList)}

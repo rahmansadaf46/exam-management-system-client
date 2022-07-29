@@ -17,7 +17,7 @@ const CreateExam = () => {
     const [semester, setSemester] = useState({});
     const [category, setCategory] = useState('');
     const [mcqCategory, setMcqCategory] = useState('');
-    // const [assignmentCategory, setAssignmentCategory] = useState('');
+    const [assignmentCategory, setAssignmentCategory] = useState('');
     const [quantityView, setQuantityView] = useState(false);
     const [questionQuantity, setQuestionQuantity] = useState(0);
     const [isTeacher, setIsTeacher] = useState(false);
@@ -49,7 +49,8 @@ const CreateExam = () => {
     const [assignmentData, setAssignmentData] = useState([{
         assignmentDetails: "",
         assignmentCategory: "",
-        mark: ""
+        mark: "",
+        fileCategory: ""
     }]);
     const [vivaData, setVivaData] = useState([{
         vivaDetails: "",
@@ -85,7 +86,8 @@ const CreateExam = () => {
         setAssignmentData([{
             assignmentDetails: "",
             assignmentCategory: "",
-            mark: ""
+            mark: "",
+            fileCategory:""
         }])
         setVivaData([{
             vivaDetails: "",
@@ -129,7 +131,8 @@ const CreateExam = () => {
                }
                else if(data.category === "assignment"){
                 setAssignmentData(data?.question)
-                
+                // console.log(data?.question)
+                setAssignmentCategory(data?.question[0].assignmentCategory)
                }
                else{
                 setVivaData(data?.question)
@@ -309,7 +312,8 @@ const CreateExam = () => {
         // console.log(i)
         let newFormValues = [...assignmentData];
         newFormValues[0][e.target.name] = e.target.value;
-        // newFormValues[i].rightAnswer = newFormValues[i].rightAnswer.toLowerCase();
+        setAssignmentCategory(newFormValues[0].assignmentCategory)
+        // newFormValues[0].assignmentCategory = newFormValues[i].rightAnswer.toLowerCase();
         setAssignmentData(newFormValues);
     }
     let handleChangeViva = (e) => {
@@ -626,6 +630,18 @@ const CreateExam = () => {
                                                                                 <option value="Link Submission">Link Submission</option>
                                                                             </select>
                                                                         </div>
+                                                                        {assignmentCategory === 'File Submission' && <><div className="form-group mx-5 px-5">
+                                                                            <label for="assignmentCategory"><b>Select File Category</b></label>
+                                                                            <select
+                                                                                onChange={(event) => handleChangeAssignment(event)}
+                                                                                value={assignmentData[0].fileCategory || ""}
+                                                                                name="fileCategory"
+                                                                                className="form-control">
+                                                                                <option value="">Select File Category</option>
+                                                                                <option value="pdf">PDF</option>
+                                                                                <option value="docx">Docx</option>
+                                                                            </select>
+                                                                        </div></>}
                                                                         <div className="form-group row mb-1 d-flex justify-content-center">
 
                                                                             <div className="form-group col-10  ">
