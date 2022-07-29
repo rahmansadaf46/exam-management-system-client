@@ -202,7 +202,7 @@ const ExamPage = () => {
 
         let time = new Date(new Date(questionData.time).getTime() + questionData.duration * 60000) - new Date().getTime();
         console.log(parseInt(time / 1000))
-        let filterTime = parseInt(time / 1000) * 1000;
+        let filterTime = (parseInt(time / 1000) - 1) * 1000;
         console.log(!isNaN(filterTime))
         if (!isNaN(filterTime)) {
             setInterval(() => {
