@@ -8,7 +8,7 @@ import { UserContext } from '../../../App';
 // import AllTeachersData from '../AllTeachersData/AllTeachersData';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const TeacherList = () => {
     // const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
@@ -66,7 +66,7 @@ const TeacherList = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://192.168.12.101:6060/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })

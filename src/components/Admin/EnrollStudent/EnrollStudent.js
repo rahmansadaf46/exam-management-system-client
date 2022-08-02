@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const EnrollStudent = () => {
     const { register, handleSubmit, errors } = useForm();
     const [allSession, setAllSession] = useState('');
@@ -47,7 +47,7 @@ const EnrollStudent = () => {
         formData.append('mobile', data.mobile);
         formData.append('department', data.department);
         formData.append('category', data.category);
-        fetch('http://localhost:5000/addStudent', {
+        fetch(BASE_URL + '/addStudent', {
             method: 'POST',
             body: formData
         })

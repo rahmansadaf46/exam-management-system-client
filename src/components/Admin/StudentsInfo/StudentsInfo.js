@@ -5,7 +5,7 @@ import AllStudentsData from '../AllStudentsData/AllStudentsData';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import { UserContext } from '../../../App';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const StudentsInfo = () => {
     const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
@@ -77,7 +77,7 @@ const StudentsInfo = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://192.168.12.101:6060/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })
