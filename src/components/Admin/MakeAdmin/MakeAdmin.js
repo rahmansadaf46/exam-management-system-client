@@ -15,7 +15,7 @@ const MakeAdmin = () => {
             setLoading(true);
         }
         // https://demo-0523.herokuapp.com/admin/addAdmin
-        fetch('http://localhost:5000/addAdmin', {
+        fetch('http://192.168.12.101:6060/addAdmin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

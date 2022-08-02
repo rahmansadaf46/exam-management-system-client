@@ -136,33 +136,32 @@ const Login = () => {
                 .auth()
                 .createUserWithEmailAndPassword(currentUser.email, currentUser.password)
                 .then((result) => {
-                    const { displayName, email } = result.user;
-                    const newUser = {
-                        email: email,
-                        name: displayName,
-                        success: true,
-                        error: "",
-                    };
-                    setCurrentUser(newUser);
-
-                    setLoggedInUser(newUser);
-
-                    let admin = {};
-                    admin.name = currentUser.name;
-                    admin.email = currentUser.email.toLowerCase();
-
                     if (result) {
-                        fetch('http://localhost:5000/addAdminName', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(admin)
-                        })
-                            .then(res => res.json())
-                            .then(success => {
-                                if (success) {
+                        const user = firebase.auth().currentUser;
 
-                                }
-                            })
+                        user.updateProfile({
+                            displayName: currentUser.name,
+                        }).then(function () {
+                            const { displayName, email } = result.user;
+                            const newUser = {
+                                email: email,
+                                name: displayName,
+                                success: true,
+                                error: "",
+                            };
+
+
+                            let admin = {};
+                            admin.name = currentUser.name;
+                            setCurrentUser(newUser);
+
+                            setLoggedInUser(newUser);
+                            setData(newUser);
+                            console.log('user name updated successfully')
+                        }).catch(function (error) {
+                            console.log(error)
+                        });
+
                     }
                 })
                 .catch((error) => {
@@ -207,7 +206,7 @@ const Login = () => {
                     setLoggedInUser(newUser);
                     setData(newUser);
                     console.log(newUser);
-                    fetch('http://localhost:5000/isAdmin', {
+                    fetch('http://192.168.12.101:6060/isAdmin', {
                         method: 'POST',
                         headers: { 'content-type': 'application/json' },
                         body: JSON.stringify({ email: email })

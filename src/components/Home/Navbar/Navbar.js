@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
 import logo from '../../../images/ICON/ist.png';
@@ -18,23 +18,17 @@ const Navbar = () => {
 
 
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
-    if (loggedInUser.email) {
-        fetch('http://localhost:5000/adminName', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: loggedInUser.email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                setAdminName(data[0].name);
-                localStorage.setItem('adminName', JSON.stringify(data[0].name));
-            })
-    }
+
+    
     // useEffect(() => {
     //     setAdminName(JSON.parse(localStorage.getItem("adminName")))
     // }, [localStorage.getItem("adminName")])
 
-
+    useEffect(() => {
+        if (localStorage.getItem('user')) {
+            setAdminName(JSON.parse(localStorage.getItem('user')).name)
+        }
+    }, [])
 
 
 
@@ -78,13 +72,7 @@ const Navbar = () => {
 
                                 {
                                     loggedInUser.email && <p style={{ color: '#FB9937' }}>
-                                        {
-                                            adminName.length === 0 && <p>Loading...</p>
-
-                                        }
-                                        {
-                                            adminName
-                                        }
+                                        {adminName}
 
                                     </p>
                                 }

@@ -43,7 +43,7 @@ const AdminList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/adminList')
+        fetch('http://192.168.12.101:6060/adminList')
             .then(res => res.json())
             .then(data => {
                 // if (data) {
@@ -63,7 +63,7 @@ const AdminList = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://localhost:5000/isAdmin', {
+            fetch('http://192.168.12.101:6060/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })
@@ -71,6 +71,7 @@ const AdminList = () => {
                 .then(res => res.json())
                 .then(data => {
                     localStorage.setItem('admin', JSON.stringify(data));
+                    console.log(data)
                     setIsAdmin(data);
                 });
         }, [])
@@ -85,7 +86,7 @@ const AdminList = () => {
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete?')) {
 
-            fetch(`http://localhost:5000/deleteAdmin/${id}`, {
+            fetch(`http://192.168.12.101:6060/deleteAdmin/${id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())
@@ -101,6 +102,7 @@ const AdminList = () => {
         }
 
     }
+    console.log(loggedInUser)
     return (
         <>
             {
@@ -148,11 +150,11 @@ const AdminList = () => {
                                                                         {
                                                                             admin.map((data, index) =>
             
-                                                                                <tr key={data._id} style={{ background: 'white' }}>
+                                                                                <tr key={data.id} style={{ background: 'white' }}>
                                                                                     <td >{index + 1}.</td>
             
                                                                                     <td className=""><span className="mt-5">{data.email}</span></td>
-                                                                                    <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data._id)} className="btn btn-danger btn-sm">Remove</button></td>
+                                                                                    <td><button style={{ display: data.email === loggedInUser.email ? 'none' : 'email' }} onClick={() => handleDelete(data.id)} className="btn btn-danger btn-sm">Remove</button></td>
                                                                                 </tr>
                                                                             )
                                                                         }
