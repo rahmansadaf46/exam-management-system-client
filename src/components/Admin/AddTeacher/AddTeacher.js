@@ -140,7 +140,7 @@ const AddTeacher = () => {
 
                                                             <select
                                                                 onChange={(event) => changeDepartment(event.target.value)}
-                                                                value={currentDepartment} className="form-control">
+                                                                value={currentDepartment} className="form-control  form-select">
                                                                 <option value="">Select Department</option>
 
                                                                 {

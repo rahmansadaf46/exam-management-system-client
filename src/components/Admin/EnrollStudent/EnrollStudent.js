@@ -143,7 +143,7 @@ const EnrollStudent = () => {
 
                                                             <select
                                                                 onChange={(event) => changeDepartment(event.target.value)}
-                                                                value={currentDepartment} className="form-control">
+                                                                value={currentDepartment} className="form-control  form-select">
                                                                 <option value="">Select Department</option>
 
                                                                 {
@@ -160,7 +160,7 @@ const EnrollStudent = () => {
                                                                 disabled={currentDepartment === ""}
                                                                 onChange={(event) => setSelectedSession(event.target.value)}
                                                                 value={selectedSession}
-                                                                className="form-control">
+                                                                className="form-control form-select">
                                                                 <option value="">Select Session</option>
 
                                                                 {

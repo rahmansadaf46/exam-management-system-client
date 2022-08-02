@@ -113,7 +113,7 @@ const QuestionList = () => {
                             <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-4">
                                 <div className=" ">
                                     <div className="semester-header"><h2>Question List</h2></div>
-                                    <div className="container mx-5 px-5 mt-5 mb-5">
+                                    <div className=" mx-5 px-5 mt-5 mb-5">
                                         <DataTable
                                             columns={columns}
                                             data={questionList}

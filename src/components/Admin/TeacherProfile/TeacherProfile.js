@@ -128,7 +128,7 @@ const TeacherProfile = () => {
                                                     <h3><span style={{ color: '#7BB35A' }}>Email:</span> {teacher.email}</h3>
                                                     <br />
                                                     <h3><span style={{ color: '#7BB35A' }}>Contact No:</span> {teacher.mobile}</h3>
-                                                    <div className="row mt-4">
+                                                    <div className="d-flex  mt-4">
                                                         <button style={{ background: '#FB9937' }} onClick={openModal} className="m-3 btn text-white">Update Info</button>
                                                         <UpdateTeacher modalIsOpen={modalIsOpen} teacher={teacher} closeModal={closeModal}></UpdateTeacher>
                                                         <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(teacher._id) }; }} className="m-3 btn btn-danger">Delete</button>

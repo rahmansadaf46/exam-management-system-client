@@ -109,7 +109,7 @@ const CreateExam = () => {
                 setQuestion(data);
                 setCategory(data.category)
                if(data.category === 'mcq'){
-                setQuestionQuantity(data.totalQuestion)
+                setQuestionQuantity(parseInt(data.totalQuestion))
                 setQuantityView(true)
                 setMcqCategory(data.mcqCategory)
                 if(data.mcqCategory === 'mcqFillInTheBlanks'){
@@ -527,7 +527,7 @@ const CreateExam = () => {
                                                                 <select
                                                                     onChange={(event) => handleChange(event.target.value)}
                                                                     value={category} 
-                                                                    className="form-control">
+                                                                    className="form-control form-select">
                                                                     <option value="">Select Category</option>
                                                                     <option value="mcq">MCQ/Fill in the Blanks</option>
                                                                     <option value="written">Written Exam</option>
@@ -541,7 +541,7 @@ const CreateExam = () => {
                                                                 <select
                                                                     onChange={(event) => handleChangeMCQCategory(event.target.value)}
                                                                     value={mcqCategory} 
-                                                                    className="form-control">
+                                                                    className="form-control form-select">
                                                                     <option value="">Select MCQ Category</option>
                                                                     <option value="mcqFillInTheBlanks">MCQ and Fill in the Blanks</option>
                                                                     <option value="onlyMcq">Only MCQ</option>
@@ -624,7 +624,7 @@ const CreateExam = () => {
                                                                                 onChange={(event) => handleChangeAssignment(event)}
                                                                                 value={assignmentData[0].assignmentCategory || ""}
                                                                                 name="assignmentCategory"
-                                                                                className="form-control">
+                                                                                className="form-control form-select">
                                                                                 <option value="">Select Assignment Category</option>
                                                                                 <option value="File Submission">File Submission</option>
                                                                                 <option value="Link Submission">Link Submission</option>
@@ -636,7 +636,7 @@ const CreateExam = () => {
                                                                                 onChange={(event) => handleChangeAssignment(event)}
                                                                                 value={assignmentData[0].fileCategory || ""}
                                                                                 name="fileCategory"
-                                                                                className="form-control">
+                                                                                className="form-control form-select">
                                                                                 <option value="">Select File Category</option>
                                                                                 <option value="pdf">PDF</option>
                                                                                 <option value="docx">Docx</option>

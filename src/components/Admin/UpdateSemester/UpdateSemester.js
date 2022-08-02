@@ -190,7 +190,7 @@ const UpdateSemester = ({ modalIsOpen, closeModal, semester }) => {
                             // disabled={currentDepartment === ""}
                             onChange={(event) => setSelectedSession(event.target.value)}
                             defaultValue={selectedSession}
-                            className="form-control">
+                            className="form-control form-select">
                             <option value="">Select Session</option>
 
                             {

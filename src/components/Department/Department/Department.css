@@ -1,7 +1,7 @@
 .department-underline {
-    margin: 0 auto;
-    width: 315px;
-    height: 6px;
-    background-color: orange;
-    border-radius: 100px;
+    margin: 0 auto!important;
+    width: 315px!important;
+    height: 6px!important;
+    background-color: orange!important;
+    border-radius: 100px!important;
 }

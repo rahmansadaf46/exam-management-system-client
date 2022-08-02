@@ -106,7 +106,7 @@ const QuestionProfile = () => {
                                         <h3  className='text-center'>Loading...</h3>
                                     </div></>: <div className=" ">
                                     <div className="semester-header"><h2>Question</h2></div>
-                                    <div className="container">
+                                    <div style={{margin:'0px 250px'}}>
                                         <div style={{ border: '3px solid gray', textAlign: 'center', padding: '10px' }}>
                                             <div>
                                                 <h4><span className="text-primary">Exam Name:</span> {question.examName}</h4>

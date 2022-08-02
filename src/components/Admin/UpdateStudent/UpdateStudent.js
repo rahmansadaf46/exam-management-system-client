@@ -155,7 +155,7 @@ const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
                             value={selectedSession}
                             disabled={currentDepartment === ""}
                             defaultValue={student.session}
-                            className="form-control">
+                            className="form-control form-select">
                             <option value="">Select Session</option>
                             {
                                 session.length === 0 && <option defaultValue={student.session}>{student.session}</option>
@@ -168,7 +168,7 @@ const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
                     </div>
                     <div className="col-4">
                         <label for="">Student's Department:</label>
-                        <select onChange={(event) => changeDepartment(event.target.value)} className="form-control" defaultValue={student.department} name="department" ref={register({ required: true })} >
+                        <select onChange={(event) => changeDepartment(event.target.value)} className="form-control form-select" defaultValue={student.department} name="department" ref={register({ required: true })} >
                             <option disabled={true} value="Not set">Select Department</option>
                             {
                                 dept.length === 0 && <option defaultValue={student.department}>{student.department}</option>

@@ -1,5 +1,5 @@
 body {
-  font-family: 'Righteous', cursive;
+  font-family: 'Righteous', cursive!important;
 }
 
 .text-yellow {
@@ -158,14 +158,14 @@ input::-webkit-inner-spin-button {
 }
 
 .countdown-wrapper {
-  width: 83%;
+  width: 84%;
   display: flex;
   justify-content: center;
   /* margin: 0 -8px 0 -8px; */
   background-color: #FB9937;
   z-index: 99;
   position: fixed;
-  top: 100px;
+  top: 106px;
   /* right: 0px; */
   
 }
@@ -181,10 +181,20 @@ input::-webkit-inner-spin-button {
 
 .time {
   margin: 0;
-  font-size: 20px !important;
+  font-size: 22px !important;
   font-weight: 800 !important;
 }
 
 .small {
   font-size: 18px !important;
+}
+.crousel-item{
+  /* opacity:0; */
+  transition: none !important;
+  position: static!important;
+}
+.carousel-item.active{
+  /* opacity:1; */
+  position: static!important;
+  transition: none !important;
 }

@@ -128,47 +128,48 @@ const AdminList = () => {
                                     <br />
                                     <br />
 
-                                    <div className="d-flex justify-content-center" >
-                                        <div className='w-50'>
-
-                                            {
+                                 
+                                    {
                                                 admin.length === 0 ? <img className="rounded mx-auto d-block " style={{ width: '30%', height: '30%' }} src="https://cdn.lowgif.com/small/745b4d14b1057edd-ajax-loading-gif-11-gif-images-download.gif" alt="" />
-                                                    : <table className="table table-borderless">
-                                                        <thead style={{ background: '#FB9937', }}>
-                                                            <tr>
-                                                                <th className="text-black text-left" scope="col">Sr No.</th>
-                                                                <th className="text-black" scope="col">Email</th>
-                                                                <th className="text-black" scope="col"></th>
-                                                            </tr>
-                                                        </thead>
-
-
-                                                        <tbody >
-
-                                                            {
-                                                                admin.map((data, index) =>
-
-                                                                    <tr key={data._id} style={{ background: 'white' }}>
-                                                                        <td >{index + 1}.</td>
-
-                                                                        <td className=""><span className="mt-5">{data.email}</span></td>
-                                                                        <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data._id)} className="btn btn-danger btn-sm">Remove</button></td>
-                                                                    </tr>
-                                                                )
-                                                            }
-
-                                                        </tbody>
-
-                                                    </table>
+                                                    :    <div className="d-flex justify-content-center" >
+                                                    <div className='w-50'>
+                                                    <table className="table table-borderless">
+                                                                    <thead style={{ background: '#FB9937', }}>
+                                                                        <tr>
+                                                                            <th className="text-black text-left" scope="col">Sr No.</th>
+                                                                            <th className="text-black" scope="col">Email</th>
+                                                                            <th className="text-black" scope="col"></th>
+                                                                        </tr>
+                                                                    </thead>
+            
+            
+                                                                    <tbody >
+            
+                                                                        {
+                                                                            admin.map((data, index) =>
+            
+                                                                                <tr key={data._id} style={{ background: 'white' }}>
+                                                                                    <td >{index + 1}.</td>
+            
+                                                                                    <td className=""><span className="mt-5">{data.email}</span></td>
+                                                                                    <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data._id)} className="btn btn-danger btn-sm">Remove</button></td>
+                                                                                </tr>
+                                                                            )
+                                                                        }
+            
+                                                                    </tbody>
+            
+                                                                </table>
+                                                   
+            
+            
+                                                    </div>
+                                                    {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
+                                                    {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
+            
+                                                </div>
                                             }
 
-
-
-                                        </div>
-                                        {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
-                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
-
-                                    </div>
                                 </div>
                             </div>
                         </div>

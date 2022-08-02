@@ -56,7 +56,7 @@ const McqCategory = ({ index, element, handleChangeMCQ, removeFormFields }) => {
                             onChange={(event) => handleChangeMCQ(index, event)}
                             value={element.rightAnswer}
                             name="rightAnswer"
-                            className="form-control">
+                            className="form-control form-select">
                             <option value="">Select Right Answer</option>
                             <option value="answer1">Answer 1</option>
                             <option value="answer2">Answer 2</option>

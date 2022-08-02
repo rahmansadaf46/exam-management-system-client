@@ -83,7 +83,7 @@ const StudentProfile = () => {
                                                     <h3><span style={{ color: '#7BB35A' }}>Email:</span> {student.email}</h3>
                                                     <br />
                                                     <h3><span style={{ color: '#7BB35A' }}>Contact No:</span> {student.mobile}</h3>
-                                                    <div className="row mt-4">
+                                                    <div className="d-flex mt-4">
                                                         <button style={{ background: '#FB9937' }} onClick={openModal} className="m-3 btn text-white">Update Info</button>
                                                         <UpdateStudent modalIsOpen={modalIsOpen} student={student} closeModal={closeModal}></UpdateStudent>
                                                         <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(student._id) }; }} className="m-3 btn btn-danger">Delete</button>

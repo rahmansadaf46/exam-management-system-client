@@ -96,7 +96,7 @@ const AddSession = () => {
                                                         <select
                                                             style={{ width: '250px' }}
                                                             onChange={(event) => changeDepartment(event.target.value)}
-                                                            value={currentDepartment} className="form-control">
+                                                            value={currentDepartment} className="form-control  form-select">
                                                             <option disabled={true} value="Not set">Select Department</option>
                                                             {
                                                                 dept.length === 0 && <option>CSE</option>

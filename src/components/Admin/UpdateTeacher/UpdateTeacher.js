@@ -123,7 +123,7 @@ const UpdateTeacher = ({ modalIsOpen, closeModal, teacher }) => {
                     </div> */}
                     <div className="col-6">
                         <label for="">Teacher's Department:</label>
-                        <select onChange={(event) => changeDepartment(event.target.value)} className="form-control" defaultValue={teacher.department} name="department" ref={register({ required: true })} >
+                        <select onChange={(event) => changeDepartment(event.target.value)} className="form-control form-select" defaultValue={teacher.department} name="department" ref={register({ required: true })} >
                             <option disabled={true} value="Not set">Select Department</option>
                             {
                                 dept.length === 0 && <option defaultValue={teacher.department}>{teacher.department}</option>

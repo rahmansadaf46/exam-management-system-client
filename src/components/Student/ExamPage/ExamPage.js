@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import StudentHeader from '../StudentHeader/StudentHeader';
 import StudentSidebar from '../StudentSidebar/StudentSidebar';
-
-
+import timesUp from '../../../images/ICON/timesUp.png'
+import Carousel from 'react-bootstrap/Carousel';
 const Countdown = ({ time, duration }) => {
     // const [countdownDate] = useState((new Date(time).getTime() + duration * 60000));
     const [state, setState] = useState({
@@ -17,15 +17,36 @@ const Countdown = ({ time, duration }) => {
 
     useEffect(() => {
         // setNewTime()
-        setInterval(() => {
+        // setInterval(() => {
+        //     setNewTime()
+        //     // if(state.seconds === 0 ){
+        //     //     window.location.assign('/')
+        //     // }
+        //     console.log(state.seconds)
+        // }, 10);
+        let timeData = new Date(new Date(time).getTime() + duration * 60000) - new Date().getTime();
+        console.log(parseInt(timeData / 1000))
+        let filterTime = (parseInt(timeData / 1000)) * 1000;
+        console.log(!isNaN(filterTime))
+        // function stop(){
+        //     clearInterval(intervalID);
+        // }
+        var refreshIntervalId = setInterval(() => {
             setNewTime()
             // if(state.seconds === 0 ){
             //     window.location.assign('/')
             // }
             // console.log(state.seconds)
-        }, 10);
+        }, 10)
+        if (!isNaN(filterTime)) {
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
+            setInterval(() => {
+                clearInterval(refreshIntervalId)
+                // window.location.reload('/exam')
+            }, filterTime);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [time, duration]);
 
     const setNewTime = () => {
@@ -180,7 +201,7 @@ const ExamPage = () => {
                     setLoading(false)
                     setQuestionData(res.question);
                     setCategory(res.question.category);
-                    setQuestion(res.question.question);
+                    setQuestion(shuffle(res.question.question));
                 }
                 else {
                     setLoading(false)
@@ -202,11 +223,11 @@ const ExamPage = () => {
 
         let time = new Date(new Date(questionData.time).getTime() + questionData.duration * 60000) - new Date().getTime();
         console.log(parseInt(time / 1000))
-        let filterTime = (parseInt(time / 1000) - 1) * 1000;
+        let filterTime = (parseInt(time / 1000)) * 1000;
         console.log(!isNaN(filterTime))
         if (!isNaN(filterTime)) {
             setInterval(() => {
-                window.location.assign('/exam')
+                window.location.assign(`/examPage/${questionData._id}`)
             }, filterTime);
         }
 
@@ -218,7 +239,7 @@ const ExamPage = () => {
         //     // }
         //     // console.log(state.seconds)
         // }, Math.round(new Date(new Date(questionData.time).getTime() + questionData.duration * 60000)- new Date().getTime() / 1000));
-    }, [questionData.time, questionData.duration])
+    }, [questionData.time, questionData.duration, questionData._id])
 
     const handleChange = (number, category, ans) => {
         console.log(number, category, ans)
@@ -276,7 +297,11 @@ const ExamPage = () => {
         return array;
     }
     console.log(category, question)
+    const [index, setIndex] = useState(0);
 
+    const handleSelect = (selectedIndex, e) => {
+        setIndex(selectedIndex);
+    };
     return (
         <div >
             <>
@@ -291,7 +316,7 @@ const ExamPage = () => {
                                 <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-3">
                                     {loading && <h2 className='text-center mt-5 text-warning'>Loading...</h2>}
 
-                                    {timeUp && <h2 className='text-center mt-5 text-danger'>Exam Time Up</h2>}
+                                    {timeUp && <div className='text-center mt-5 '><img src={timesUp} alt="" /></div>}
                                     {
                                         question.length > 0 && <Countdown time={questionData?.time} duration={questionData?.duration} />}
 
@@ -299,57 +324,72 @@ const ExamPage = () => {
 
                                         {/* <div className="semester-header"><h2>Exam Page</h2></div> */}
                                         {
-                                            question.length > 0 && <div className='text-center mt-4'>
+                                            question.length > 0 && <div className='text-center mt-5'>
                                                 <h3 className='text-success'>{questionData.examName}</h3>
-                                                <h5><span className="text-warning">Date:</span> {questionData?.time?.split('T')[0]}</h5>
-                                                <h5><span className="text-warning">Start Time:</span> {questionData?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${questionData?.time?.split('T')[1]?.split(':')[0] - 12}:${questionData?.time?.split('T')[1]?.split(':')[1]}`) : (questionData?.time?.split('T')[1])} {questionData?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5>
+                                                {/* <h5><span className="text-warning">Date:</span> {questionData?.time?.split('T')[0]}</h5> */}
+                                                {/* <h5><span className="text-warning">Start Time:</span> {questionData?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${questionData?.time?.split('T')[1]?.split(':')[0] - 12}:${questionData?.time?.split('T')[1]?.split(':')[1]}`) : (questionData?.time?.split('T')[1])} {questionData?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5> */}
 
                                                 <h5><span className="text-warning">End Time:</span>  {new Date(new Date(questionData?.time).getTime() + questionData?.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</h5>
                                                 <h5><span className="text-warning">Duration:</span> {questionData?.duration} Min</h5>
-                                                <h5><span className="text-warning">Full Mark:</span> {question?.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0)}</h5>
-
+                                                <h5><span className="text-warning">Total Mark:</span> {question?.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0)}</h5>
+                                                {questionData?.category === 'mcq' || questionData?.category === 'written' ? <>
+                                                    <h5><span className="text-warning">Total Question:</span> {questionData.totalQuestion} </h5>
+                                                </> : <></>}
                                             </div>
                                         }
 
                                         {
-                                            category === 'mcq' && <div style={{ marginBottom: '100px', display: result ? 'none' : 'flex' }} className="container py-3  justify-content-center">
-                                                <div className="text-center w-50">
+                                            category === 'mcq' && <div style={{ marginBottom: '100px', display: result ? 'none' : 'flex' }} className="container pb-3  justify-content-center">
+                                                <div style={{ width: '800px' }} className="text-center ">
+                                                    <Carousel style={{ marginBottom: '-20px', marginTop: '-10px' }} indicators={false} interval={null} variant="dark" fade={true} activeIndex={index} onSelect={handleSelect}>
 
-                                                    {
-                                                        shuffle(question)?.map((question, index) =>
+                                                        {
+                                                            question?.map((question, index) =>
+                                                                <Carousel.Item style={{ padding: ' 40px 90px 10px 90px' }} >
+                                                                    <div className=''>
+                                                                        <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
+                                                                            <fieldset >
+                                                                                <p className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
+                                                                                <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
+                                                                                {question.category === 'mcq' ? <>{
+                                                                                    [{ answer: question.answer1, value: 'answer1' }, { answer: question.answer2, value: 'answer2' }, { answer: question.answer3, value: 'answer3' }, { answer: question.answer4, value: 'answer4' }].map(answer => <>
+                                                                                        <div style={{ lineHeight: '0.5' }}>
+                                                                                            <label className="rad-label">
+                                                                                                <input
+                                                                                                    onClick={() => handleChange(question.questionNumber, question.category, answer.value)}
+                                                                                                    type="radio" className="rad-input" name="rad" />
+                                                                                                <div className="rad-design" />
+                                                                                                <div style={{ userSelect: 'none' }} className="rad-text">{answer.answer}</div>
+                                                                                            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                        </div></>)
+                                                                                }
 
-                                                            <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
-                                                                <fieldset >
-                                                                    <p className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
-                                                                    <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
-                                                                    {question.category === 'mcq' ? <>{
-                                                                        shuffle([{ answer: question.answer1, value: 'answer1' }, { answer: question.answer2, value: 'answer2' }, { answer: question.answer3, value: 'answer3' }, { answer: question.answer4, value: 'answer4' }]).map(answer => <>
-                                                                            <div style={{ lineHeight: '0.5' }}>
-                                                                                <label className="rad-label">
-                                                                                    <input
-                                                                                        onClick={() => handleChange(question.questionNumber, question.category, answer.value)}
-                                                                                        type="radio" className="rad-input" name="rad" />
-                                                                                    <div className="rad-design" />
-                                                                                    <div style={{ userSelect: 'none' }} className="rad-text">{answer.answer}</div>
-                                                                                </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                                            </div></>)
-                                                                    }
+                                                                                </> : question.category === 'fillInTheGaps' ? <>
+                                                                                    <label >
+                                                                                        <textArea
+                                                                                            onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
+                                                                                            style={{ width: '400px' }}
+                                                                                            type="text" className="form-control" />
 
-                                                                    </> : question.category === 'fillInTheGaps' ? <>
-                                                                        <label >
-                                                                            <textArea
-                                                                                onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
-                                                                                style={{ width: '400px' }}
-                                                                                type="text" className="form-control" />
-
-                                                                        </label>
-                                                                    </> : <></>}
+                                                                                    </label>
+                                                                                </> : <></>}
 
 
-                                                                </fieldset>
-                                                            </form>)
+                                                                            </fieldset>
+                                                                        </form>
 
-                                                    }
+
+                                                                    </div>
+                                                                </Carousel.Item>
+                                                            )
+
+                                                        }
+
+
+
+
+                                                    </Carousel>
+
 
                                                     {/* <input type="Submit" defaultValue="Proceed" /> */}
                                                     {
@@ -368,7 +408,9 @@ const ExamPage = () => {
 
                                                             {
                                                                 question[0].assignmentCategory === 'File Submission' ? <>
+                                                                    <div className='d-flex justify-content-center'>
                                                                     <DragDropFile />
+                                                                    </div>
                                                                 </> : <>
 
                                                                     <label >
@@ -410,33 +452,36 @@ const ExamPage = () => {
                                             </div></>
                                         }
                                         {
-                                            category === 'written' && <div style={{ marginBottom: '100px', display: result ? 'none' : 'flex' }} className="container py-3  justify-content-center">
-                                                <div className="text-center w-50">
-
-                                                    {
-                                                        shuffle(question)?.map((question, index) =>
-
-                                                            <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
-                                                                <fieldset >
-                                                                    <p className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
-                                                                    <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
-                                                                    <>
+                                            category === 'written' && <div style={{ marginBottom: '100px', display: result ? 'none' : 'flex' }} className="container pb-3  justify-content-center">
+                                                <div style={{ width: '800px' }} className="text-center ">
+                                                    <Carousel style={{ marginBottom: '-20px', marginTop: '-10px' }} indicators={false} interval={null} variant="dark" fade={true} activeIndex={index} onSelect={handleSelect}>
+                                                        {
+                                                            question?.map((question, index) =>
+                                                            <Carousel.Item style={{ padding: ' 40px 90px 10px 90px' }} >
+                                                            <div className=''>
+                                                                <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
+                                                                    <fieldset >
+                                                                        <p style={{marginTop:'-20px'}} className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
+                                                                        <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
                                                                         <label >
-                                                                            <textArea
-                                                                                onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
-                                                                                style={{ width: '400px' }}
-                                                                                type="text" className="form-control" />
+                                                                                <textArea
+                                                                                    onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
+                                                                                    style={{ width: '400px',marginBottom:'-15px',height:'200px' }}
+                                                                                    type="text" className="form-control" />
 
-                                                                        </label>
-                                                                    </>
-
+                                                                            </label>
 
 
-                                                                </fieldset>
-                                                            </form>)
 
-                                                    }
+                                                                    </fieldset>
+                                                                </form>
+                                                                
+                                                                </div>
+                                                                </Carousel.Item>
+                                                                )
 
+                                                        }
+                                                    </Carousel>
 
 
                                                     {/* <input type="Submit" defaultValue="Proceed" /> */}

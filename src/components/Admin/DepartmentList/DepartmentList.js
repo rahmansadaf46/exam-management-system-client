@@ -108,12 +108,12 @@ const DepartmentList = () => {
                                     <br />
                                     <br />
 
-                                    <div className="d-flex justify-content-center" >
-                                        <div className='w-25'>
 
-                                            {
-                                                department.length === 0 ? <img className="rounded mx-auto d-block " style={{ width: '30%', height: '30%' }} src="https://cdn.lowgif.com/small/745b4d14b1057edd-ajax-loading-gif-11-gif-images-download.gif" alt="" />
-                                                    : <table className="table table-borderless">
+                                    {
+                                        department.length === 0 ? <img className="rounded mx-auto d-block " style={{ width: '30%', height: '30%' }} src="https://cdn.lowgif.com/small/745b4d14b1057edd-ajax-loading-gif-11-gif-images-download.gif" alt="" />
+                                            : <div className="d-flex justify-content-center" >
+                                                <div className='w-25'>
+                                                    <table className="table table-borderless">
                                                         <thead style={{ background: '#FB9937', }}>
                                                             <tr>
                                                                 <th className="text-black text-left" scope="col">Sr No.</th>
@@ -140,15 +140,16 @@ const DepartmentList = () => {
                                                         </tbody>
 
                                                     </table>
-                                            }
 
 
 
-                                        </div>
-                                        {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
-                                        {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
 
-                                    </div>
+                                                </div>
+                                                {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
+                                                {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
+
+                                            </div>
+                                    }
                                 </div>
                             </div>
                         </div>
