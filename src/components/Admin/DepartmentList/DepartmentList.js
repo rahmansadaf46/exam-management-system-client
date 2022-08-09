@@ -43,7 +43,7 @@ const DepartmentList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/departments')
+        fetch(BASE_URL + '/departments')
             .then(res => res.json())
             .then(data => {
                 // if (data) {

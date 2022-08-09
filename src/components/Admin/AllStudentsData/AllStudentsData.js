@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './AllStudentsData.css';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AllStudentsData = ({ students, department, dept }) => {
     return (
         <div>
@@ -27,14 +27,14 @@ const AllStudentsData = ({ students, department, dept }) => {
                             {
                                 students.map((student, index) =>
 
-                                    <tr key={student._id} style={{ background: 'white' }}>
+                                    <tr key={student.id} style={{ background: 'white' }}>
                                         <td >{index + 1}.</td>
-                                        <td className="avatar-img"><img className="avatar" src={`http://localhost:5000/student/${student.image}`} alt="avatar" /> </td>
+                                        <td className="avatar-img"><img className="avatar" src={BASE_URL + `${student.image}`} alt="avatar" /> </td>
                                         <td className="text-uppercase"><span className="mt-5">{student.name}</span></td>
                                         <td>{student.roll}</td>
                                         <td>{student.department}</td>
                                         <td>{student.session}</td>
-                                        <td className=""><Link to={`/admin/profile/${student._id}`} style={{ background: '#7AB259' }} className="btn text-white">See More</Link></td>
+                                        <td className=""><Link to={`/admin/profile/${student.id}`} style={{ background: '#7AB259' }} className="btn text-white">See More</Link></td>
                                     </tr>
                                 )
                             }

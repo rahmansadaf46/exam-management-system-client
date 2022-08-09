@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { useForm } from "react-hook-form";
 // import { useHistory } from 'react-router-dom';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const customStyles = {
     content: {
         top: '51%',
@@ -77,7 +77,7 @@ const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
             window.alert("Please Enter Session")
         }
         else {
-            fetch(`http://localhost:5000/updateStudent/${student._id}`, {
+            fetch(BASE_URL + `/updateStudent/${student.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

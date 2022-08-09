@@ -86,7 +86,7 @@ const AdminList = () => {
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete?')) {
 
-            fetch(`http://192.168.12.101:6060/deleteAdmin/${id}`, {
+            fetch(BASE_URL + `/deleteAdmin/${id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())

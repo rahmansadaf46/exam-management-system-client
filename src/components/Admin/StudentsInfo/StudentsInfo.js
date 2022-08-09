@@ -42,34 +42,21 @@ const StudentsInfo = () => {
     }
 
 
-    function MyComponent() {
-        useEffect(() => {
-            setStudents(JSON.parse(localStorage.getItem("student")) || {});
-        }, [])
-    }
+    useEffect(() => {
+        fetch(BASE_URL + '/students')
+            .then(res => res.json())
+            .then(data => {
+                // if (data) {
+                //     localStorage.setItem('student', JSON.stringify(data));
 
-    function MyComponent2() {
-        useEffect(() => {
-            fetch('http://localhost:5000/students')
-                .then(res => res.json())
-                .then(data => {
-                    if (data) {
-                        localStorage.setItem('student', JSON.stringify(data));
-
-                    }
-                    console.log(data);
-                    setStudents(data);
-                })
-        }, [])
-    }
+                // }
+                console.log(data);
+                setStudents(data);
+            })
+    }, [])
 
 
-    if (localStorage.getItem("student")) {
-        MyComponent();
-    }
-    else {
-        MyComponent2()
-    }
+  
     function MyComponent3() {
         useEffect(() => {
             setIsAdmin(JSON.parse(localStorage.getItem("admin")) || {});
@@ -121,7 +108,7 @@ const StudentsInfo = () => {
                                     <br />
                                     <br />
                                     <div >
-                                        {rollNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Student's Data Not Found</h1> : <AllStudentsData key={students._id} students={students}></AllStudentsData>}
+                                        {rollNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Student's Data Not Found</h1> : <AllStudentsData key={students.id} students={students}></AllStudentsData>}
 
                                     </div>
                                 </div>
