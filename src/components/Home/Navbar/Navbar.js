@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
 import logo from '../../../images/ICON/ist.png';
@@ -18,18 +18,11 @@ const Navbar = () => {
 
 
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
-    if (loggedInUser.email) {
-        fetch('http://localhost:5000/adminName', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: loggedInUser.email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                setAdminName(data[0].name);
-                localStorage.setItem('adminName', JSON.stringify(data[0].name));
-            })
-    }
+    useEffect(() => {
+        if (localStorage.getItem('user')) {
+            setAdminName(JSON.parse(localStorage.getItem('user')).name)
+        }
+    }, [])
     // useEffect(() => {
     //     setAdminName(JSON.parse(localStorage.getItem("adminName")))
     // }, [localStorage.getItem("adminName")])
@@ -55,11 +48,11 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <button onClick={handleNavCollapse} class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded={!isNavCollapsed ? true : false} aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button onClick={handleNavCollapse} className="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded={!isNavCollapsed ? true : false} aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div class={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className={`${isNavCollapsed ? 'collapse' : ''} collapse navbar-collapse`}  id="navbarSupportedContent">
                     <ul className=" navbar-nav ml-auto mr-5">
 
                         <li className="nav-item ">
@@ -78,13 +71,7 @@ const Navbar = () => {
 
                                 {
                                     loggedInUser.email && <p style={{ color: '#FB9937' }}>
-                                        {
-                                            adminName.length === 0 && <p>Loading...</p>
-
-                                        }
-                                        {
-                                            adminName
-                                        }
+                                        {adminName}
 
                                     </p>
                                 }

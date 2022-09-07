@@ -44,7 +44,7 @@ const Unauthorized = () => {
                     : <div >
 
                         <Navbar />
-                        <h1 style={{ fontSize: '200px', marginTop: '70px', color: 'red' }} class="text-center " >Access Denied</h1>
+                        <h1 style={{ fontSize: '200px', marginTop: '70px', color: 'red' }} className="text-center " >Access Denied</h1>
                         <br />
 
                     </div>

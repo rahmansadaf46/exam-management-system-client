@@ -90,7 +90,7 @@ const SemesterDetails = () => {
                                                 </div> */}
                                                 <div className="col-md-12 ">
                                                     <h2 style={{ color: '#FB9937' }} className="text-center">Semester Details</h2>
-                                                    <div class="profile-underline"></div>
+                                                    <div className="profile-underline"></div>
                                                     <h3 className="mt-4"><span style={{ color: '#7BB35A' }}>Semester Name:</span> {semester.semester
                                                     }</h3>
                                                     <br />

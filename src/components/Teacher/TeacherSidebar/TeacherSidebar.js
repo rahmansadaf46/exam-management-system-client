@@ -69,12 +69,7 @@ const TeacherSidebar = () => {
 
                 </li>
 
-                <li>
-                    <Link style={{ textDecoration: 'none' }} to="/practice" className="">
-                        <span><FontAwesomeIcon icon={faClipboard} /> Practice</span>
-                    </Link>
-
-                </li>
+           
                 {/* <li>
                     <Link onClick={() => { window.location.href = "/admin/teacherList" }} style={{ textDecoration: 'none' }} to="/admin/teacherList" className="">
                         <span><FontAwesomeIcon icon={faUser} /> All Teacher</span>

@@ -130,10 +130,7 @@ const EnrollStudent = () => {
                                                         <label for=""><b>Enter Name</b></label>
                                                         <input type="text" ref={register({
                                                             required: "Required",
-                                                            pattern: {
-                                                                value: /(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/,
-                                                                message: true
-                                                            }
+                                                    
                                                         })} name="name" placeholder="Student's Name" className="form-control" />
                                                         {errors.name && <span className="text-danger">Invalid Name</span>}
                                                     </div>

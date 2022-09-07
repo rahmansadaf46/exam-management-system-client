@@ -127,9 +127,9 @@ const QuestionProfile = () => {
                                             </div>
                                             <div>
                                                 
-                                            <Link class="btn btn-warning mr-3" to={`/updateQuestion/${question._id}`} type="submit">Update Question</Link>
+                                            <Link className="btn btn-warning mr-3" to={`/updateQuestion/${question._id}`} type="submit">Update Question</Link>
                                             {/* <UpdateQuestionDetails modalIsOpen={modalIsOpen} question={question} updateDetails={updateDetails(question)} closeModal={closeModal}></UpdateQuestionDetails> */}
-                                                <button onClick={() => handleDelete(question._id)} class="btn btn-danger" type="submit">Delete Question</button>
+                                                <button onClick={() => handleDelete(question._id)} className="btn btn-danger" type="submit">Delete Question</button>
                                                 
                                             </div>
                                         </div>

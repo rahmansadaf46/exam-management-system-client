@@ -101,17 +101,22 @@ const Countdown = ({ time, duration }) => {
     </div>)
 }
 // drag drop file component
-function DragDropFile() {
+function DragDropFile({handleFunction,question}) {
     // drag state
     const [file, setFile] = useState([])
     function handleFile(files) {
         console.log(files[0])
         setFile([files[0]])
         console.log(files[0].name)
-
+        // index,question, mark, number, category, ans
+        handleFunction(0, question.assignmentDetails, question.mark, 1, "File Submission", files[0])
         // alert("Number of files: " + files);
     }
+    
     console.log(file)
+    useEffect(()=>{
+        // 
+    },[file])
     const [dragActive, setDragActive] = React.useState(false);
     // ref
     const inputRef = React.useRef(null);
@@ -171,6 +176,8 @@ function DragDropFile() {
 };
 
 const ExamPage = () => {
+    const [student, setStudent] = useState([]);
+    const [answer, setAnswer] = useState([]);
     // const [semester, setSemester] = useState({});
     const [isStudent, setIsStudent] = useState(false);
     // const [student, setStudent] = useState([]);
@@ -188,7 +195,7 @@ const ExamPage = () => {
     document.title = "Exam Page";
 
     useEffect(() => {
-        // setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
+        setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
         setIsStudent(JSON.parse(localStorage.getItem("studentAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
         fetch(`http://localhost:5000/questionFind/${id}`)
@@ -241,8 +248,30 @@ const ExamPage = () => {
         // }, Math.round(new Date(new Date(questionData.time).getTime() + questionData.duration * 60000)- new Date().getTime() / 1000));
     }, [questionData.time, questionData.duration, questionData._id])
 
-    const handleChange = (number, category, ans) => {
-        console.log(number, category, ans)
+    const handleChange = (index,question, mark, number, category, ans) => {
+        console.log({
+            index: index,
+            questionNumber: number,
+            questionCategory: category,
+            answer: ans
+        })
+        let data = {
+            index: index + 1,
+            questionName: question,
+            mark: parseInt(mark),
+            questionNumber: number,
+            category: category,
+            answer: ans
+        }
+        if (answer.find(ans => ans.index === index + 1) === undefined) {
+            const previousAnswer = [...answer, data]
+            setAnswer(previousAnswer)
+        }
+        else {
+            let newAns = answer.filter(ans => ans.index !== index + 1)
+            const previousAnswer = [...newAns, data]
+            setAnswer(previousAnswer)
+        }
         // const findQues = question.filter(question => question.data.question === ques)
         // // console.log(findQues)
         // let data = {}
@@ -276,7 +305,8 @@ const ExamPage = () => {
         // alert(`Your result is ${result.length}/${question.length}`)
         // window.location.assign('/')
         // setResultCount(result.length)
-        setResult(true)
+        // setResult(true)
+        console.log(answer,questionData,student)
 
     }
     function shuffle(array) {
@@ -356,7 +386,7 @@ const ExamPage = () => {
                                                                                         <div style={{ lineHeight: '0.5' }}>
                                                                                             <label className="rad-label">
                                                                                                 <input
-                                                                                                    onClick={() => handleChange(question.questionNumber, question.category, answer.value)}
+                                                                                                    onBlur={() => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, answer.value)}
                                                                                                     type="radio" className="rad-input" name="rad" />
                                                                                                 <div className="rad-design" />
                                                                                                 <div style={{ userSelect: 'none' }} className="rad-text">{answer.answer}</div>
@@ -367,7 +397,7 @@ const ExamPage = () => {
                                                                                 </> : question.category === 'fillInTheGaps' ? <>
                                                                                     <label >
                                                                                         <textArea
-                                                                                            onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
+                                                                                            onBlur={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
                                                                                             style={{ width: '400px' }}
                                                                                             type="text" className="form-control" />
 
@@ -409,7 +439,7 @@ const ExamPage = () => {
                                                             {
                                                                 question[0].assignmentCategory === 'File Submission' ? <>
                                                                     <div className='d-flex justify-content-center'>
-                                                                    <DragDropFile />
+                                                                    <DragDropFile handleFunction={handleChange} question={question[0]}/>
                                                                     </div>
                                                                 </> : <>
 
@@ -457,28 +487,28 @@ const ExamPage = () => {
                                                     <Carousel style={{ marginBottom: '-20px', marginTop: '-10px' }} indicators={false} interval={null} variant="dark" fade={true} activeIndex={index} onSelect={handleSelect}>
                                                         {
                                                             question?.map((question, index) =>
-                                                            <Carousel.Item style={{ padding: ' 40px 90px 10px 90px' }} >
-                                                            <div className=''>
-                                                                <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
-                                                                    <fieldset >
-                                                                        <p style={{marginTop:'-20px'}} className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
-                                                                        <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
-                                                                        <label >
-                                                                                <textArea
-                                                                                    onChange={(e) => handleChange(question.questionNumber, question.category, e.target.value)}
-                                                                                    style={{ width: '400px',marginBottom:'-15px',height:'200px' }}
-                                                                                    type="text" className="form-control" />
+                                                                <Carousel.Item style={{ padding: ' 40px 90px 10px 90px' }} >
+                                                                    <div className=''>
+                                                                        <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
+                                                                            <fieldset >
+                                                                                <p style={{ marginTop: '-20px' }} className="font-weight-bold text-primary">Ques no: <span>{index + 1}</span> <br /> <span style={{ userSelect: 'none' }} className="text-danger">{question.questionName}</span></p>
+                                                                                <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
+                                                                                <label >
+                                                                                    <textArea
+                                                                                        onBlur={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
+                                                                                        style={{ width: '400px', marginBottom: '-15px', height: '200px' }}
+                                                                                        type="text" className="form-control" />
 
-                                                                            </label>
+                                                                                </label>
 
 
 
-                                                                    </fieldset>
-                                                                </form>
-                                                                
-                                                                </div>
+                                                                            </fieldset>
+                                                                        </form>
+
+                                                                    </div>
                                                                 </Carousel.Item>
-                                                                )
+                                                            )
 
                                                         }
                                                     </Carousel>

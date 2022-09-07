@@ -64,7 +64,7 @@ const Department = () => {
                             </div>
                         </Link>
                         <h2 className="text-center">Select <span className="text-yellow">Department</span> </h2>
-                        <div class="department-underline mb-2"></div>
+                        <div className="department-underline mb-2"></div>
                         {
                             dept.length === 0 && <img className="rounded mx-auto d-block mt-4 pt-3" src="https://media1.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="" />
                         }

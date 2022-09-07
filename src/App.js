@@ -35,6 +35,7 @@ import TeacherProfile from './components/Admin/TeacherProfile/TeacherProfile';
 import StudentDashboard from './components/Student/StudentDashboard/StudentDashboard';
 import Exam from './components/Student/Exam/Exam';
 import ExamPage from './components/Student/ExamPage/ExamPage';
+import UpdateQuestion from './components/Teacher/CreateExam/UpdateQuestion';
 
 export const UserContext = createContext();
 
@@ -79,7 +80,7 @@ function App() {
             <CreateExam></CreateExam>
           </PrivateRoute>
           <PrivateRoute path="/updateQuestion/:id">
-            <CreateExam></CreateExam>
+            <UpdateQuestion></UpdateQuestion>
           </PrivateRoute>
           <PrivateRoute path="/admin/allstudent">
             <StudentsInfo></StudentsInfo>

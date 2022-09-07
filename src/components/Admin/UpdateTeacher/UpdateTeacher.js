@@ -84,7 +84,7 @@ const UpdateTeacher = ({ modalIsOpen, closeModal, teacher }) => {
             contentLabel="Example Modal"
         >
             <div className="d-flex justify-content-end">
-                <button type="button" onClick={() => closeModal()} class="close" aria-label="Close">
+                <button type="button" onClick={() => closeModal()} className="close" aria-label="Close">
                     <span style={{ color: 'gray' }} aria-hidden="true">&times;</span>
                 </button>
 

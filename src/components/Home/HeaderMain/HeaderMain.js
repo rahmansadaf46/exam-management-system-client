@@ -184,7 +184,7 @@ const HeaderMain = () => {
                 <div className="col-md-4 offset-md-1 ">
                     <div className="d-flex">
 
-                        <div class="title-bar "></div>
+                        <div className="title-bar "></div>
                         <div className="app-title">
                             <div className="animated infinite pulse">
                                 <h2 style={{ color: '#111430' }}><b><span style={{ color: 'orange' }}>IST</span><br />Online Exam  <br />Hall</b></h2>

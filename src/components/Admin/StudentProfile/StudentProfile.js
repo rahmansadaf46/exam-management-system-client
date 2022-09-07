@@ -63,7 +63,7 @@ const StudentProfile = () => {
                             <div style={{ backgroundColor: '#F4F7FC' }} className="col-md-10 pt-4 vh-100">
                                 <div className="col-md-12">
                                     <h2 style={{ color: '#FB9937' }} className="text-center">Student's Profile</h2>
-                                    <div class="profile-underline"></div>
+                                    <div className="profile-underline"></div>
                                     <div className="mt-4">
                                         {
                                             student.name ? <div className="row pt-2 ">

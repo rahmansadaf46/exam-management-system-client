@@ -30,7 +30,7 @@ const TeacherHeader = () => {
                 </div>
                 <div className="col-md-3 mt-2">
                     <div className="mt-5   " style={{ color: '#7AB259' }}>
-                        {loggedInUser.email && <div className="d-flex justify-content-end "><p className="mt-1">{JSON.parse(localStorage.getItem("adminName"))}</p> <img className="avatar mx-4" src={`http://localhost:5000/teacher/${JSON.parse(localStorage.getItem("teacherData"))[0]?.image}`} alt="avatar" /></div>}
+                        {loggedInUser.email && <div className="d-flex justify-content-end "><p className="mt-1">{JSON.parse(localStorage.getItem("user")).name}</p> <img className="avatar mx-4" src={`http://localhost:5000/teacher/${JSON.parse(localStorage.getItem("teacherData"))[0]?.image}`} alt="avatar" /></div>}
                     </div>
                 </div>
             </section>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory, useParams } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
@@ -10,9 +9,7 @@ import WrittenExam from './WrittenExam';
 
 
 const CreateExam = () => {
-    const { id } = useParams();
-    const history = useHistory()
-    console.log(id);
+
  
     const [semester, setSemester] = useState({});
     const [category, setCategory] = useState('');
@@ -99,54 +96,84 @@ const CreateExam = () => {
     const [loading] = useState(false);
 
     const { register, handleSubmit, errors } = useForm();
-    const [question, setQuestion] = useState({})
-    useEffect(() => {
-        fetch(`http://localhost:5000/question/${id}`)
-            .then(res => res.json())
+    // const [question, setQuestion] = useState({})
+    const [students, setStudents] = useState({})
+    // useEffect(() => {
+    //     fetch(`http://localhost:5000/question/${id}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             window.scrollTo(0, 0);
+    //             console.log(data)
+    //             setQuestion(data);
+    //             setCategory(data.category)
+    //            if(data.category === 'mcq'){
+    //             setQuestionQuantity(parseInt(data.totalQuestion))
+    //             setQuantityView(true)
+    //             setMcqCategory(data.mcqCategory)
+    //             if(data.mcqCategory === 'mcqFillInTheBlanks'){
+    //                const filterMCQ = data.question.filter(el=>el.category==='mcq')
+    //                setMcqQuestion(filterMCQ);
+    //                const filterFillInTheBlanks = data.question.filter(el=>el.category!=='mcq')
+    //                setFillInTheGapsQuestion(filterFillInTheBlanks);
+    //             }
+    //             else if(data.mcqCategory === "onlyMcq"){
+    //                 setMcqQuestion(data?.question);
+    //             }
+    //             else{
+    //                 setFillInTheGapsQuestion(data?.question);
+    //             }
+    //            } else if(data.category === "written"){
+    //             setQuestionQuantity(data.totalQuestion)
+    //             setQuantityView(true)
+    //             setWrittenExamQuestion(data?.question);
+    //            }
+    //            else if(data.category === "assignment"){
+    //             setAssignmentData(data?.question)
+    //             // console.log(data?.question)
+    //             setAssignmentCategory(data?.question[0].assignmentCategory)
+    //            }
+    //            else{
+    //             setVivaData(data?.question)
+    //            }
+    //         })
+    // }, [id])
+    document.title = "Create Exam";
+    
+    useEffect(()=>{
+        const semester = JSON.parse(localStorage.getItem("selectedSemester"));
+        console.log(semester)
+        let studentData = {
+            department: semester.department,
+            session: semester.session
+        }
+        fetch('http://localhost:5000/studentsForExam', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: studentData })
+        })
+            .then(response => response.json())
             .then(data => {
-                window.scrollTo(0, 0);
-                console.log(data)
-                setQuestion(data);
-                setCategory(data.category)
-               if(data.category === 'mcq'){
-                setQuestionQuantity(parseInt(data.totalQuestion))
-                setQuantityView(true)
-                setMcqCategory(data.mcqCategory)
-                if(data.mcqCategory === 'mcqFillInTheBlanks'){
-                   const filterMCQ = data.question.filter(el=>el.category==='mcq')
-                   setMcqQuestion(filterMCQ);
-                   const filterFillInTheBlanks = data.question.filter(el=>el.category!=='mcq')
-                   setFillInTheGapsQuestion(filterFillInTheBlanks);
-                }
-                else if(data.mcqCategory === "onlyMcq"){
-                    setMcqQuestion(data?.question);
-                }
-                else{
-                    setFillInTheGapsQuestion(data?.question);
-                }
-               } else if(data.category === "written"){
-                setQuestionQuantity(data.totalQuestion)
-                setQuantityView(true)
-                setWrittenExamQuestion(data?.question);
-               }
-               else if(data.category === "assignment"){
-                setAssignmentData(data?.question)
-                // console.log(data?.question)
-                setAssignmentCategory(data?.question[0].assignmentCategory)
-               }
-               else{
-                setVivaData(data?.question)
-               }
+                // console.log(data)
+                // setStudents(data)
+                const studentData = data;
+                let updateData = [];
+                studentData.forEach(student=>{
+                    updateData.push({...student, answerId:[]})
+                })
+                setStudents(updateData)
+                console.log(updateData)
+                // if (roll.length === 0) {
+                //     setRollNF(true);
+                // }
+                // if (roll.length > 0) {
+                //     setRollNF(false);
+                // }
+                // setStudents(roll);
             })
-    }, [id])
-    if(id){
-        document.title = "Update Question";
-    
-    }
-    else{
-        document.title = "Create Exam";
-    }
-    
+            .catch(error => {
+                console.error(error)
+            })
+    },[])
     const onSubmit = data => {
         let validation = true;
         let categoryValue = category;
@@ -226,18 +253,44 @@ const CreateExam = () => {
             }
         }
         else if (categoryValue === 'assignment') {
-            const question = assignmentData.map(data => Object.values(data));
-            const questionValues = Array.prototype.concat.apply([], question)
-            const valueChecking = questionValues.some(el => el === '');
-            console.log(valueChecking)
-            if (valueChecking) {
-                window.alert('Please insert all data');
-                validation = false;
+            console.log(assignmentData)
+            if(assignmentData[0].assignmentCategory === "Link Submission"){
+                let filterData = [];
+                assignmentData.forEach(data => {
+                  filterData.push({
+                    assignmentCategory: data.assignmentCategory,
+                    assignmentDetails: data.assignmentDetails,
+                    mark: data.mark
+                  })
+                });
+                const question = filterData.map(data => Object.values(data));
+                const questionValues = Array.prototype.concat.apply([], question)
+                const valueChecking = questionValues.some(el => el === '');
+                console.log(valueChecking)
+                if (valueChecking) {
+                    window.alert('Please insert all data');
+                    validation = false;
+                }
+                else {
+    
+                    data.question = assignmentData;
+                }
             }
-            else {
-
-                data.question = assignmentData;
+            else{
+                const question = assignmentData.map(data => Object.values(data));
+                const questionValues = Array.prototype.concat.apply([], question)
+                const valueChecking = questionValues.some(el => el === '');
+                console.log(valueChecking)
+                if (valueChecking) {
+                    window.alert('Please insert all data');
+                    validation = false;
+                }
+                else {
+    
+                    data.question = assignmentData;
+                }
             }
+           
         }
         else if (categoryValue === 'viva') {
             const question = vivaData.map(data => Object.values(data));
@@ -260,38 +313,22 @@ const CreateExam = () => {
         console.log(validation)
         if (validation) {
             console.log(data);
-            if(id){
-                fetch(`http://localhost:5000/updateQuestion/${question._id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+            students.map(student => student.fullMark = data.question.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0))
+            console.log(students)
+            fetch('http://localhost:5000/addQuestion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(success => {
+                    console.log(success)
+                    if (success) {
+                        // setLoading(false);
+                        alert("Exam Created Successfully");
+                        window.location.reload();
+                    }
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data) {
-                            // closeModal();
-                            // localStorage.removeItem("student");
-                            // window.location.reload();
-                            history.goBack()
-                            alert("Updated Successfully");
-                        }
-                    })
-            }
-            else{
-                fetch('http://localhost:5000/addQuestion', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
-                    .then(res => res.json())
-                    .then(success => {
-                        if (success) {
-                            // setLoading(false);
-                            alert("Exam Created Successfully");
-                            window.location.reload();
-                        }
-                    })
-            }
            
 
         }
@@ -454,7 +491,7 @@ const CreateExam = () => {
     }
 
 
-    console.log(assignmentData, mcqQuestion);
+    console.log(assignmentData, mcqQuestion,);
     return (
         <>
             {
@@ -475,8 +512,8 @@ const CreateExam = () => {
                                                     <div className="col-md-12">
                                                         <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
                                                             <div className="form-group">
-                                                                <label for=""><b>Exam Name</b></label>
-                                                                <textarea type="text" ref={register({ required: true })} defaultValue={question.examName} name="examName" placeholder="Enter Exam Name" className="form-control" />
+                                                                <label htmlFor=""><b>Exam Name</b></label>
+                                                                <textarea type="text" ref={register({ required: true })}  name="examName" placeholder="Enter Exam Name" className="form-control" />
                                                                 {errors.examName && <span className="text-danger">This field is required</span>}
 
                                                             </div>
@@ -484,7 +521,7 @@ const CreateExam = () => {
                                                                 <div className="row">
                                                                     <div className="col-6">
                                                                         <div className="form-group">
-                                                                            <label for=""><b>Department</b></label>
+                                                                            <label htmlFor=""><b>Department</b></label>
                                                                             <input type="text" value={semester.department} readOnly ref={register({ required: true })} name="department" placeholder="" className="form-control" />
                                                                             {errors.name && <span className="text-danger">This field is required</span>}
 
@@ -492,7 +529,7 @@ const CreateExam = () => {
                                                                     </div>
                                                                     <div className="col-6">
                                                                         <div className="form-group">
-                                                                            <label for=""><b>Session</b></label>
+                                                                            <label htmlFor=""><b>Session</b></label>
                                                                             <input type="text" readOnly value={semester.session} ref={register({ required: true })} name="session" placeholder="" className="form-control" />
                                                                             {errors.name && <span className="text-danger">This field is required</span>}
 
@@ -501,7 +538,7 @@ const CreateExam = () => {
                                                                 </div>
                                                                 <div className=" row justify-content-center">
                                                                     <div className="form-group col-6">
-                                                                        <label for=""><b>Semester</b></label>
+                                                                        <label htmlFor=""><b>Semester</b></label>
                                                                         <input type="text" readOnly value={semester.semester} ref={register({ required: true })} name="semester" placeholder="" className="form-control" />
                                                                         {errors.name && <span className="text-danger">This field is required</span>}
 
@@ -510,20 +547,20 @@ const CreateExam = () => {
                                                             </div>
                                                             <div className="row justify-content-center">
                                                                 <div className="form-group">
-                                                                    <label for=""><b>Enter Start Time</b></label>
-                                                                    <input style={{ width: '95%' }} defaultValue={question.time} type="datetime-local" min={new Date().toISOString().slice(0, -8)} ref={register({ required: true })} name="time" className="form-control" />
+                                                                    <label htmlFor=""><b>Enter Start Time</b></label>
+                                                                    <input style={{ width: '95%' }}  type="datetime-local" min={new Date().toISOString().slice(0, -8)} ref={register({ required: true })} name="time" className="form-control" />
                                                                     {errors.time && <span className="text-danger">This field is required</span>}
 
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label for=""><b>Enter Duration(In Minutes)</b></label>
-                                                                    <input type="number" ref={register({ required: true })} defaultValue={question.duration} name="duration" placeholder="Enter Duration" className="form-control" />
+                                                                    <label htmlFor=""><b>Enter Duration(In Minutes)</b></label>
+                                                                    <input type="number" ref={register({ required: true })}  name="duration" placeholder="Enter Duration" className="form-control" />
                                                                     {errors.duration && <span className="text-danger">This field is required</span>}
 
                                                                 </div>
                                                             </div>
                                                             <div className="form-group">
-                                                                <label for=""><b>Select Category</b></label>
+                                                                <label htmlFor=""><b>Select Category</b></label>
                                                                 <select
                                                                     onChange={(event) => handleChange(event.target.value)}
                                                                     value={category} 
@@ -537,7 +574,7 @@ const CreateExam = () => {
 
                                                             </div>
                                                             {category === 'mcq' && <div className="form-group">
-                                                                <label for=""><b>Select MCQ Category</b></label>
+                                                                <label htmlFor=""><b>Select MCQ Category</b></label>
                                                                 <select
                                                                     onChange={(event) => handleChangeMCQCategory(event.target.value)}
                                                                     value={mcqCategory} 
@@ -554,7 +591,7 @@ const CreateExam = () => {
 
                                                                 <div className="col-6 mt-2">
                                                                     <div className="form-group">
-                                                                        <label for=""><b>Total Question</b></label>
+                                                                        <label htmlFor=""><b>Total Question</b></label>
                                                                         <input value={questionQuantity} type="text" ref={register({ required: true })} readOnly name="totalQuestion" placeholder="Total Question" className="form-control" />
                                                                         {errors.totalQuestion && <span className="text-danger">This field is required</span>}
 
@@ -614,12 +651,12 @@ const CreateExam = () => {
                                                                             <button className="button add btn btn-dark btn-sm " type="button" onClick={() => addFormFieldsWrittenExam()}>Add Question</button>
                                                                         </div></>}
                                                                     {category === 'assignment' && <><div className="form-group">
-                                                                        <label for=""><b>Enter Assignment Details</b></label>
+                                                                        <label htmlFor=""><b>Enter Assignment Details</b></label>
                                                                         <textarea type="text" value={assignmentData[0].assignmentDetails || ""} onChange={e => handleChangeAssignment(e)} name="assignmentDetails" placeholder="Enter Assignment Details" className="form-control" />
                                                                         {errors.name && <span className="text-danger">This field is required</span>}
 
                                                                     </div><div className="form-group">
-                                                                            <label for="assignmentCategory"><b>Select Assignment Category</b></label>
+                                                                            <label htmlFor="assignmentCategory"><b>Select Assignment Category</b></label>
                                                                             <select
                                                                                 onChange={(event) => handleChangeAssignment(event)}
                                                                                 value={assignmentData[0].assignmentCategory || ""}
@@ -631,7 +668,7 @@ const CreateExam = () => {
                                                                             </select>
                                                                         </div>
                                                                         {assignmentCategory === 'File Submission' && <><div className="form-group mx-5 px-5">
-                                                                            <label for="assignmentCategory"><b>Select File Category</b></label>
+                                                                            <label htmlFor="assignmentCategory"><b>Select File Category</b></label>
                                                                             <select
                                                                                 onChange={(event) => handleChangeAssignment(event)}
                                                                                 value={assignmentData[0].fileCategory || ""}
@@ -645,7 +682,7 @@ const CreateExam = () => {
                                                                         <div className="form-group row mb-1 d-flex justify-content-center">
 
                                                                             <div className="form-group col-10  ">
-                                                                                <label for=""><b>Enter Mark</b></label>
+                                                                                <label htmlFor=""><b>Enter Mark</b></label>
                                                                                 <div>  <input type="text" onChange={e => handleChangeAssignment( e)} value={assignmentData[0].mark || ""} name="mark" placeholder="Enter Mark" className="form-control" />
                                                                                 </div>
                                                                             </div>
@@ -656,19 +693,19 @@ const CreateExam = () => {
                                                                             <a className="text-success" target="blank" href="https://ist-online-viva.netlify.app/create">Generate a link</a>
                                                                         </div>
                                                                         <div className="form-group">
-                                                                            <label for=""><b>Enter Attendance Link</b></label>
+                                                                            <label htmlFor=""><b>Enter Attendance Link</b></label>
                                                                             <input type="text" value={vivaData[0].attendanceLink || ""} onChange={e => handleChangeViva(e)} name="attendanceLink" placeholder="Attendance Link" className="form-control" />
                                                                             {errors.name && <span className="text-danger">This field is required</span>}
 
                                                                         </div>
                                                                         <div className="form-group">
-                                                                            <label for=""><b>Enter Host Link</b></label>
+                                                                            <label htmlFor=""><b>Enter Host Link</b></label>
                                                                             <input type="text" value={vivaData[0].hostLink || ""} onChange={e => handleChangeViva(e)} name="hostLink" placeholder="Viva Link" className="form-control" />
                                                                             {errors.name && <span className="text-danger">This field is required</span>}
 
                                                                         </div>
                                                                         <div className="form-group">
-                                                                            <label for=""><b>Enter Viva Details</b></label>
+                                                                            <label htmlFor=""><b>Enter Viva Details</b></label>
                                                                             <textarea type="text" value={vivaData[0].vivaDetails || ""} onChange={e => handleChangeViva(e)} name="vivaDetails" placeholder="Enter Viva Details" className="form-control" />
                                                                             {errors.name && <span className="text-danger">This field is required</span>}
 
@@ -676,7 +713,7 @@ const CreateExam = () => {
                                                                         <div className="form-group row mb-1 d-flex justify-content-center">
 
                                                                             <div className="form-group col-10  ">
-                                                                                <label for=""><b>Enter Mark</b></label>
+                                                                                <label htmlFor=""><b>Enter Mark</b></label>
                                                                                 <div>  <input type="text" onChange={e => handleChangeViva(e)} value={vivaData[0].mark || ""} name="mark" placeholder="Enter Mark" className="form-control" />
                                                                                 </div>
                                                                             </div>

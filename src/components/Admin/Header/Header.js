@@ -30,7 +30,7 @@ const Header = () => {
                 </div>
                 <div className="col-md-2 mt-2">
                     <div className="mt-5 text-right pr-4" style={{ margin: '', color: '#7AB259' }}>
-                        <h6>{loggedInUser.email && <p>{JSON.parse(localStorage.getItem("adminName"))}</p>}{" "}</h6>
+                        <h6>{loggedInUser.email && <p>{JSON.parse(localStorage.getItem("user")).name}</p>}{" "}</h6>
                     </div>
                 </div>
             </section>

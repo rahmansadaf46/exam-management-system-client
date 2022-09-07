@@ -152,17 +152,30 @@ const Login = () => {
                     admin.email = currentUser.email.toLowerCase();
 
                     if (result) {
-                        fetch('http://localhost:5000/addAdminName', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(admin)
-                        })
-                            .then(res => res.json())
-                            .then(success => {
-                                if (success) {
+                        const user = firebase.auth().currentUser;
 
-                                }
-                            })
+                        user.updateProfile({
+                            displayName: currentUser.name,
+                        }).then(function () {
+                            const { displayName, email } = result.user;
+                            const newUser = {
+                                email: email,
+                                name: displayName,
+                                success: true,
+                                error: "",
+                            };
+
+
+                            let admin = {};
+                            admin.name = currentUser.name;
+                            setCurrentUser(newUser);
+
+                            setLoggedInUser(newUser);
+                            setData(newUser);
+                            console.log('user name updated successfully')
+                        }).catch(function (error) {
+                            console.log(error)
+                        });
                     }
                 })
                 .catch((error) => {
