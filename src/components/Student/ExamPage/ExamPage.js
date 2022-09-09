@@ -403,41 +403,49 @@ const ExamPage = () => {
 
     }
     const handleViva = (index, question, mark, number, category, ans) => {
-        // console.log(answer)
-        // const result = answer.filter(ans => ans.answer === 'Right')
-        // alert(`Your result is ${result.length}/${question.length}`)
-        // window.location.assign('/')
-        // setResultCount(result.length)
-        // setResult(true)
-        let dataBody = {
-            index: index + 1,
-            questionName: question,
-            mark: parseInt(mark),
-            questionNumber: number,
-            category: category,
-            answer: ans
-        }
+        console.log(questionData,student[0])
 
-        console.log(dataBody, questionData, student)
-        fetch('http://localhost:5000/addResult1', {
+        fetch('http://localhost:5000/resultViva', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
+            body: JSON.stringify({ email: student[0].email, questionId: questionData._id})
         })
             .then(response => response.json())
-            .then(data => {
-
-                if (data) {
-                    // window.alert('Exam Submitted successfully');
-                    // history.goBack()
+            .then(result=>{
+                console.log(result)
+                if(result === false){
+                    let dataBody = {
+                        index: index + 1,
+                        questionName: question,
+                        mark: parseInt(mark),
+                        questionNumber: number,
+                        category: category,
+                        answer: ans
+                    }
+            
+                    // console.log(dataBody, questionData, student)
+                    fetch('http://localhost:5000/addResult1', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+            
+                            if (data) {
+                                // window.alert('Exam Submitted successfully');
+                                // history.goBack()
+                            }
+            
+                        })
+            
+                        .catch(error => {
+                            console.error(error)
+                        })
+            
                 }
-
             })
-
-            .catch(error => {
-                console.error(error)
-            })
-
+        
     }
     function shuffle(array) {
         let currentIndex = array.length, randomIndex;
