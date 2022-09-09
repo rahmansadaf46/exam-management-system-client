@@ -7,11 +7,11 @@ import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
 
 
-const QuestionList = () => {
+const ResultSheet = () => {
     const [isTeacher, setIsTeacher] = useState(false);
     const [questionList, setQuestionList] = useState([])
 
-    document.title = "Question List";
+    document.title = "Result Sheet";
 
     useEffect(() => {
         // console.log();
@@ -53,7 +53,7 @@ const QuestionList = () => {
                 <div>
                     <Link
                         className="btn btn-sm btn-info m-1"
-                        to={`/question/${data._id}`}
+                        to={`/resultPage/${data._id}`}
                         onClick={() => {
                             console.log(data._id);
                         }}
@@ -112,7 +112,7 @@ const QuestionList = () => {
                             </div>
                             <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-4">
                                 <div className=" ">
-                                    <div className="semester-header"><h2>Question List</h2></div>
+                                    <div className="semester-header"><h2>Result Sheet</h2></div>
                                     <div className=" mx-5 px-5 mt-3 mb-5">
                                         <DataTable
                                             columns={columns}
@@ -135,4 +135,4 @@ const QuestionList = () => {
     );
 };
 
-export default QuestionList;
+export default ResultSheet;

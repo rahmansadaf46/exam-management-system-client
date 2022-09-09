@@ -63,6 +63,12 @@ const TeacherSidebar = () => {
 
                 </li>
                 <li>
+                    <Link style={{ textDecoration: 'none' }} to="/resultSheet" className="">
+                        <span><FontAwesomeIcon icon={faBars} /> Result Sheet</span>
+                    </Link>
+
+                </li>
+                <li>
                     <Link style={{ textDecoration: 'none' }} to="/department" className="">
                         <span><FontAwesomeIcon icon={faBars} /> Department List</span>
                     </Link>

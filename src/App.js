@@ -36,6 +36,9 @@ import StudentDashboard from './components/Student/StudentDashboard/StudentDashb
 import Exam from './components/Student/Exam/Exam';
 import ExamPage from './components/Student/ExamPage/ExamPage';
 import UpdateQuestion from './components/Teacher/CreateExam/UpdateQuestion';
+import ResultSheet from './components/Teacher/ResultSheet/ResultSheet';
+import ResultPage from './components/Teacher/ResultPage/ResultPage';
+import ResultDetails from './components/Teacher/ResultDetails/ResultDetails';
 
 export const UserContext = createContext();
 
@@ -126,6 +129,15 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/questionList">
             <QuestionList></QuestionList>
+          </PrivateRoute>
+          <PrivateRoute path="/resultSheet">
+            <ResultSheet></ResultSheet>
+          </PrivateRoute>
+          <PrivateRoute path="/resultDetails/:id">
+            <ResultDetails></ResultDetails>
+          </PrivateRoute>
+          <PrivateRoute path="/resultPage/:id">
+            <ResultPage></ResultPage>
           </PrivateRoute>
           <PrivateRoute path="/question/:id">
             <QuestionProfile></QuestionProfile>

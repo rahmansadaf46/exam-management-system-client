@@ -18,6 +18,7 @@ const AddTeacher = () => {
 
     const handleFileChange = (e) => {
         const newFile = e.target.files[0];
+        console.log(newFile)
         setFile(newFile);
     }
     const changeDepartment = (newDepartment) => {

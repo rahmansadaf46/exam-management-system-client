@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 // import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import StudentHeader from '../StudentHeader/StudentHeader';
@@ -101,22 +101,44 @@ const Countdown = ({ time, duration }) => {
     </div>)
 }
 // drag drop file component
-function DragDropFile({handleFunction,question}) {
+function DragDropFile({ handleFunction, question }) {
     // drag state
     const [file, setFile] = useState([])
     function handleFile(files) {
-        console.log(files[0])
-        setFile([files[0]])
-        console.log(files[0].name)
+        console.log(files[0].type)
         // index,question, mark, number, category, ans
-        handleFunction(0, question.assignmentDetails, question.mark, 1, "File Submission", files[0])
+        if (question.fileCategory === 'pdf') {
+            console.log(files[0].type)
+            if (files[0].type === 'application/pdf') {
+                handleFunction(0, question.assignmentDetails, question.mark, 1, "File Submission", files[0])
+                console.log(files[0])
+                setFile([files[0]])
+                console.log(files[0].name)
+            }
+            else {
+                window.alert('Please insert PDF file.')
+            }
+        }
+        else {
+            if (files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                handleFunction(0, question.assignmentDetails, question.mark, 1, "File Submission", files[0])
+                console.log(files[0])
+                setFile([files[0]])
+                console.log(files[0].name)
+            }
+            else {
+                window.alert('Please insert Docx file.')
+            }
+
+        }
+
         // alert("Number of files: " + files);
     }
-    
+
     console.log(file)
-    useEffect(()=>{
+    useEffect(() => {
         // 
-    },[file])
+    }, [file])
     const [dragActive, setDragActive] = React.useState(false);
     // ref
     const inputRef = React.useRef(null);
@@ -176,6 +198,7 @@ function DragDropFile({handleFunction,question}) {
 };
 
 const ExamPage = () => {
+    const history = useHistory()
     const [student, setStudent] = useState([]);
     const [answer, setAnswer] = useState([]);
     // const [semester, setSemester] = useState({});
@@ -195,6 +218,7 @@ const ExamPage = () => {
     document.title = "Exam Page";
 
     useEffect(() => {
+        localStorage.setItem("examStart", true);
         setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
         setIsStudent(JSON.parse(localStorage.getItem("studentAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
@@ -234,21 +258,18 @@ const ExamPage = () => {
         console.log(!isNaN(filterTime))
         if (!isNaN(filterTime)) {
             setInterval(() => {
-                window.location.assign(`/examPage/${questionData._id}`)
+                if (JSON.parse(localStorage.getItem("examStart"))) {
+                    handleSubmit();
+                    // window.location.assign(`/examPage/${questionData._id}`)
+                    localStorage.setItem("examStart", false);
+                }
+               
             }, filterTime);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [questionData.time, questionData.duration, questionData._id, answer])
 
-
-        // setInterval(() => {
-        //     window.location.assign('/exam')
-        //     // if(state.seconds === 0 ){
-        //     //     window.location.assign('/')
-        //     // }
-        //     // console.log(state.seconds)
-        // }, Math.round(new Date(new Date(questionData.time).getTime() + questionData.duration * 60000)- new Date().getTime() / 1000));
-    }, [questionData.time, questionData.duration, questionData._id])
-
-    const handleChange = (index,question, mark, number, category, ans) => {
+    const handleChange = (index, question, mark, number, category, ans) => {
         console.log({
             index: index,
             questionNumber: number,
@@ -272,27 +293,7 @@ const ExamPage = () => {
             const previousAnswer = [...newAns, data]
             setAnswer(previousAnswer)
         }
-        // const findQues = question.filter(question => question.data.question === ques)
-        // // console.log(findQues)
-        // let data = {}
-        // if (findQues[0].data.rightAnswer === ans) {
-        //     data.question = ques;
-        //     data.answer = 'Right'
-        // }
-        // else if (findQues[0].data.rightAnswer !== ans) {
-        //     data.question = ques;
-        //     data.answer = 'Wrong'
-        // }
-        // //    console.log(sameQues)
-        // if (answer.find(ans => ans.question === ques) === undefined) {
-        //     const previousAnswer = [...answer, data]
-        //     setAnswer(previousAnswer)
-        // }
-        // else {
-        //     let newAns = answer.filter(ans => ans.question !== ques)
-        //     const previousAnswer = [...newAns, data]
-        //     setAnswer(previousAnswer)
-        // }
+
 
 
 
@@ -300,13 +301,142 @@ const ExamPage = () => {
     }
 
     const handleSubmit = () => {
+
+        setResult(true)
+        console.log(answer, questionData, student)
+        // const formData = new FormData()
+        // formData.append('student', student);
+        // formData.append('answer', answer);
+        // formData.append('questionData', questionData);
+        // fetch(`http://localhost:5000/question/${questionData._id}`)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log(data.question)
+        //         let question = data.question
+        //         let rightAnswer = [];
+        //         answer.forEach(ans => {
+        //             // console.log(data)
+        //             question.forEach(ques => {
+        //                 if (ques.questionName === ans.questionName) {
+        //                     if (ans.category === 'mcq') {
+        //                         if (ques.rightAnswer === ans.answer) {
+        //                             rightAnswer.push({
+        //                                 questionNumber: ques.questionNumber,
+        //                                 category: ques.category,
+        //                                 questionName: ques.questionName,
+        //                                 answer1: ques.answer1,
+        //                                 answer2: ques.answer2,
+        //                                 answer3: ques.answer3,
+        //                                 answer4: ques.answer4,
+        //                                 rightAnswer: ques.rightAnswer,
+        //                                 mark: parseInt(ques.mark),
+        //                                 givenAnswer: ans.answer,
+        //                                 answer: 'Right'
+        //                             })
+        //                         }
+        //                         else {
+        //                             rightAnswer.push({
+        //                                 questionNumber: ques.questionNumber,
+        //                                 category: ques.category,
+        //                                 questionName: ques.questionName,
+        //                                 answer1: ques.answer1,
+        //                                 answer2: ques.answer2,
+        //                                 answer3: ques.answer3,
+        //                                 answer4: ques.answer4,
+        //                                 rightAnswer: ques.rightAnswer,
+        //                                 mark: parseInt(0),
+        //                                 givenAnswer: ans.answer,
+        //                                 answer: 'Wrong'
+        //                             })
+        //                         }
+        //                     }
+        //                     else if (ans.category === 'fillInTheGaps') {
+        //                         if (ques.rightAnswer.toLowerCase() === ans.answer.toLowerCase()) {
+        //                             rightAnswer.push({
+        //                                 questionNumber: ques.questionNumber,
+        //                                 category: ques.category,
+        //                                 questionName: ques.questionName,
+        //                                 rightAnswer: ques.rightAnswer,
+        //                                 mark: parseInt(ques.mark),
+        //                                 givenAnswer: ans.answer,
+        //                                 answer: 'Right'
+        //                             })
+        //                         }
+        //                         else {
+        //                             rightAnswer.push({
+        //                                 questionNumber: ques.questionNumber,
+        //                                 category: ques.category,
+        //                                 questionName: ques.questionName,
+        //                                 rightAnswer: ques.rightAnswer,
+        //                                 mark: parseInt(0),
+        //                                 givenAnswer: ans.answer,
+        //                                 answer: 'Wrong'
+        //                             })
+        //                         }
+        //                     }
+
+        //                 }
+
+
+        //             })
+        //         })
+
+
+        fetch('http://localhost:5000/addResult1', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ student: student, answer: answer, question: questionData })
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data) {
+                    window.alert('Exam Submitted successfully');
+                    history.goBack()
+                }
+
+            })
+
+            .catch(error => {
+                console.error(error)
+            })
+
+    }
+    const handleViva = (index, question, mark, number, category, ans) => {
         // console.log(answer)
         // const result = answer.filter(ans => ans.answer === 'Right')
         // alert(`Your result is ${result.length}/${question.length}`)
         // window.location.assign('/')
         // setResultCount(result.length)
         // setResult(true)
-        console.log(answer,questionData,student)
+        let dataBody = {
+            index: index + 1,
+            questionName: question,
+            mark: parseInt(mark),
+            questionNumber: number,
+            category: category,
+            answer: ans
+        }
+
+        console.log(dataBody, questionData, student)
+        fetch('http://localhost:5000/addResult1', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data) {
+                    // window.alert('Exam Submitted successfully');
+                    // history.goBack()
+                }
+
+            })
+
+            .catch(error => {
+                console.error(error)
+            })
 
     }
     function shuffle(array) {
@@ -386,7 +516,7 @@ const ExamPage = () => {
                                                                                         <div style={{ lineHeight: '0.5' }}>
                                                                                             <label className="rad-label">
                                                                                                 <input
-                                                                                                    onBlur={() => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, answer.value)}
+                                                                                                    onClick={() => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, answer.value)}
                                                                                                     type="radio" className="rad-input" name="rad" />
                                                                                                 <div className="rad-design" />
                                                                                                 <div style={{ userSelect: 'none' }} className="rad-text">{answer.answer}</div>
@@ -439,13 +569,14 @@ const ExamPage = () => {
                                                             {
                                                                 question[0].assignmentCategory === 'File Submission' ? <>
                                                                     <div className='d-flex justify-content-center'>
-                                                                    <DragDropFile handleFunction={handleChange} question={question[0]}/>
+                                                                        <DragDropFile handleFunction={handleChange} question={question[0]} />
                                                                     </div>
                                                                 </> : <>
 
                                                                     <label >
                                                                         <textArea
-                                                                            // onChange={(e) => handleChange(question.questionNumber,question.category, e.target.value)} 
+
+                                                                            onBlur={(e) => handleChange(0, question[0].assignmentDetails, question[0].mark, 1, "Link Submission", e.target.value)}
                                                                             style={{ width: '400px' }}
                                                                             placeholder="Enter Link Here"
                                                                             type="text" className="form-control" />
@@ -474,7 +605,7 @@ const ExamPage = () => {
                                                     <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
                                                         <fieldset >
                                                             <p className="font-weight-bold mb-4"><span style={{ userSelect: 'none' }} className="text-danger">{question[0].vivaDetails}</span></p>
-                                                            <p className="font-weight-bold mb-4">Attendance Link : <span style={{ userSelect: 'none' }} className="text-primary"><a target="blank" href={`//${question[0]?.attendanceLink}`}>{question[0]?.attendanceLink}</a></span></p>
+                                                            <p className="font-weight-bold mb-4">Attendance Link : <span style={{ userSelect: 'none' }} className="text-primary"><a target="blank" onClick={() => handleViva(0, question[0].vivaDetails, question[0].mark, 1, "viva", 'none')} href={`//${question[0]?.attendanceLink}`}>{question[0]?.attendanceLink}</a></span></p>
                                                         </fieldset>
                                                     </form>
                                                     <br />
@@ -495,7 +626,7 @@ const ExamPage = () => {
                                                                                 <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
                                                                                 <label >
                                                                                     <textArea
-                                                                                        onBlur={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
+                                                                                        onChange={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
                                                                                         style={{ width: '400px', marginBottom: '-15px', height: '200px' }}
                                                                                         type="text" className="form-control" />
 

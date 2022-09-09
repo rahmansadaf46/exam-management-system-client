@@ -158,7 +158,7 @@ const CreateExam = () => {
                 const studentData = data;
                 let updateData = [];
                 studentData.forEach(student=>{
-                    updateData.push({...student, answerId:[]})
+                    updateData.push({...student, result:[]})
                 })
                 setStudents(updateData)
                 console.log(updateData)
@@ -310,11 +310,13 @@ const CreateExam = () => {
         data.teacherName = teacherData[0].name;
         data.email = teacherData[0].email;
         data.category = categoryValue;
+
         console.log(validation)
         if (validation) {
             console.log(data);
             students.map(student => student.fullMark = data.question.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0))
             console.log(students)
+            // data.students = students
             fetch('http://localhost:5000/addQuestion', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -322,7 +324,7 @@ const CreateExam = () => {
             })
                 .then(res => res.json())
                 .then(success => {
-                    console.log(success)
+                    // console.log(success)
                     if (success) {
                         // setLoading(false);
                         alert("Exam Created Successfully");
