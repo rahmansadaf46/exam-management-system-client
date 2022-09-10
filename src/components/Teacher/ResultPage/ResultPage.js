@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Link, useParams } from 'react-router-dom';
-// import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import AddMarkViva from '../AddMarkViva/AddMarkViva';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
-// import UpdateQuestionDetails from '../UpdateQuestionDetails/UpdateQuestionDetails';
 
 
 const ResultPage = () => {
     const [isTeacher, setIsTeacher] = useState(false);
     const [question, setQuestion] = useState([]);
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState('');
+    const [loading, setLoading] = useState(true);
     const { id } = useParams();
-    // const history = useHistory();
     const [resultSheet, setResultSheet] = useState([])
-    // const [modalIsOpen, setIsOpen] = useState(false);
-    // function openModal() {
-    //     setIsOpen(true);
-    // }
     const [modalIsOpen, setIsOpen] = useState(false);
     const [modalData, setModalData] = useState([])
     function openModal() {
         setIsOpen(true);
-        // console.log(data);
-        // setModalData(data);
     }
 
 
@@ -39,7 +31,6 @@ const ResultPage = () => {
                 window.scrollTo(0, 0);
                 ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 setQuestion(ques);
-                console.log(ques)
                 const semester = JSON.parse(localStorage.getItem("selectedSemester"));
                 let studentData = {
                     department: semester.department,
@@ -52,7 +43,6 @@ const ResultPage = () => {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
                         fetch('http://localhost:5000/resultFind', {
                             method: 'POST',
                             headers: { 'content-type': 'application/json' },
@@ -60,7 +50,6 @@ const ResultPage = () => {
                         })
                             .then(res => res.json())
                             .then(result => {
-                                console.log(result)
                                 if (ques.category === 'mcq') {
                                     let filterData = [];
                                     if (result.length > 0) {
@@ -88,6 +77,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -101,6 +91,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -132,6 +123,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -145,6 +137,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -177,6 +170,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -190,6 +184,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -223,6 +218,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -236,6 +232,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -250,26 +247,21 @@ const ResultPage = () => {
 
 
     }, [id])
-    document.title = "Question";
+    document.title = "Result Page";
     const refresh = () => {
         setResultSheet([])
+        setLoading(true)
         fetch(`http://localhost:5000/question/${id}`)
             .then(res => res.json())
             .then(ques => {
                 window.scrollTo(0, 0);
                 ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 setQuestion(ques);
-                console.log(ques)
                 const semester = JSON.parse(localStorage.getItem("selectedSemester"));
                 let studentData = {
                     department: semester.department,
                     session: semester.session
                 }
-                // setInterval(() => {
-                //     this.getCardData(this.dataConfigCard);
-                //     this.getBillingInfoData(this.dataConfig);
-                //     this.getTopTenDiagnosis(this.dataConfig);
-                //   }, 30 * 60 * 1000);
                 fetch('http://localhost:5000/studentsForExam', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -277,7 +269,6 @@ const ResultPage = () => {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
                         fetch('http://localhost:5000/resultFind', {
                             method: 'POST',
                             headers: { 'content-type': 'application/json' },
@@ -285,7 +276,6 @@ const ResultPage = () => {
                         })
                             .then(res => res.json())
                             .then(result => {
-                                console.log(result)
                                 if (ques.category === 'mcq') {
                                     let filterData = [];
                                     if (result.length > 0) {
@@ -313,6 +303,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -326,6 +317,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -357,6 +349,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -370,6 +363,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -402,6 +396,7 @@ const ResultPage = () => {
                                                 }
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                     else {
@@ -415,6 +410,7 @@ const ResultPage = () => {
                                                 attendance: 'Absence'
                                             })
                                         })
+                                        setLoading(false)
                                         setResultSheet(filterData);
                                     }
                                 }
@@ -432,12 +428,6 @@ const ResultPage = () => {
         setIsTeacher(JSON.parse(localStorage.getItem("teacherAccess")) || {});
     }, [])
 
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
-    // function updateDetails(data) {
-    //     console.log(data);
-    // }
     const columnsAssignment = [
         {
             name: '#',
@@ -496,9 +486,6 @@ const ResultPage = () => {
                         className="btn btn-sm btn-info m-1"
                         style={{ display: data.attendance === 'Present' ? 'block' : 'none' }}
                         to={`/resultDetails/${data.resultId}`}
-                        onClick={() => {
-                            console.log(data.resultId);
-                        }}
                     >
                         See Details
                     </Link>
@@ -569,7 +556,6 @@ const ResultPage = () => {
                         onClick={() => {
                             setModalData(data);
                             openModal();
-                            console.log(data);
                         }}
                     >
                         Add Mark
@@ -638,9 +624,6 @@ const ResultPage = () => {
                         className="btn btn-sm btn-info m-1"
                         style={{ display: data.attendance === 'Present' ? 'block' : 'none' }}
                         to={`/resultDetails/${data.resultId}`}
-                        onClick={() => {
-                            console.log(data.resultId);
-                        }}
                     >
                         See Details
                     </Link>
@@ -701,9 +684,6 @@ const ResultPage = () => {
                         className="btn btn-sm btn-info m-1"
                         style={{ display: data.attendance === 'Present' ? 'block' : 'none' }}
                         to={`/resultDetails/${data.resultId}`}
-                        onClick={() => {
-                            console.log(data.resultId);
-                        }}
                     >
                         See Details
                     </Link>
@@ -797,7 +777,7 @@ const ResultPage = () => {
                                             </div>
                                             {question.category === 'viva' && <div style={{ display: 'absolute', marginBottom: '-50px' }} className=" container d-flex justify-content-start mt-3">
                                                 {/* <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label> */}
-                                                <button onClick={() => refresh()} className="btn btn-dark btn-sm" type="submit">Refresh Result</button>
+                                                <button onClick={() => refresh()} className="btn btn-warning btn-sm" type="submit">Refresh Result&nbsp;<b> &#x21bb;</b></button>
 
                                             </div>}
 
@@ -823,7 +803,7 @@ const ResultPage = () => {
                                                             striped
                                                             highlightOnHover
                                                             customStyles={customStyles}
-                                                            progressPending={resultSheet.length === 0}
+                                                            progressPending={loading}
                                                             paginationRowsPerPageOptions={[5, 10, 15]}
                                                         />}
 
@@ -835,7 +815,7 @@ const ResultPage = () => {
                                                             striped
                                                             highlightOnHover
                                                             customStyles={customStyles}
-                                                            progressPending={resultSheet.length === 0}
+                                                            progressPending={loading}
                                                             paginationRowsPerPageOptions={[5, 10, 15]}
                                                         />}
 
@@ -850,7 +830,7 @@ const ResultPage = () => {
                                                                 striped
                                                                 highlightOnHover
                                                                 customStyles={customStyles}
-                                                                progressPending={resultSheet.length === 0}
+                                                                progressPending={loading}
                                                                 paginationRowsPerPageOptions={[5, 10, 15]}
                                                             /></>
                                                     }
@@ -865,7 +845,7 @@ const ResultPage = () => {
                                                                 striped
                                                                 highlightOnHover
                                                                 customStyles={customStyles}
-                                                                progressPending={resultSheet.length === 0}
+                                                                progressPending={loading}
                                                                 paginationRowsPerPageOptions={[5, 10, 15]}
                                                             /></>
                                                     }

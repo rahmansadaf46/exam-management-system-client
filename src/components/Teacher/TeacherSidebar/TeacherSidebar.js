@@ -1,10 +1,14 @@
-import { faBars, faPlus, faSignOutAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faPlus, faSignOutAlt, faClipboard, faCheckSquare, faFile ,faList, } from '@fortawesome/free-solid-svg-icons';
+
+import {   } from '@fortawesome/free-regular-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon  } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router-dom';
 // import { UserContext } from '../../../App';
 // import './Sidebar.css';
-
+library.add(fab, faCheckSquare,)
 const TeacherSidebar = () => {
     // const [loggedInUser, setLoggedInUser] = useContext(UserContext);
     // const [dept, setDept] = useState([]);
@@ -58,13 +62,13 @@ const TeacherSidebar = () => {
                 </li>
                 <li>
                     <Link style={{ textDecoration: 'none' }} to="/questionList" className="">
-                        <span><FontAwesomeIcon icon={faBars} /> Question List</span>
+                        <span><FontAwesomeIcon icon={faList} /> Question List</span>
                     </Link>
 
                 </li>
                 <li>
                     <Link style={{ textDecoration: 'none' }} to="/resultSheet" className="">
-                        <span><FontAwesomeIcon icon={faBars} /> Result Sheet</span>
+                        <span><FontAwesomeIcon icon={faFile} /> Result Sheet</span>
                     </Link>
 
                 </li>

@@ -10,7 +10,8 @@ import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
 const QuestionList = () => {
     const [isTeacher, setIsTeacher] = useState(false);
     const [questionList, setQuestionList] = useState([])
-
+    const [query, setQuery] = useState('')
+    const [loading, setLoading] = useState(true);
     document.title = "Question List";
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const QuestionList = () => {
         })
             .then(res => res.json())
             .then(result => {
-
+                setLoading(false)
                 const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
                 console.log(filterResult)
                 setQuestionList(filterResult.reverse());
@@ -45,7 +46,7 @@ const QuestionList = () => {
         },
         {
             name: 'Category',
-            selector: row => <span >{row.category === 'mcq' ? <><span className='text-uppercase'>{row.category}</span> ({row.mcqCategory === 'mcqFillInTheBlanks'?<>MCQ and Fill in the Blanks</>:row.mcqCategory === 'onlyFillInTheBlanks'?<>Only Fill in the Blanks</>:<>Only MCQ</>})</> : <><span className='text-uppercase'>{row.category}</span></>}</span>,
+            selector: row => <span >{row.category === 'mcq' ? <><span className='text-uppercase'>{row.category}</span> ({row.mcqCategory === 'mcqFillInTheBlanks' ? <>MCQ and Fill in the Blanks</> : row.mcqCategory === 'onlyFillInTheBlanks' ? <>Only Fill in the Blanks</> : <>Only MCQ</>})</> : <><span className='text-uppercase'>{row.category}</span></>}</span>,
         },
         {
             name: 'Action',
@@ -100,6 +101,20 @@ const QuestionList = () => {
             },
         },
     };
+    const search = (rows) => {
+        if (rows) {
+            const columns = rows[0] && Object?.keys(rows[0]);
+            return rows?.filter((row) =>
+                columns?.some(
+                    (column) =>
+                        row[column]
+                            ?.toString()
+                            .toLowerCase()
+                            .indexOf(query?.toLowerCase()) > -1
+                )
+            )
+        }
+    }
     return (
         <>
             {
@@ -113,15 +128,28 @@ const QuestionList = () => {
                             <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-4">
                                 <div className=" ">
                                     <div className="semester-header"><h2>Question List</h2></div>
+                                  
                                     <div className=" mx-5 px-5 mt-3 mb-5">
+                                    <div className="container  form-inline  d-flex justify-content-end my-3">
+                                        <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label>
+                                        <input
+                                            style={{ borderRadius: "100px" }}
+                                            className="form-control ml-2 p-1"
+                                            type="text"
+                                            value={query}
+                                            onChange={(e) => {
+                                                setQuery(e.target.value);
+                                            }}
+                                        />
+                                    </div>
                                         <DataTable
                                             columns={columns}
-                                            data={questionList}
+                                            data={search(questionList)}
                                             pagination
                                             striped
                                             highlightOnHover
                                             customStyles={customStyles}
-                                            progressPending={questionList.length === 0}
+                                            progressPending={loading}
                                             paginationRowsPerPageOptions={[5, 10, 15]}
                                         />
                                     </div>
