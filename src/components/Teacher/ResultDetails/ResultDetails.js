@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import {   useParams } from 'react-router-dom';
 // import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import AddMarkModal from '../AddMarkModal/AddMarkModal';
@@ -12,7 +12,7 @@ const ResultDetails = () => {
     const [isTeacher, setIsTeacher] = useState(false);
     // const [question, setQuestion] = useState([]);
     const { id } = useParams();
-    const history = useHistory();
+    // const history = useHistory();
     const [result, setResult] = useState([])
     const [modalData, setModalData] = useState([])
     // const [modalIsOpen, setIsOpen] = useState(false);
@@ -52,25 +52,25 @@ const ResultDetails = () => {
     // function updateDetails(data) {
     //     console.log(data);
     // }
-    const handleDelete = (id) => {
-        if (window.confirm('Are you sure you want to delete?')) {
+    // const handleDelete = (id) => {
+    //     if (window.confirm('Are you sure you want to delete?')) {
 
-            fetch(`http://localhost:5000/deleteQuestion/${id}`, {
-                method: 'DELETE'
-            })
-                .then(res => res.json())
-                .then(result => {
-                    // localStorage.removeItem("student");
-                    alert('Question Deleted')
-                    if (result) {
-                        // window.location.reload();
-                        history.goBack()
-                    }
+    //         fetch(`http://localhost:5000/deleteQuestion/${id}`, {
+    //             method: 'DELETE'
+    //         })
+    //             .then(res => res.json())
+    //             .then(result => {
+    //                 // localStorage.removeItem("student");
+    //                 alert('Question Deleted')
+    //                 if (result) {
+    //                     // window.location.reload();
+    //                     history.goBack()
+    //                 }
 
-                })
-        }
+    //             })
+    //     }
 
-    }
+    // }
     return (
         <>
             {
@@ -96,6 +96,10 @@ const ResultDetails = () => {
                                                     <h5><span className="text-success">Student Roll:</span> {result.studentRoll} </h5>
                                                     {result?.category === 'written' ? <>
                                                         <h5><span className="text-warning">Status:</span> <span style={{ color: result.status === 'Not Checked' ? 'red' : 'green' }}>{result.status} {result.status === 'Not Checked' ? <>({result.answerData.answer.filter(ans => ans.status === 'Not Checked').length} More Remaining)</> : <></>}</span>  </h5>
+                                                    </> : <></>}
+
+                                                    {result?.category === 'assignment' ? <>
+                                                        <h5><span className="text-warning">Status:</span> <span style={{ color: result.status === 'Not Checked' ? 'red' : 'green' }}>{result.status}</span>  </h5>
                                                     </> : <></>}
                                                     <div className="row">
                                                         <div className='col-md-6'>
@@ -163,10 +167,16 @@ const ResultDetails = () => {
                                                         </div>}
 
                                                     </div>)}
-                                                </div> : result?.category === 'assignment' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor: '#FFFEE2', textAlign: 'center', padding: '10px' }}>
-                                                    {/* <h5 className="text-warning">Assignment Name: <span>{result.question[0]?.assignmentDetails}</span></h5>
-                                                <h5 className="text-success">Assignment Category: <span>{question.question[0]?.assignmentCategory}</span> </h5>
-                                                <h5 className="text-info">File Category: <span>{result.question[0]?.fileCategory}</span> </h5> */}
+                                                </div> : result?.category === 'assignment' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor:  result?.status === 'Not Checked' ? '#fff5f5' : '#dcffd2', textAlign: 'center', padding: '10px' }}>
+                                                { <div style={{  borderTop: 'none', textAlign: 'center', padding: '10px' }}>
+                                                            {/* <h5 className="text-primary">Question Number: <span>{index + 1}</span></h5> */}
+                                                            <h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0].questionName}</span></h5>
+                                                            {/* <h5 className="text-success">Right Answer: <span>{data.rightAnswer}</span></h5> */}
+                                                            <h5 className="text-success">Link: <a target="blank" href={result?.answerData?.answer[0].answer}>{result?.answerData?.answer[0].answer}</a></h5>
+                                                            <button onClick={() => openModal({ questionName: result?.answerData?.answer[0].questionName, questionNumber: result?.answerData?.answer[0].questionNumber, mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
+                                                        </div>}
+                                                    
+                                            
                                                 </div> </> : result?.category === 'viva' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor: '#FFFEE2', textAlign: 'center', padding: '10px', marginBottom: '40px' }}>
                                                     {/* <h5 className="text-warning">Viva Details: <span>{result.question[0]?.vivaDetails}</span></h5>
                                                 <br></br>
@@ -187,7 +197,7 @@ const ResultDetails = () => {
                                                         </div>}
 
                                                     </div>)}
-                                                    <AddMarkModal setResult={setResult} modalIsOpen={modalIsOpen} result={result} answer={modalData} closeModal={closeModal}></AddMarkModal>
+                                                    
                                                     {result?.answerData?.notAnswer.length > 0 && <h2 className='text-center mt-3 text-danger'>Not Answer</h2>}
                                                     {result?.answerData?.notAnswer.length > 0 && result?.answerData?.notAnswer?.map((data, index) => <div>
                                                         {<div style={{ border: '3px solid gray', backgroundColor: '#fff5f5', textAlign: 'center', padding: '10px' }}>
@@ -206,6 +216,7 @@ const ResultDetails = () => {
                                     </div>}
                                 </div>
                             </div>
+                            <AddMarkModal setResult={setResult} modalIsOpen={modalIsOpen} result={result} answer={modalData} closeModal={closeModal}></AddMarkModal>
                         </div>
 
                     </div> : <Unauthorized />

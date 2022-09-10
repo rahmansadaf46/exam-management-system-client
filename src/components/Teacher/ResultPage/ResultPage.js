@@ -45,6 +45,226 @@ const ResultPage = () => {
                     department: semester.department,
                     session: semester.session
                 }
+                fetch('http://localhost:5000/studentsForExam', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: studentData })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        fetch('http://localhost:5000/resultFind', {
+                            method: 'POST',
+                            headers: { 'content-type': 'application/json' },
+                            body: JSON.stringify({ questionId: id })
+                        })
+                            .then(res => res.json())
+                            .then(result => {
+                                console.log(result)
+                                if (ques.category === 'mcq') {
+                                    let filterData = [];
+                                    if (result.length > 0) {
+                                        result.forEach(resultStudent => {
+                                            data.forEach(student => {
+                                                if (resultStudent.studentEmail === student.email) {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: resultStudent.obtainedMark,
+                                                        resultId: resultStudent._id,
+                                                        attendance: 'Present'
+                                                    })
+                                                }
+                                                else {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: 0,
+
+                                                        attendance: 'Absence'
+                                                    })
+                                                }
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                    else {
+                                        data.forEach(student => {
+                                            filterData.push({
+                                                name: student.name,
+                                                roll: student.roll,
+                                                email: student.email,
+                                                obtainedMark: 0,
+
+                                                attendance: 'Absence'
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                }
+                                else if (ques.category === 'written') {
+                                    let filterData = [];
+                                    if (result.length > 0) {
+                                        result.forEach(resultStudent => {
+                                            data.forEach(student => {
+                                                if (resultStudent.studentEmail === student.email) {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: resultStudent.obtainedMark,
+                                                        resultId: resultStudent._id,
+                                                        status: resultStudent.status,
+                                                        attendance: 'Present'
+                                                    })
+                                                }
+                                                else {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: 0,
+
+                                                        attendance: 'Absence'
+                                                    })
+                                                }
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                    else {
+                                        data.forEach(student => {
+                                            filterData.push({
+                                                name: student.name,
+                                                roll: student.roll,
+                                                email: student.email,
+                                                obtainedMark: 0,
+
+                                                attendance: 'Absence'
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                }
+                                else if (ques.category === 'viva') {
+                                    let filterData = [];
+                                    if (result.length > 0) {
+                                        result.forEach(resultStudent => {
+                                            data.forEach(student => {
+                                                if (resultStudent.studentEmail === student.email) {
+                                                    filterData.push({
+                                                        resultData: resultStudent,
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: resultStudent.obtainedMark,
+                                                        status: resultStudent.status,
+                                                        fullMark: result[0]?.totalMark,
+                                                        attendance: 'Present'
+                                                    })
+                                                }
+                                                else {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: 0,
+
+                                                        attendance: 'Absence'
+                                                    })
+                                                }
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                    else {
+                                        data.forEach(student => {
+                                            filterData.push({
+                                                name: student.name,
+                                                roll: student.roll,
+                                                email: student.email,
+                                                obtainedMark: 0,
+
+                                                attendance: 'Absence'
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                }
+                                else if (ques.category === 'assignment') {
+                                    let filterData = [];
+                                    if (result.length > 0) {
+                                        result.forEach(resultStudent => {
+                                            data.forEach(student => {
+                                                if (resultStudent.studentEmail === student.email) {
+                                                    filterData.push({
+                                                        resultData: resultStudent,
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: resultStudent.obtainedMark,
+                                                        status: resultStudent.status,
+                                                        resultId: resultStudent._id,
+                                                        fullMark: result[0]?.totalMark,
+                                                        attendance: 'Present'
+                                                    })
+                                                }
+                                                else {
+                                                    filterData.push({
+                                                        name: student.name,
+                                                        roll: student.roll,
+                                                        email: student.email,
+                                                        obtainedMark: 0,
+
+                                                        attendance: 'Absence'
+                                                    })
+                                                }
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                    else {
+                                        data.forEach(student => {
+                                            filterData.push({
+                                                name: student.name,
+                                                roll: student.roll,
+                                                email: student.email,
+                                                obtainedMark: 0,
+
+                                                attendance: 'Absence'
+                                            })
+                                        })
+                                        setResultSheet(filterData);
+                                    }
+                                }
+                            })
+
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+
+            })
+
+
+    }, [id])
+    document.title = "Question";
+    const refresh = () => {
+        setResultSheet([])
+        fetch(`http://localhost:5000/question/${id}`)
+            .then(res => res.json())
+            .then(ques => {
+                window.scrollTo(0, 0);
+                ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                setQuestion(ques);
+                console.log(ques)
+                const semester = JSON.parse(localStorage.getItem("selectedSemester"));
+                let studentData = {
+                    department: semester.department,
+                    session: semester.session
+                }
                 // setInterval(() => {
                 //     this.getCardData(this.dataConfigCard);
                 //     this.getBillingInfoData(this.dataConfig);
@@ -207,185 +427,6 @@ const ResultPage = () => {
 
             })
 
-
-    }, [id])
-    document.title = "Question";
-    const refresh = () =>{
-        setResultSheet([])
-        fetch(`http://localhost:5000/question/${id}`)
-        .then(res => res.json())
-        .then(ques => {
-            window.scrollTo(0, 0);
-            ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            setQuestion(ques);
-            console.log(ques)
-            const semester = JSON.parse(localStorage.getItem("selectedSemester"));
-            let studentData = {
-                department: semester.department,
-                session: semester.session
-            }
-            // setInterval(() => {
-            //     this.getCardData(this.dataConfigCard);
-            //     this.getBillingInfoData(this.dataConfig);
-            //     this.getTopTenDiagnosis(this.dataConfig);
-            //   }, 30 * 60 * 1000);
-            fetch('http://localhost:5000/studentsForExam', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: studentData })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    fetch('http://localhost:5000/resultFind', {
-                        method: 'POST',
-                        headers: { 'content-type': 'application/json' },
-                        body: JSON.stringify({ questionId: id })
-                    })
-                        .then(res => res.json())
-                        .then(result => {
-                            console.log(result)
-                            if (ques.category === 'mcq') {
-                                let filterData = [];
-                                if (result.length > 0) {
-                                    result.forEach(resultStudent => {
-                                        data.forEach(student => {
-                                            if (resultStudent.studentEmail === student.email) {
-                                                filterData.push({
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: resultStudent.obtainedMark,
-                                                    resultId: resultStudent._id,
-                                                    attendance: 'Present'
-                                                })
-                                            }
-                                            else {
-                                                filterData.push({
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: 0,
-
-                                                    attendance: 'Absence'
-                                                })
-                                            }
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                                else {
-                                    data.forEach(student => {
-                                        filterData.push({
-                                            name: student.name,
-                                            roll: student.roll,
-                                            email: student.email,
-                                            obtainedMark: 0,
-
-                                            attendance: 'Absence'
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                            }
-                            else if (ques.category === 'written') {
-                                let filterData = [];
-                                if (result.length > 0) {
-                                    result.forEach(resultStudent => {
-                                        data.forEach(student => {
-                                            if (resultStudent.studentEmail === student.email) {
-                                                filterData.push({
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: resultStudent.obtainedMark,
-                                                    resultId: resultStudent._id,
-                                                    status: resultStudent.status,
-                                                    attendance: 'Present'
-                                                })
-                                            }
-                                            else {
-                                                filterData.push({
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: 0,
-
-                                                    attendance: 'Absence'
-                                                })
-                                            }
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                                else {
-                                    data.forEach(student => {
-                                        filterData.push({
-                                            name: student.name,
-                                            roll: student.roll,
-                                            email: student.email,
-                                            obtainedMark: 0,
-
-                                            attendance: 'Absence'
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                            }
-                            else if (ques.category === 'viva') {
-                                let filterData = [];
-                                if (result.length > 0) {
-                                    result.forEach(resultStudent => {
-                                        data.forEach(student => {
-                                            if (resultStudent.studentEmail === student.email) {
-                                                filterData.push({
-                                                    resultData: resultStudent,
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: resultStudent.obtainedMark,
-                                                    status: resultStudent.status,
-                                                    fullMark: result[0]?.totalMark,
-                                                    attendance: 'Present'
-                                                })
-                                            }
-                                            else {
-                                                filterData.push({
-                                                    name: student.name,
-                                                    roll: student.roll,
-                                                    email: student.email,
-                                                    obtainedMark: 0,
-
-                                                    attendance: 'Absence'
-                                                })
-                                            }
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                                else {
-                                    data.forEach(student => {
-                                        filterData.push({
-                                            name: student.name,
-                                            roll: student.roll,
-                                            email: student.email,
-                                            obtainedMark: 0,
-
-                                            attendance: 'Absence'
-                                        })
-                                    })
-                                    setResultSheet(filterData);
-                                }
-                            }
-                        })
-
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-
-        })
-
     }
     useEffect(() => {
         setIsTeacher(JSON.parse(localStorage.getItem("teacherAccess")) || {});
@@ -397,6 +438,76 @@ const ResultPage = () => {
     // function updateDetails(data) {
     //     console.log(data);
     // }
+    const columnsAssignment = [
+        {
+            name: '#',
+            sortable: true,
+            cell: (data, index) => (
+                <span>{index + 1}.</span>
+            ),
+            width: '70px'
+        },
+        {
+            name: 'Student Name',
+            sortable: true,
+            wrap: true,
+            selector: row => row.name,
+            width: '180px'
+        },
+        {
+            name: 'Roll',
+            selector: row => row.roll,
+            sortable: true,
+            width: '90px'
+        },
+        {
+            name: 'Obtained Mark',
+            sortable: true,
+            width: '180px',
+            selector: row => row.obtainedMark,
+            cell: (data) => (
+                <span style={{ color: data.obtainedMark === 0 ? 'red' : 'green' }}><b>{data.obtainedMark}</b></span>
+            ),
+        },
+        {
+            name: 'Attendance',
+            sortable: true,
+            width: '155px',
+            selector: row => row.attendance,
+            cell: (data) => (
+                <span style={{ color: data.attendance === 'Present' ? 'green' : 'red' }}>{data.attendance}</span>
+            ),
+        },
+        {
+            name: 'Status',
+            selector: row => row.status,
+            cell: (data) => (
+                <span style={{ color: data.status === 'Not Checked' ? 'red' : 'green' }}>{data.status}</span>
+            ),
+            sortable: true,
+            width: '150px'
+        },
+
+        {
+            name: 'Action',
+            cell: (data) => (
+                <div>
+                     <Link
+                        className="btn btn-sm btn-info m-1"
+                        style={{ display: data.attendance === 'Present' ? 'block' : 'none' }}
+                        to={`/resultDetails/${data.resultId}`}
+                        onClick={() => {
+                            console.log(data.resultId);
+                        }}
+                    >
+                        See Details
+                    </Link>
+                    {" "}
+
+                </div>
+            ),
+        },
+    ];
     const columnsViva = [
         {
             name: '#',
@@ -684,12 +795,12 @@ const ResultPage = () => {
                                                 </div>
 
                                             </div>
-                                            {question.category === 'viva' &&  <div style={{display:'absolute', marginBottom:'-50px'}} className=" container d-flex justify-content-start mt-3">
+                                            {question.category === 'viva' && <div style={{ display: 'absolute', marginBottom: '-50px' }} className=" container d-flex justify-content-start mt-3">
                                                 {/* <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label> */}
-                                                <button onClick={()=> refresh()} className="btn btn-dark btn-sm" type="submit">Refresh Result</button>
+                                                <button onClick={() => refresh()} className="btn btn-dark btn-sm" type="submit">Refresh Result</button>
 
                                             </div>}
-                                           
+
                                             <div>
                                                 <div className="container  form-inline  d-flex justify-content-end my-3">
                                                     <label style={{ color: '#7AB259' }} className=" ml-1" htmlFor="filter">Filter</label>
@@ -734,6 +845,21 @@ const ResultPage = () => {
                                                         <>
                                                             <DataTable
                                                                 columns={columnsViva}
+                                                                data={search(resultSheet)}
+                                                                pagination
+                                                                striped
+                                                                highlightOnHover
+                                                                customStyles={customStyles}
+                                                                progressPending={resultSheet.length === 0}
+                                                                paginationRowsPerPageOptions={[5, 10, 15]}
+                                                            /></>
+                                                    }
+                                                    {question.category === 'assignment' &&
+
+
+                                                        <>
+                                                            <DataTable
+                                                                columns={columnsAssignment}
                                                                 data={search(resultSheet)}
                                                                 pagination
                                                                 striped

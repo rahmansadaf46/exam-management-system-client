@@ -31,7 +31,7 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
     //     // }
     // }
 
-
+    console.log(result)
     const onSubmit = data => {
         // data.session = selectedSession;
         console.log(data)
@@ -41,38 +41,69 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
             window.alert(`Mark is bigger than ${answer.mark}`)
         }
         else {
-            let answerData = result.answerData.answer;
-            let filterAnotherAnswer = answerData.filter(ans => ans.questionNumber !== parseInt(quesId))
-            let filterAnswer = answerData.filter(ans => ans.questionNumber === parseInt(quesId))
 
-            filterAnswer[0].obtainedMark = parseInt(mark);
-            filterAnswer[0].status = 'Checked';
-            let allAnswer = [...filterAnswer, ...filterAnotherAnswer];
-            let allCheck = allAnswer.filter(ans => ans.status === 'Not Checked')
-            if (allCheck.length === 0) {
+            if(result.category === 'assignment'){
+                // let answerData = result.answerData.answer;
+                
+                
+                result.obtainedMark = parseInt(mark);
                 result.status = "Checked";
-            }
-            let totalObtainMark = allAnswer.map(ans => ans.obtainedMark).reduce((a, b) => a + b, 0);
-            result.answerData.answer = allAnswer;
-            result.obtainedMark = parseInt(totalObtainMark);
-            console.log(result, totalObtainMark)
-            fetch(`http://localhost:5000/updateResult/${result._id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(result)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data) {
-                        setResult(result);
-                        closeModal();
-                        // closeModal();
-                        // localStorage.removeItem("student");
-                        // window.location.reload();
-                        // history.goBack()
-                        // alert("Updated Successfully");
-                    }
+                fetch(`http://localhost:5000/updateResult/${result._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(result)
                 })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            setResult(result);
+                            closeModal();
+                            // closeModal();
+                            // localStorage.removeItem("student");
+                            // window.location.reload();
+                            // history.goBack()
+                            // alert("Updated Successfully");
+                        }
+                    })
+                // setResult(result);
+                // closeModal();
+                // console.log(result, totalObtainMark)
+            }
+            else{
+                let answerData = result.answerData.answer;
+                let filterAnotherAnswer = answerData.filter(ans => ans.questionNumber !== parseInt(quesId))
+                let filterAnswer = answerData.filter(ans => ans.questionNumber === parseInt(quesId))
+    
+                filterAnswer[0].obtainedMark = parseInt(mark);
+                filterAnswer[0].status = 'Checked';
+                let allAnswer = [...filterAnswer, ...filterAnotherAnswer];
+                let allCheck = allAnswer.filter(ans => ans.status === 'Not Checked')
+                if (allCheck.length === 0) {
+                    result.status = "Checked";
+                }
+                let totalObtainMark = allAnswer.map(ans => ans.obtainedMark).reduce((a, b) => a + b, 0);
+                result.answerData.answer = allAnswer;
+                result.obtainedMark = parseInt(totalObtainMark);
+                console.log(result, totalObtainMark)
+                fetch(`http://localhost:5000/updateResult/${result._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(result)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            setResult(result);
+                            closeModal();
+                            // closeModal();
+                            // localStorage.removeItem("student");
+                            // window.location.reload();
+                            // history.goBack()
+                            // alert("Updated Successfully");
+                        }
+                    })
+            }
+          
            
             
         }
@@ -133,12 +164,13 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
 
             <h4 style={{ color: '#7BB35A' }} className="text-center text-brand">Add Mark </h4>
             <form className="p-2" onSubmit={handleSubmit(onSubmit)}>
-                <div className="form-group text-center">
+                {result.category === 'assignment' ? <></> : <>  <div className="form-group text-center">
                     <span className='text-warning'>Question No: </span> <span className='text-success'>{answer.index}</span>
                 </div>
                 <div className="form-group text-center">
                     <span className='text-warning'>Question Name: </span> <span className='text-success'>{answer.questionName}</span>
-                </div>
+                </div></>}
+              
                 <div className="form-group">
                     <label for="">Enter Mark:</label>
                     <input type="text" ref={register({ required: true })} defaultValue={answer.obtainedMark} name={answer.questionNumber} className="form-control" />
