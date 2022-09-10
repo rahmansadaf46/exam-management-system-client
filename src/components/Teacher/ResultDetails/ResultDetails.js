@@ -170,10 +170,18 @@ const ResultDetails = () => {
                                                 </div> : result?.category === 'assignment' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor:  result?.status === 'Not Checked' ? '#fff5f5' : '#dcffd2', textAlign: 'center', padding: '10px' }}>
                                                 { <div style={{  borderTop: 'none', textAlign: 'center', padding: '10px' }}>
                                                             {/* <h5 className="text-primary">Question Number: <span>{index + 1}</span></h5> */}
-                                                            <h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0].questionName}</span></h5>
-                                                            {/* <h5 className="text-success">Right Answer: <span>{data.rightAnswer}</span></h5> */}
+                                                            {result?.answerData?.answer[0]?.category === "Link Submission" ? <><h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0].questionName}</span></h5>
+
                                                             <h5 className="text-success">Link: <a target="blank" href={result?.answerData?.answer[0].answer}>{result?.answerData?.answer[0].answer}</a></h5>
                                                             <button onClick={() => openModal({ questionName: result?.answerData?.answer[0].questionName, questionNumber: result?.answerData?.answer[0].questionNumber, mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
+                                                            </> : <>
+                                                            <h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0]?.assignmentDetails}</span></h5>
+
+                                                            <h5 className="text-success">File: <a href={`http://localhost:5000/files/${result?.answerData?.answer[0].answer}`}>{result?.answerData?.answer[0].answer}</a></h5>
+                                                            <button onClick={() => openModal({ questionName: '', questionNumber: '1', mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
+                                                            </>}
+                                                            
+                                                           
                                                         </div>}
                                                     
                                             

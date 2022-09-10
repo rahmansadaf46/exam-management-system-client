@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useForm } from "react-hook-form";
-// import { useHistory } from 'react-router-dom';
 
 const customStyles = {
     content: {
@@ -16,36 +15,15 @@ const customStyles = {
 
 const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) => {
     const { register, handleSubmit, errors } = useForm();
-    // let history = useHistory();
-    // const [allSession, setAllSession] = useState('');
-    // const [session, setSession] = useState([]);
-    // const [selectedSession, setSelectedSession] = useState(student.session);
-    // const changeDepartment = (newDepartment) => {
-    //     setCurrentDepartment(newDepartment)
-    //     setSelectedSession("")
-    //     console.log(newDepartment, selectedSession, student.department)
-    //     setSession(allSession.filter(data => data?.department === newDepartment))
 
-    //     // if (newDepartment !== student.department) {
-
-    //     // }
-    // }
-
-    console.log(result)
     const onSubmit = data => {
-        // data.session = selectedSession;
-        console.log(data)
         let quesId = Object.keys(data)[0];
         let mark = Object.values(data)[0];
         if (mark > answer.mark) {
             window.alert(`Mark is bigger than ${answer.mark}`)
         }
         else {
-
             if(result.category === 'assignment'){
-                // let answerData = result.answerData.answer;
-                
-                
                 result.obtainedMark = parseInt(mark);
                 result.status = "Checked";
                 fetch(`http://localhost:5000/updateResult/${result._id}`, {
@@ -58,16 +36,8 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
                         if (data) {
                             setResult(result);
                             closeModal();
-                            // closeModal();
-                            // localStorage.removeItem("student");
-                            // window.location.reload();
-                            // history.goBack()
-                            // alert("Updated Successfully");
                         }
                     })
-                // setResult(result);
-                // closeModal();
-                // console.log(result, totalObtainMark)
             }
             else{
                 let answerData = result.answerData.answer;
@@ -84,7 +54,6 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
                 let totalObtainMark = allAnswer.map(ans => ans.obtainedMark).reduce((a, b) => a + b, 0);
                 result.answerData.answer = allAnswer;
                 result.obtainedMark = parseInt(totalObtainMark);
-                console.log(result, totalObtainMark)
                 fetch(`http://localhost:5000/updateResult/${result._id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -94,12 +63,7 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
                     .then(data => {
                         if (data) {
                             setResult(result);
-                            closeModal();
-                            // closeModal();
-                            // localStorage.removeItem("student");
-                            // window.location.reload();
-                            // history.goBack()
-                            // alert("Updated Successfully");
+                            closeModal();;
                         }
                     })
             }
@@ -107,44 +71,6 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
            
             
         }
-        //   console.log( Object.values(data)[0])
-
-
-        // let validation = true;
-
-        // if (question.category === 'mcq' || question.category === 'written') {
-        //     if (parseInt(data.questionQuantity) > parseInt(data.totalQuestion)) {
-        //         window.alert("Please Enter Right Question Quantity");
-        //         validation = false;
-        //     }
-        // }
-        // if(validation){
-        //     window.alert("Question Updated Successfully");
-        //     let updateData = Object.assign(question, data)
-        //     console.log(updateData)
-        // }
-
-        // question.
-        // updateDetails(data)
-        // if (data.session === "") {
-        //     window.alert("Please Enter Session")
-        // }
-        // else {
-        //     fetch(`http://localhost:5000/updateStudent/${student._id}`, {
-        //         method: 'PATCH',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify(data)
-        //     })
-        //         .then(res => res.json())
-        //         .then(data => {
-        //             if (data) {
-        //                 closeModal();
-        //                 localStorage.removeItem("student");
-        //                 window.location.reload();
-        //                 alert("Updated Successfully");
-        //             }
-        //         })
-        // }
 
     }
     return (
@@ -180,22 +106,6 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
                 <div className="form-group text-center">
                     <span className='text-primary'>Total Mark: </span> <span className='text-danger'>{answer.mark}</span>
                 </div>
-                {/* <div className='row'>
-               <div className="form-group col-6">
-                    <label for="">Exam time and date:</label>
-                    <input type="datetime-local" ref={register({ required: true })} name="time" defaultValue={question.time}  className="form-control" />
-                    {errors.time && <span className="text-danger">This field is required</span>}
-                </div>
-                <div className="form-group col-6">
-                    
-                    <div className="">
-                        <label for="">Duration:</label>
-                        <input ref={register({ required: true })} className="form-control" name="duration" defaultValue={question.duration}  type="number" />
-                        {errors.duration && <span className="text-danger">This field is required</span>}
-                    </div>
-                </div>
-               </div> */}
-
                 <div className="form-group text-center">
                     <button type="submit" style={{ background: "#FB9937" }} className="btn  text-white px-5">Update Mark</button>
                 </div>

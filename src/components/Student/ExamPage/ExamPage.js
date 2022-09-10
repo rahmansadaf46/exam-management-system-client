@@ -323,7 +323,68 @@ const ExamPage = () => {
                 })
         }
         else {
-            console.log(answer, questionData, student)
+            // console.log(answer, questionData, student)
+
+            let dataBody = {
+                questionId: questionData._id,
+                examName: questionData.examName,
+                category: questionData.category,
+                teacherName: questionData.teacherName,
+                teacherEmail: questionData.email,
+                time: questionData.time,
+                duration: questionData.duration,
+                semester: questionData.semester,
+                department: questionData.department,
+                session: questionData.session,
+                totalQuestion: null,
+                studentEmail: student[0].email,
+                studentName: student[0].name,
+                studentRoll: student[0].roll,
+                status: 'Not Checked',
+                totalMark: answer[0].mark,
+                obtainedMark: parseInt(0),
+                file: answer[0].answer,
+                assignmentCategory: answer[0].category,
+                assignmentDetails: answer[0].questionName
+               
+            }
+            console.log(dataBody);
+            const formData = new FormData()
+            formData.append('file', answer[0].answer);
+            formData.append('assignmentDetails', dataBody.assignmentDetails);
+            formData.append('assignmentCategory', dataBody.assignmentCategory);
+            formData.append('obtainedMark', dataBody.obtainedMark);
+            formData.append('totalMark', dataBody.totalMark);
+            formData.append('status', dataBody.status);
+            formData.append('studentRoll', dataBody.studentRoll);
+            formData.append('studentName', dataBody.studentName);
+            formData.append('questionId', dataBody.questionId);
+            formData.append('examName', dataBody.examName);
+            formData.append('category', dataBody.category);
+            formData.append('teacherName', dataBody.teacherName);
+            formData.append('teacherEmail', dataBody.teacherEmail);
+            formData.append('time', dataBody.time);
+            formData.append('duration', dataBody.duration);
+            formData.append('semester', dataBody.semester);
+            formData.append('department', dataBody.department);
+            formData.append('session', dataBody.session);
+            formData.append('totalQuestion', dataBody.totalQuestion);
+            formData.append('studentEmail', dataBody.studentEmail);
+            fetch('http://localhost:5000/addResult2', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        window.alert('Exam Submitted successfully');
+                        history.goBack()
+                    }
+                })
+    
+                .catch(error => {
+                    console.error(error)
+                })
         }
 
 
