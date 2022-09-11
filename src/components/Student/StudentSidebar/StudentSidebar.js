@@ -1,4 +1,4 @@
-import { faBars,  faSignOutAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faBars,  faSignOutAlt, faClipboard, faList } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -54,6 +54,12 @@ const StudentSidebar = () => {
                 <li>
                     <Link style={{ textDecoration: 'none' }} to="/exam" className="">
                         <span><FontAwesomeIcon icon={faClipboard} /> Exam Panel</span>
+                    </Link>
+
+                </li>
+                <li>
+                    <Link style={{ textDecoration: 'none' }} to="/studentResult" className="">
+                        <span><FontAwesomeIcon icon={faList} /> Result</span>
                     </Link>
 
                 </li>

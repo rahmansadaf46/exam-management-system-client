@@ -39,6 +39,8 @@ import UpdateQuestion from './components/Teacher/CreateExam/UpdateQuestion';
 import ResultSheet from './components/Teacher/ResultSheet/ResultSheet';
 import ResultPage from './components/Teacher/ResultPage/ResultPage';
 import ResultDetails from './components/Teacher/ResultDetails/ResultDetails';
+import StudentResult from './components/Student/StudentResult/StudentResult';
+import StudentResultDetails from './components/Student/StudentResultDetails/StudentResultDetails';
 
 export const UserContext = createContext();
 
@@ -144,6 +146,12 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/studentDashboard">
             <StudentDashboard></StudentDashboard>
+          </PrivateRoute>
+          <PrivateRoute path="/studentResult">
+            <StudentResult></StudentResult>
+          </PrivateRoute>
+          <PrivateRoute path="/studentResultDetails/:id">
+            <StudentResultDetails></StudentResultDetails>
           </PrivateRoute>
           <PrivateRoute path="/exam">
             <Exam></Exam>
