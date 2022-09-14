@@ -8,7 +8,7 @@ import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import "./Login.css";
 import logo from "../../images/ICON/istName.PNG"
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 
 firebase.initializeApp(firebaseConfig);
@@ -220,7 +220,7 @@ const Login = () => {
                     setLoggedInUser(newUser);
                     setData(newUser);
                     console.log(newUser);
-                    fetch('http://localhost:5000/isAdmin', {
+                    fetch(BASE_URL + '/isAdmin', {
                         method: 'POST',
                         headers: { 'content-type': 'application/json' },
                         body: JSON.stringify({ email: email })

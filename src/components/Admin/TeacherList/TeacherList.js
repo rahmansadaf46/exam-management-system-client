@@ -8,7 +8,7 @@ import { UserContext } from '../../../App';
 // import AllTeachersData from '../AllTeachersData/AllTeachersData';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const TeacherList = () => {
     // const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
@@ -46,7 +46,7 @@ const TeacherList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/teachers')
+        fetch(BASE_URL + '/teachers')
             .then(res => res.json())
             .then(data => {
                 // if (data) {
@@ -66,7 +66,7 @@ const TeacherList = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://localhost:5000/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })
@@ -96,7 +96,7 @@ const TeacherList = () => {
             name: '',
             width:'50px',
             cell: (data, index) => (
-                <><td className="avatar-img mr-4"><img className="avatar" src={`http://localhost:5000/teacher/${data.image}`} alt="avatar" /> </td>
+                <><td className="avatar-img mr-4"><img className="avatar" src={BASE_URL + `${data.image}`} alt="avatar" /> </td>
                  </>
                
              ),
@@ -124,9 +124,9 @@ const TeacherList = () => {
                 <div>
                     <Link
                         className="btn btn-sm btn-success m-1"
-                        to={`/admin/teacher/${data._id}`}
+                        to={`/admin/teacher/${data.id}`}
                         onClick={() => {
-                            console.log(data._id);
+                            console.log(data.id);
                         }}
                     >
                         See Details

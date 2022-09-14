@@ -5,7 +5,7 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import { UserContext } from '../../../App';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AdminList = () => {
     // const { register, handleSubmit, errors } = useForm();
     const [loggedInUser] = useContext(UserContext);
@@ -43,7 +43,7 @@ const AdminList = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/adminList')
+        fetch(BASE_URL + '/adminList')
             .then(res => res.json())
             .then(data => {
                 // if (data) {
@@ -63,7 +63,7 @@ const AdminList = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://localhost:5000/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })
@@ -85,7 +85,7 @@ const AdminList = () => {
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete?')) {
 
-            fetch(`http://localhost:5000/deleteAdmin/${id}`, {
+            fetch(BASE_URL + `/deleteAdmin/${id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())
@@ -148,11 +148,11 @@ const AdminList = () => {
                                                                         {
                                                                             admin.map((data, index) =>
             
-                                                                                <tr key={data._id} style={{ background: 'white' }}>
+                                                                                <tr key={data.id} style={{ background: 'white' }}>
                                                                                     <td >{index + 1}.</td>
             
                                                                                     <td className=""><span className="mt-5">{data.email}</span></td>
-                                                                                    <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data._id)} className="btn btn-danger btn-sm">Remove</button></td>
+                                                                                    <td><button style={{ display: data.email === loggedInUser.email ? 'none' : '' }} onClick={() => handleDelete(data.id)} className="btn btn-danger btn-sm">Remove</button></td>
                                                                                 </tr>
                                                                             )
                                                                         }
@@ -164,8 +164,8 @@ const AdminList = () => {
             
             
                                                     </div>
-                                                    {/* <AlldepartmentData key={department._id} department={department}></AlldepartmentData> */}
-                                                    {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department._id} department={department}></AlldepartmentData>} */}
+                                                    {/* <AlldepartmentData key={department.id} department={department}></AlldepartmentData> */}
+                                                    {/* {teacherNF === true ? <h1 style={{ color: '#DC3545' }} className="text-center mt-5">Teacher's Data Not Found</h1> : <AlldepartmentData key={department.id} department={department}></AlldepartmentData>} */}
             
                                                 </div>
                                             }

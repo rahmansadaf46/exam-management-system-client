@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const MakeAdmin = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const MakeAdmin = () => {
             setLoading(true);
         }
         // https://demo-0523.herokuapp.com/admin/addAdmin
-        fetch('http://localhost:5000/addAdmin', {
+        fetch(BASE_URL + '/addAdmin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

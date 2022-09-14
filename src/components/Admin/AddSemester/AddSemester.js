@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 // import YearPicker from "react-single-year-picker";
 import Select from "react-select";
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AddSemester = () => {
     const { register, handleSubmit, errors } = useForm();
     const [listLoading, setListLoading] = useState(true);
@@ -41,7 +42,7 @@ const AddSemester = () => {
         data.status = "Active"
         console.log(data)
         // https://demo-0523.herokuapp.com/admin/addAdmin
-        fetch('http://localhost:5000/addSemester', {
+        fetch(BASE_URL + '/addSemester', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -68,7 +69,7 @@ const AddSemester = () => {
 
     function MyComponent2() {
         useEffect(() => {
-            fetch('http://localhost:5000/departments')
+            fetch(BASE_URL + '/departments')
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
@@ -95,7 +96,7 @@ const AddSemester = () => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:5000/teachers')
+        fetch(BASE_URL + '/teachers')
             .then(res => res.json())
             .then(data => {
 
@@ -109,7 +110,7 @@ const AddSemester = () => {
                 // }
                 // setDept(data)
             })
-        fetch('http://localhost:5000/sessions')
+        fetch(BASE_URL + '/sessions')
             .then(res => res.json())
             .then(data => {
                 // console.log(data)
@@ -182,7 +183,7 @@ const AddSemester = () => {
         //     ...provided,
         // }),
     };
-
+console.log(teacher)
     return (
         <>
             {

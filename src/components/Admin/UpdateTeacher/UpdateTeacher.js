@@ -13,7 +13,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)'
     }
 };
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const UpdateTeacher = ({ modalIsOpen, closeModal, teacher }) => {
     const { register, handleSubmit, errors } = useForm();
     // let history = useHistory();
@@ -40,7 +40,7 @@ const UpdateTeacher = ({ modalIsOpen, closeModal, teacher }) => {
 
     function MyComponent2() {
         useEffect(() => {
-            fetch('http://localhost:5000/departments')
+            fetch(BASE_URL + '/departments')
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
@@ -61,7 +61,7 @@ const UpdateTeacher = ({ modalIsOpen, closeModal, teacher }) => {
     const onSubmit = data => {
         data.department = currentDepartment;
         console.log(data)
-        fetch(`http://localhost:5000/updateTeacher/${teacher._id}`, {
+        fetch(BASE_URL + `/updateTeacher/${teacher.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

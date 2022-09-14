@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
 // import { useHistory } from 'react-router-dom';
 import header from '../../../images/Photos/header.png'
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const HeaderMain = () => {
     // const history = useHistory();
 
@@ -108,7 +108,7 @@ const HeaderMain = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://localhost:5000/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })

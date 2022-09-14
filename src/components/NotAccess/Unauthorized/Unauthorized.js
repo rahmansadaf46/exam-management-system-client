@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 // import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
 import Navbar from '../../Home/Navbar/Navbar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Unauthorized = () => {
     const [isAdmin, setIsAdmin] = useState(true);
@@ -16,7 +16,7 @@ const Unauthorized = () => {
     }
     function MyComponent4() {
         useEffect(() => {
-            fetch('http://localhost:5000/isAdmin', {
+            fetch(BASE_URL + '/isAdmin', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })

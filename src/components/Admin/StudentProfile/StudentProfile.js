@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import UpdateStudent from '../UpdateStudent/UpdateStudent';
 import './StudentProfile.css';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const StudentProfile = () => {
     const { id } = useParams();
 
@@ -24,7 +24,7 @@ const StudentProfile = () => {
         setIsOpen(false);
     }
     useEffect(() => {
-        fetch(`http://localhost:5000/students/${id}`)
+        fetch(BASE_URL + `/students/${id}`)
             .then(res => res.json())
             .then(data => {
                 window.scrollTo(0, 0);
@@ -33,7 +33,7 @@ const StudentProfile = () => {
             })
     }, [id])
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/delete/${id}`, {
+        fetch(BASE_URL + `/deleteStudent/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())
@@ -68,7 +68,7 @@ const StudentProfile = () => {
                                         {
                                             student.name ? <div className="row pt-2 ">
                                                 <div className="col-md-5 pl-5 ml-5">
-                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={`http://localhost:5000/student/${student.image}`} alt="" />
+                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={BASE_URL + `${student.image}`} alt="" />
                                                     <h2 style={{ color: '#111430' }} className="text-uppercase text-center mt-3">{student.name}</h2>
                                                 </div>
                                                 <div className="col-md-6 mt-4">
@@ -86,7 +86,7 @@ const StudentProfile = () => {
                                                     <div className="d-flex mt-4">
                                                         <button style={{ background: '#FB9937' }} onClick={openModal} className="m-3 btn text-white">Update Info</button>
                                                         <UpdateStudent modalIsOpen={modalIsOpen} student={student} closeModal={closeModal}></UpdateStudent>
-                                                        <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(student._id) }; }} className="m-3 btn btn-danger">Delete</button>
+                                                        <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(student.id) }; }} className="m-3 btn btn-danger">Delete</button>
                                                     </div>
                                                 </div>
                                             </div>

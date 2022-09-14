@@ -6,14 +6,14 @@ import Sidebar from '../Sidebar/Sidebar';
 import UpdateTeacher from '../UpdateTeacher/UpdateTeacher';
 // import Updateteacher from '../Updateteacher/Updateteacher';
 // import './teacherProfile.css';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const TeacherProfile = () => {
     const { id } = useParams();
 
     let history = useHistory();
     const [isAdmin, setIsAdmin] = useState(false);
     const [teacher, setTeacher] = useState({});
-    const [semester, setSemester] = useState([]);
+    // const [semester, setSemester] = useState([]);
     // const [loading, setLoading] = useState(true);
     const [modalIsOpen, setIsOpen] = useState(false);
     document.title = `${id} `;
@@ -26,41 +26,41 @@ const TeacherProfile = () => {
         setIsOpen(false);
     }
     useEffect(() => {
-        fetch(`http://localhost:5000/teacherProfile/${id}`)
+        fetch(BASE_URL + `/teacherProfile/${id}`)
             .then(res => res.json())
             .then(data => {
                 window.scrollTo(0, 0);
                 setTeacher(data);
-                fetch('http://localhost:5000/semesterById', {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify({ id: data._id })
-                })
-                    .then(res => res.json())
-                    .then(result => {
-                        if (result.length > 0) {
-                            console.log(result)
-                            // setTeacherButton(true);
-                        }
+                // fetch('http://localhost:5000/semesterById', {
+                //     method: 'POST',
+                //     headers: { 'content-type': 'application/json' },
+                //     body: JSON.stringify({ id: data._id })
+                // })
+                //     .then(res => res.json())
+                //     .then(result => {
+                //         if (result.length > 0) {
+                //             console.log(result)
+                //             // setTeacherButton(true);
+                //         }
 
-                    });
-                    fetch('http://localhost:5000/semesters')
-                    .then(res => res.json())
-                    .then(result => {
-                        if (result.length > 0) {
-                            setSemester(result)
-                            console.log(result)
-                            // setTeacherButton(true);
-                        }
+                //     });
+                //     fetch('http://localhost:5000/semesters')
+                //     .then(res => res.json())
+                //     .then(result => {
+                //         if (result.length > 0) {
+                //             setSemester(result)
+                //             console.log(result)
+                //             // setTeacherButton(true);
+                //         }
 
-                    });
+                //     });
                 // setLoading(false);
             })
     }, [id])
     const handleDelete = (id) => {
         console.log(id)
-        const filterSemester = semester.filter(data=> data.teacher = data.teacher.filter(person => person !== id))
-        console.log(filterSemester)
+        // const filterSemester = semester.filter(data=> data.teacher = data.teacher.filter(person => person !== id))
+        // console.log(filterSemester)
         // fetch(`http://localhost:5000/updateSemesterTeacher/${id}`, {
         //         method: 'PATCH',
         //         headers: { 'Content-Type': 'application/json' },
@@ -76,7 +76,7 @@ const TeacherProfile = () => {
         //                 // alert("Semester Updated Successfully");
         //             }
         //         })
-        fetch(`http://localhost:5000/deleteTeacher/${id}`, {
+        fetch(BASE_URL + `/deleteTeacher/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())
@@ -110,7 +110,7 @@ const TeacherProfile = () => {
                                         {
                                             teacher.name ? <div className="row pt-2 ">
                                                 <div className="col-md-5 pl-5 ml-5">
-                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={`http://localhost:5000/teacher/${teacher.image}`} alt="" />
+                                                    <img className=" mx-auto d-block" style={{ borderRadius: "50%" }} width="335" height="335" src={BASE_URL + `${teacher.image}`} alt="" />
                                                     <h2 style={{ color: '#111430' }} className="text-uppercase text-center mt-3">{teacher.name}</h2>
                                                 </div>
                                                 <div className="col-md-6 mt-4">
@@ -131,7 +131,7 @@ const TeacherProfile = () => {
                                                     <div className="d-flex  mt-4">
                                                         <button style={{ background: '#FB9937' }} onClick={openModal} className="m-3 btn text-white">Update Info</button>
                                                         <UpdateTeacher modalIsOpen={modalIsOpen} teacher={teacher} closeModal={closeModal}></UpdateTeacher>
-                                                        <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(teacher._id) }; }} className="m-3 btn btn-danger">Delete</button>
+                                                        <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(teacher.id) }; }} className="m-3 btn btn-danger">Delete</button>
                                                     </div>
                                                 </div>
                                             </div>

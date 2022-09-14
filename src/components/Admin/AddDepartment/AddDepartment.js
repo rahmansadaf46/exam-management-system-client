@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AddDepartment = () => {
     const { register, handleSubmit, errors } = useForm();
     // const [file, setFile] = useState(null);
@@ -27,7 +27,7 @@ const AddDepartment = () => {
         // formData.append('file', file);
         // formData.append('department', data.department);
         console.log(data)
-        fetch('http://localhost:5000/addDepartment', {
+        fetch(BASE_URL + '/addDepartment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

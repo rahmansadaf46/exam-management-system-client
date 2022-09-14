@@ -4,6 +4,7 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import YearPicker from "react-single-year-picker";
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AddSession = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -25,18 +26,24 @@ const AddSession = () => {
         data.session = session;
         console.log(data)
         // https://demo-0523.herokuapp.com/admin/addAdmin
-        fetch('http://localhost:5000/addSession', {
+        fetch(BASE_URL + '/addSession', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
             .then(res => res.json())
             .then(success => {
-                if (success) {
+                console.log(success)
+                if(success.statusCode === 400){
+                    setLoading(false);
+                    alert('Session session already exists under this department'); 
+                }
+                else{
                     setLoading(false);
                     alert("Session Added");
                     window.location.reload();
                 }
+                
             })
 
     }
@@ -52,7 +59,7 @@ const AddSession = () => {
 
     function MyComponent2() {
         useEffect(() => {
-            fetch('http://localhost:5000/departments')
+            fetch(BASE_URL + '/departments')
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
