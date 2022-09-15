@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const AllSemester = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     document.title = "Semester List";
@@ -19,7 +19,7 @@ const AllSemester = () => {
         // const semester = JSON.parse(localStorage.getItem("selectedSemester"))?.semester;
         // const department = JSON.parse(localStorage.getItem("selectedSemester"))?.department;
         // const session = JSON.parse(localStorage.getItem("selectedSemester"))?.session;
-        fetch('http://localhost:5000/semesters')
+        fetch(BASE_URL + '/semesters')
             .then(res => res.json())
             .then(result => {
 
@@ -48,9 +48,9 @@ const AllSemester = () => {
                 <div>
                     <Link
                         className="btn btn-sm btn-success m-1"
-                        to={`/semesterProfile/${data._id}`}
+                        to={`/semesterProfile/${data.id}`}
                         onClick={() => {
-                            console.log(data._id);
+                            console.log(data.id);
                         }}
                     >
                         See Details

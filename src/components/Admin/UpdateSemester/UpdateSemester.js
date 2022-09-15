@@ -14,7 +14,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)'
     }
 };
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const UpdateSemester = ({ modalIsOpen, closeModal, semester }) => {
     const { register, handleSubmit, errors } = useForm();
     // let history = useHistory();
@@ -63,29 +63,30 @@ const UpdateSemester = ({ modalIsOpen, closeModal, semester }) => {
     //     MyComponent2()
     // }
     useEffect(() => {
-        fetch('http://localhost:5000/sessions')
+        fetch(BASE_URL + '/sessions')
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 setAllSession(data.filter(data => data?.department === semester.department))
+                const teacherList = semester.teacher.map(el => { return { value: el.id, label: el.name } })
+                // console.log(teacherList)
+                setSelectedTeacher(teacherList)
+                // setTeacher(teacherList)
+                // setListLoading(false)
                 // if (data) {
                 //     localStorage.setItem('dept', JSON.stringify(data));
                 // }
                 // setDept(data)
             })
-        fetch('http://localhost:5000/teachers')
+            fetch(BASE_URL + '/teachers')
             .then(res => res.json())
             .then(data => {
 
-                const teacherList = data.map(el => { return { value: el._id, label: el.name } })
+                const teacherList = data.map(el => { return { value: el.id, label: el.name } })
                 // console.log(teacherList)
-                setTeacher(teacherList)
                 setListLoading(false)
 
-                // if (data) {
-                //     localStorage.setItem('dept', JSON.stringify(data));
-                // }
-                // setDept(data)
+                setTeacher(teacherList)
             })
     }, [semester])
     const handleTeacher = (e) => {
@@ -99,8 +100,8 @@ const UpdateSemester = ({ modalIsOpen, closeModal, semester }) => {
         let valid = true;
         data.department = semester.department;
         data.session = selectedSession;
-        data.teacher = selectedTeacher.map(teacher => teacher.value);
-        data.status = "Active"
+        data.teacher = selectedTeacher.map(teacher =>  {return {id: teacher.value}});
+        // data.status = "Active"
         if (selectedSession === '') {
             alert("Please select a session")
             valid = false;
@@ -113,7 +114,7 @@ const UpdateSemester = ({ modalIsOpen, closeModal, semester }) => {
 
         if (valid) {
             console.log(data);
-            fetch(`http://localhost:5000/updateSemester/${semester._id}`, {
+            fetch(BASE_URL + `/updateSemester/${semester.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

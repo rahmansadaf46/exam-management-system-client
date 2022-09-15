@@ -136,27 +136,19 @@ const HeaderMain = () => {
         }, [])
     }
     function MyComponent6() {
+        console.log(loggedInUser.email )
+       
         useEffect(() => {
-            fetch('http://localhost:5000/isTeacher', {
+            fetch(BASE_URL + '/isTeacherValidation', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ email: loggedInUser.email })
+                body: JSON.stringify({ email: loggedInUser.email  })
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.length > 0) {
-                        fetch('http://localhost:5000/semesterById', {
-                            method: 'POST',
-                            headers: { 'content-type': 'application/json' },
-                            body: JSON.stringify({ id: data[0]._id })
-                        })
-                            .then(res => res.json())
-                            .then(result => {
-                                if (result.length > 0) {
-                                    setTeacherButton(true);
-                                }
-
-                            });
+                    // console.log(data)
+                    if (data) {
+                        setTeacherButton(true);
 
                     }
                 });

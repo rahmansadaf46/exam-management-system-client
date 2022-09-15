@@ -6,7 +6,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import UpdateSemester from '../UpdateSemester/UpdateSemester';
 // import UpdateStudent from '../UpdateStudent/UpdateStudent';
 // import './StudentProfile.css';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const SemesterDetails = () => {
     const { id } = useParams();
 
@@ -26,28 +26,30 @@ const SemesterDetails = () => {
         window.location.reload();
     }
     useEffect(() => {
-        fetch(`http://localhost:5000/semester/${id}`)
+        fetch(BASE_URL + `/semester/${id}`)
             .then(res => res.json())
             .then(data => {
                 window.scrollTo(0, 0);
                 console.log(data)
 
                 // setLoading(false);
-                const teacherData = data.teacher;
-                fetch(`http://localhost:5000/teachers/`)
-                    .then(res => res.json())
-                    .then(result => {
-                        // const teacher = result;
-                        const filterTeacher = teacherData.map(el => {
-                            return result.filter(data => data._id === el)
-                        })
-                        const teacherList = Array.prototype.concat.apply([], filterTeacher);
-                        data.teacher = teacherList;
-                        const teacherListValue = teacherList.map(el => { return { value: el._id, label: el.name } })
-                        console.log(filterTeacher);
-                        data.teacherListValue = teacherListValue;
+                // const teacherData = data.teacher;
+                // data.teacherListValue = teacherData;
                         setSemester(data);
-                    })
+                // fetch(`http://localhost:5000/teachers/`)
+                //     .then(res => res.json())
+                //     .then(result => {
+                //         // const teacher = result;
+                //         const filterTeacher = teacherData.map(el => {
+                //             return result.filter(data => data.id === el)
+                //         })
+                //         const teacherList = Array.prototype.concat.apply([], filterTeacher);
+                //         data.teacher = teacherList;
+                //         const teacherListValue = teacherList.map(el => { return { value: el.id, label: el.name } })
+                //         console.log(filterTeacher);
+                //         data.teacherListValue = teacherData;
+                //         setSemester(data);
+                //     })
             })
     }, [id])
     // const handleDelete = (id) => {
@@ -125,15 +127,15 @@ const SemesterDetails = () => {
                                                                     {
                                                                         semester.teacher.map((teacher, index) =>
 
-                                                                            <tr key={teacher._id} style={{ background: 'white' }}>
+                                                                            <tr key={teacher.id} style={{ background: 'white' }}>
                                                                                 <td >{index + 1}.</td>
-                                                                                <td className="avatar-img"><img className="avatar" src={`http://localhost:5000/teacher/${teacher.image}`} alt="avatar" /> </td>
+                                                                                <td className="avatar-img"><img className="avatar" src={BASE_URL + `${teacher.image}`} alt="avatar" /> </td>
                                                                                 <td className="text-uppercase"><span className="mt-5">{teacher.name}</span></td>
                                                                                 {/* <td>{student.roll}</td> */}
                                                                                 <td>{teacher.department}</td>
                                                                                 <td>{teacher.email}</td>
                                                                                 {/* <td>{student.session}</td> */}
-                                                                                {/* <td className=""><Link to={`/admin/teacherProfile/${teacher._id}`} style={{ background: '#7AB259' }} className="btn text-white">See More</Link></td> */}
+                                                                                {/* <td className=""><Link to={`/admin/teacherProfile/${teacher.id}`} style={{ background: '#7AB259' }} className="btn text-white">See More</Link></td> */}
                                                                             </tr>
                                                                         )
                                                                     }
@@ -147,7 +149,7 @@ const SemesterDetails = () => {
                                                     <div className="d-flex justify-content-center mt-4">
                                                         <button style={{ background: '#FB9937' }} onClick={openModal} className="m-3 btn text-white">Update Info</button>
                                                         <UpdateSemester modalIsOpen={modalIsOpen} semester={semester} closeModal={closeModal}></UpdateSemester>
-                                                        {/* <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(semester._id) }; }} className="m-3 btn btn-danger">Delete</button> */}
+                                                        {/* <button onClick={() => { if (window.confirm('Are You Sure?')) { handleDelete(semester.id) }; }} className="m-3 btn btn-danger">Delete</button> */}
                                                     </div>
                                                 </div>
                                             </div>

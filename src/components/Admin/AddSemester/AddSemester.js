@@ -38,8 +38,8 @@ const AddSemester = () => {
         // const session = yearSelected;
         data.department = currentDepartment;
         data.session = selectedSession;
-        data.teacher = selectedTeacher.map(teacher => teacher.value);
-        data.status = "Active"
+        data.teacher = selectedTeacher.map(teacher =>  {return {id: teacher.value}});
+        // data.status = "Active"
         console.log(data)
         // https://demo-0523.herokuapp.com/admin/addAdmin
         fetch(BASE_URL + '/addSemester', {
@@ -100,8 +100,8 @@ const AddSemester = () => {
             .then(res => res.json())
             .then(data => {
 
-                const teacherList = data.map(el => { return { value: el._id, label: el.name } })
-                // console.log(teacherList)
+                const teacherList = data.map(el => { return { value: el.id, label: el.name } })
+                console.log(teacherList)
                 setTeacher(teacherList)
                 setListLoading(false)
 

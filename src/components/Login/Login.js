@@ -233,32 +233,41 @@ const Login = () => {
                             }
                             // setIsAdmin(data);
                         });
-                    fetch('http://localhost:5000/isTeacher', {
+                    fetch(BASE_URL + '/isTeacher', {
                         method: 'POST',
                         headers: { 'content-type': 'application/json' },
                         body: JSON.stringify({ email: email })
                     })
                         .then(res => res.json())
                         .then(data => {
-                            if (data.length > 0) {
-                                // console.log(data[0]._id)
-
-                                fetch('http://localhost:5000/semesterById', {
-                                    method: 'POST',
-                                    headers: { 'content-type': 'application/json' },
-                                    body: JSON.stringify({ id: data[0]._id })
-                                })
-                                    .then(res => res.json())
-                                    .then(result => {
-                                        if (result.length > 0) {
-                                            localStorage.setItem('teacherAccess', true);
-                                            localStorage.setItem('teacherData', JSON.stringify(data));
-                                            localStorage.setItem('semester', JSON.stringify(result));
-                                            // console.log(data)
-                                        }
-
-                                    });
+                            console.log(data)
+                            if (data.semester !== null) {
+                                localStorage.setItem('teacherAccess', true);
+                                localStorage.setItem('teacherData', JSON.stringify([data]));
+                                localStorage.setItem('semester', JSON.stringify(data.semester));
                             }
+                            // if(data.semester.length> 0){
+
+                            // }
+                            // if (data.length > 0) {
+
+
+                            //     // fetch('http://localhost:5000/semesterById', {
+                            //     //     method: 'POST',
+                            //     //     headers: { 'content-type': 'application/json' },
+                            //     //     body: JSON.stringify({ id: data[0]._id })
+                            //     // })
+                            //     //     .then(res => res.json())
+                            //     //     .then(result => {
+                            //     //         if (result.length > 0) {
+                            //     //             localStorage.setItem('teacherAccess', true);
+                            //     //             localStorage.setItem('teacherData', JSON.stringify(data));
+                            //     //             localStorage.setItem('semester', JSON.stringify(result));
+                            //     //             // console.log(data)
+                            //     //         }
+
+                            //     //     });
+                            // }
 
                             // localStorage.setItem('admin', JSON.stringify(data));
                             // setIsAdmin(data);
