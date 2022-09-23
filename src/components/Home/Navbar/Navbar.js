@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
-import logo from '../../../images/ICON/ist.png';
+// import logo from '../../../images/ICON/ist.png';
 import './Navbar.css'
 
 
@@ -39,12 +39,12 @@ const Navbar = () => {
 
                 <div className="row">
                     <div className="col-md-2 pl-5">
-                        <img style={{ width: "100px", height: "100px" }} src={logo} alt="" />
+                        {/* <img style={{ width: "100px", height: "100px" }} src={logo} alt="" /> */}
 
                     </div>
-                    <div className="col-md-10 mt-3 pl-5">
-                        <h4 style={{ color: '#FB9937' }} className="">Institute of Science and Technology</h4>
-                        <small style={{ color: '#7AB259', fontSize:'14px' }} className="">Since 1993</small>
+                    <div className="col-md-10 mt-3 pl-5 mb-5">
+                        <h4 style={{ color: '#FB9937' }} className="">Online Exam Hall</h4>
+                        {/* <small style={{ color: '#7AB259', fontSize:'14px' }} className="">Since 1993</small> */}
                     </div>
                 </div>
 

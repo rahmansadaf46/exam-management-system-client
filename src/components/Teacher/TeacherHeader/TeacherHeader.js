@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
-import logo from '../../../images/ICON/ist.png';
+import logo from '../../../images/ICON/home.png';
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TeacherHeader = () => {
     const [loggedInUser] = useContext(UserContext);
@@ -22,11 +22,11 @@ const TeacherHeader = () => {
             <section className='d-flex'>
                 <div className="col-md-2 mt-3">
                     <Link className="d-flex justify-content-center align-items-center" to="/">
-                        <img style={{ width: "", height: "90px" }} src={logo} alt="" />
+                        <img style={{ width: "", height: "90px",borderRadius: '50%' }} src={logo} alt="" />
                     </Link>
                 </div>
                 <div className="col-md-7 mt-3 pl-1 pt-4">
-                    <h1 style={{ color: "#7AB259" }}>IST <span style={{ color: "#FB9937" }}>Online Exam Hall</span> </h1>
+                    <h1 style={{ color: "#7AB259" }}>Online <span style={{ color: "#FB9937" }}> Exam Hall</span> </h1>
                 </div>
                 <div className="col-md-3 mt-2">
                     <div className="mt-5   " style={{ color: '#7AB259' }}>
