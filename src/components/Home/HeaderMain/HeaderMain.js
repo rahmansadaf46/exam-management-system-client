@@ -187,7 +187,8 @@ const HeaderMain = () => {
                         <div className="title-bar "></div>
                         <div className="app-title">
                             <div className="animated infinite pulse">
-                                <h2 style={{ color: '#111430' }}><b><span style={{ color: 'orange' }}>IST</span><br />Online Exam  <br />Hall</b></h2>
+                                <h2 style={{ color: '#111430' }}><b>
+                                Online Exam  <br />Hall</b></h2>
 
                             </div>
 
@@ -217,7 +218,7 @@ const HeaderMain = () => {
                 </div>
 
             </main >
-            <p style={{ marginTop: '9vh' }} className="text-center color-yellow"><small>Copyright Team BackbencherZz {(new Date()).getFullYear()} All Rights Reserved</small></p>
+            <p style={{ marginTop: '9vh' }} className="text-center color-yellow"><small>Copyright Team Sadaf & Kamrul {(new Date()).getFullYear()} All Rights Reserved</small></p>
         </div>
     );
 };

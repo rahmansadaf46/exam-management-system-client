@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // import DepartmentCard from '../DepartmentCard/DepartmentCard';
 import { Link } from 'react-router-dom';
-import logo from '../../images/ICON/ist.png';
+// import logo from '../../images/ICON/ist.png';
 // import { UserContext } from '../../../App';
 // import './Department.css';
 import Unauthorized from '../NotAccess/Unauthorized/Unauthorized';
@@ -64,10 +64,10 @@ const Semester = () => {
             {
                 isTeacher === true ?
                     <section className=" container">
-                        <Link to='/'>
+                        <Link  style={{textDecoration: 'none', color:'orange'}} to='/'>
                             <div className="d-flex justify-content-center ">
-                                <img style={{ width: "200px", height: "200px" }} src={logo} alt="" />
-
+                                {/* <img style=s{{ width: "200px", height: "200px" }} src={logo} alt="" /> */}
+                                <h1 className='my-5'>Online Exam Hall</h1>
                             </div>
                         </Link>
                         <h2 className="text-center">{department} <span className="text-yellow">Semester List</span> </h2>

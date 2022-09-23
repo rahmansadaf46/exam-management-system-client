@@ -7,7 +7,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import "./Login.css";
-import logo from "../../images/ICON/istName.PNG"
+// import logo from "../../images/ICON/exam.png"
 
 
 
@@ -297,10 +297,10 @@ const Login = () => {
             {
                 loading === true ? <img style={{ width: "85vh", }} className="rounded mx-auto d-block " src="https://webstockreview.net/images/gear-clipart-setting-5.gif" alt="" />
                     : <section className="loginPage-signup-login text-center">
-                        <Link to='/'>
+                        <Link style={{textDecoration: 'none', color:'orange'}} to='/'>
                             <div className="d-flex justify-content-center mb-5">
-                                <img style={{ width: '600px', marginTop: '-90px' }} src={logo} alt="" />
-
+                                {/* <img style={{ width: '600px', marginTop: '-90px' }} src={logo} alt="" /> */}
+                                <h2 >Online Exam Hall</h2>
                             </div>
                         </Link>
                         {currentUser.success && (
