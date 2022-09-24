@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import StudentHeader from '../StudentHeader/StudentHeader';
 import StudentSidebar from '../StudentSidebar/StudentSidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Exam = () => {
     // const [semester, setSemester] = useState({});
@@ -43,11 +43,11 @@ const Exam = () => {
 
 
         const semesterData = JSON.parse(localStorage.getItem("semesterData"));
-        console.log(semesterData);
-        fetch('http://localhost:5000/questionStudent', {
+        console.log(semesterData, {semesterId: semesterData.id});
+        fetch(BASE_URL +'/questionStudent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ department: semesterData.department, semester: semesterData.semester,session: semesterData.session})
+            body: JSON.stringify({semesterId: semesterData.id})
         })
             .then(res => res.json())
             .then(result => {
@@ -59,6 +59,7 @@ const Exam = () => {
                     const endTime = new Date(new Date(data.time).getTime() + data.duration * 60000);
                     const validDate = new Date() < new Date(endTime);
                     console.log(validDate,new Date(endTime));
+                    console.log(data.time)
                     if(validDate){
                         filterResult.push({...data, endTime});
                     }
@@ -142,7 +143,7 @@ const Exam = () => {
                                                 <h5><span className="text-warning">Teacher:</span> {exam.teacherName}</h5>
                                                 <h5><span className="text-warning">Date:</span> {exam?.time?.split('T')[0]}</h5>
                                                 <h5><span className="text-warning">Start Time:</span> {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? (`${exam?.time?.split('T')[1]?.split(':')[0] - 12}:${exam?.time?.split('T')[1]?.split(':')[1]}`) : (exam?.time?.split('T')[1])} {exam?.time?.split('T')[1]?.split(':')[0] > 12 ? 'PM' : 'AM'}</h5>
-                                               {new Date() > new Date(exam?.time) && <><Link to={`examPage/${exam._id}`}className="text-success">Start Exam</Link></>} 
+                                               {new Date() > new Date(exam?.time) && <><Link to={`examPage/${exam.id}`}className="text-success">Start Exam</Link></>} 
                                             </div>
                                             )  }</>
                                         }
