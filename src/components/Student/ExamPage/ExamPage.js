@@ -6,6 +6,7 @@ import StudentHeader from '../StudentHeader/StudentHeader';
 import StudentSidebar from '../StudentSidebar/StudentSidebar';
 import timesUp from '../../../images/ICON/timesUp.png'
 import Carousel from 'react-bootstrap/Carousel';
+const BASE_URL = process.env.REACT_APP_API_URL;
 const Countdown = ({ time, duration }) => {
     // const [countdownDate] = useState((new Date(time).getTime() + duration * 60000));
     const [state, setState] = useState({
@@ -219,7 +220,7 @@ const ExamPage = () => {
         setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
         setIsStudent(JSON.parse(localStorage.getItem("studentAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
-        fetch(`http://localhost:5000/questionFind/${id}`)
+        fetch(BASE_URL +`/questionFind/${id}`)
             .then(res => res.json())
             .then(res => {
                 // console.log(res)
