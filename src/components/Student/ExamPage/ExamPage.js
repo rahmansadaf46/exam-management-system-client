@@ -303,31 +303,31 @@ const ExamPage = () => {
         setResult(true)
 
         if (result1) {
-            console.log(answer, questionData, student)
-            fetch('http://localhost:5000/addResult1', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ student: student, answer: answer, question: questionData })
-            })
-                .then(response => response.json())
-                .then(data => {
+            console.log({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
+            // fetch(BASE_URL +'/addResult1', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
+            // })
+            //     .then(response => response.json())
+            //     .then(data => {
 
-                    if (data) {
-                        window.alert('Exam Submitted successfully');
-                        history.goBack()
-                    }
+            //         if (data) {
+            //             window.alert('Exam Submitted successfully');
+            //             history.goBack()
+            //         }
 
-                })
+            //     })
 
-                .catch(error => {
-                    console.error(error)
-                })
+            //     .catch(error => {
+            //         console.error(error)
+            //     })
         }
         else {
             // console.log(answer, questionData, student)
 
             let dataBody = {
-                questionId: questionData._id,
+                questionId: questionData.id,
                 examName: questionData.examName,
                 category: questionData.category,
                 teacherName: questionData.teacherName,
@@ -338,9 +338,9 @@ const ExamPage = () => {
                 department: questionData.department,
                 session: questionData.session,
                 totalQuestion: null,
-                studentEmail: student[0].email,
-                studentName: student[0].name,
-                studentRoll: student[0].roll,
+                studentEmail: student.email,
+                studentName: student.name,
+                studentRoll: student.roll,
                 status: 'Not Checked',
                 totalMark: answer[0].mark,
                 obtainedMark: parseInt(0),
@@ -349,90 +349,102 @@ const ExamPage = () => {
                 assignmentDetails: answer[0].questionName
                
             }
-            console.log(dataBody);
+            console.log({file: answer[0].answer,question:{id: questionData.id},student:{id: student.id}});
             const formData = new FormData()
-            formData.append('file', answer[0].answer);
-            formData.append('assignmentDetails', dataBody.assignmentDetails);
-            formData.append('assignmentCategory', dataBody.assignmentCategory);
-            formData.append('obtainedMark', dataBody.obtainedMark);
-            formData.append('totalMark', dataBody.totalMark);
-            formData.append('status', dataBody.status);
-            formData.append('studentRoll', dataBody.studentRoll);
-            formData.append('studentName', dataBody.studentName);
-            formData.append('questionId', dataBody.questionId);
-            formData.append('examName', dataBody.examName);
-            formData.append('category', dataBody.category);
-            formData.append('teacherName', dataBody.teacherName);
-            formData.append('teacherEmail', dataBody.teacherEmail);
-            formData.append('time', dataBody.time);
-            formData.append('duration', dataBody.duration);
-            formData.append('semester', dataBody.semester);
-            formData.append('department', dataBody.department);
-            formData.append('session', dataBody.session);
-            formData.append('totalQuestion', dataBody.totalQuestion);
-            formData.append('studentEmail', dataBody.studentEmail);
-            fetch('http://localhost:5000/addResult2', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        window.alert('Exam Submitted successfully');
-                        history.goBack()
-                    }
-                })
+            formData.append('file', answer[0].answer)
+            formData.append('question', {id: questionData.id})
+            formData.append('student', {id: student.id})
+            // formData.append('file', answer[0].answer);
+            // formData.append('assignmentDetails', dataBody.assignmentDetails);
+            // formData.append('assignmentCategory', dataBody.assignmentCategory);
+            // formData.append('obtainedMark', dataBody.obtainedMark);
+            // formData.append('totalMark', dataBody.totalMark);
+            // formData.append('status', dataBody.status);
+            // formData.append('studentRoll', dataBody.studentRoll);
+            // formData.append('studentName', dataBody.studentName);
+            // formData.append('questionId', dataBody.questionId);
+            // formData.append('examName', dataBody.examName);
+            // formData.append('category', dataBody.category);
+            // formData.append('teacherName', dataBody.teacherName);
+            // formData.append('teacherEmail', dataBody.teacherEmail);
+            // formData.append('time', dataBody.time);
+            // formData.append('duration', dataBody.duration);
+            // formData.append('semester', dataBody.semester);
+            // formData.append('department', dataBody.department);
+            // formData.append('session', dataBody.session);
+            // formData.append('totalQuestion', dataBody.totalQuestion);
+            // formData.append('studentEmail', dataBody.studentEmail);
+            console.log(formData);
+            // fetch('http://localhost:5000/addResult2', {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data) {
+            //             window.alert('Exam Submitted successfully');
+            //             history.goBack()
+            //         }
+            //     })
     
-                .catch(error => {
-                    console.error(error)
-                })
+            //     .catch(error => {
+            //         console.error(error)
+            //     })
         }
 
 
     }
     const handleViva = (index, question, mark, number, category, ans) => {
-        // console.log(questionData, student[0])
+        let dataBody = {
+            index: index + 1,
+            questionName: questionData.question[0].vivaDetails,
+            mark: parseInt(questionData.question[0].mark),
+            questionNumber: 1,
+            category: questionData.category,
+            answer: null
+        }
+        console.log(questionData)
+        console.log({ student: {id: student.id}, answer: dataBody, questionId: {id: questionData.id} })
+        // fetch('http://localhost:5000/resultViva', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ email: student[0].email, questionId: questionData._id })
+        // })
+        //     .then(response => response.json())
+        //     .then(result => {
+        //         // console.log(result)
+        //         if (result === false) {
+        //             // let dataBody = {
+        //             //     index: index + 1,
+        //             //     questionName: question,
+        //             //     mark: parseInt(mark),
+        //             //     questionNumber: number,
+        //             //     category: category,
+        //             //     answer: ans
+        //             // }
 
-        fetch('http://localhost:5000/resultViva', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: student[0].email, questionId: questionData._id })
-        })
-            .then(response => response.json())
-            .then(result => {
-                // console.log(result)
-                if (result === false) {
-                    let dataBody = {
-                        index: index + 1,
-                        questionName: question,
-                        mark: parseInt(mark),
-                        questionNumber: number,
-                        category: category,
-                        answer: ans
-                    }
+        //             // console.log({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
+        //             // fetch('http://localhost:5000/addResult1', {
+        //             //     method: 'POST',
+        //             //     headers: { 'Content-Type': 'application/json' },
+        //             //     body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
+        //             // })
+        //             //     .then(response => response.json())
+        //             //     .then(data => {
 
-                    // console.log(dataBody, questionData, student)
-                    fetch('http://localhost:5000/addResult1', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
+        //             //         if (data) {
+        //             //             // window.alert('Exam Submitted successfully');
+        //             //             // history.goBack()
+        //             //         }
 
-                            if (data) {
-                                // window.alert('Exam Submitted successfully');
-                                // history.goBack()
-                            }
+        //             //     })
 
-                        })
+        //             //     .catch(error => {
+        //             //         console.error(error)
+        //             //     })
 
-                        .catch(error => {
-                            console.error(error)
-                        })
-
-                }
-            })
+        //         }
+        //     })
 
     }
     function shuffle(array) {
