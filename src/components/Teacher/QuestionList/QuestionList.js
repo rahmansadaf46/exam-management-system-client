@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const QuestionList = () => {
     const [isTeacher, setIsTeacher] = useState(false);
@@ -19,20 +19,21 @@ const QuestionList = () => {
         setIsTeacher(JSON.parse(localStorage.getItem("teacherAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("selectedSemester")) || {});
         const email = JSON.parse(localStorage.getItem("teacherData"))[0]?.email;
-        const semester = JSON.parse(localStorage.getItem("selectedSemester"))?.semester;
-        const department = JSON.parse(localStorage.getItem("selectedSemester"))?.department;
-        const session = JSON.parse(localStorage.getItem("selectedSemester"))?.session;
-        fetch('http://localhost:5000/teacherQuestion', {
+        const semester = JSON.parse(localStorage.getItem("selectedSemester"))?.id;
+        // const department = JSON.parse(localStorage.getItem("selectedSemester"))?.department;
+        // const session = JSON.parse(localStorage.getItem("selectedSemester"))?.session;
+        console.log({ email: email, semesterId: semester })
+        fetch(BASE_URL +'/teacherQuestion', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: email })
+            body: JSON.stringify({ email: email, semesterId: semester })
         })
             .then(res => res.json())
             .then(result => {
                 setLoading(false)
-                const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
-                console.log(filterResult)
-                setQuestionList(filterResult.reverse());
+                // const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
+                console.log(result)
+                setQuestionList(result.reverse());
 
             });
     }, [])
@@ -46,7 +47,7 @@ const QuestionList = () => {
         },
         {
             name: 'Category',
-            selector: row => <span >{row.category === 'mcq' ? <><span className='text-uppercase'>{row.category}</span> ({row.mcqCategory === 'mcqFillInTheBlanks' ? <>MCQ and Fill in the Blanks</> : row.mcqCategory === 'onlyFillInTheBlanks' ? <>Only Fill in the Blanks</> : <>Only MCQ</>})</> : <><span className='text-uppercase'>{row.category}</span></>}</span>,
+            selector: row => <span >{row.category === 'mcq' ? <><span className='text-uppercase'>{row.category}</span> ({row.mcqCategory === 'mcqFillInTheBlanks' ? <>MCQ and Fill in the Blanks</> : row.mcqCategory === 'onlyFillInTheBlanks' ? <>Only Fill in the Blanks</> : row.mcqCategory === 'onlyMcq' ? <>Only MCQ</> : <></>})</> : <><span className='text-uppercase'>{row.category}</span></>}</span>,
         },
         {
             name: 'Action',
@@ -54,9 +55,9 @@ const QuestionList = () => {
                 <div>
                     <Link
                         className="btn btn-sm btn-info m-1"
-                        to={`/question/${data._id}`}
+                        to={`/question/${data.id}`}
                         onClick={() => {
-                            console.log(data._id);
+                            console.log(data.id);
                         }}
                     >
                         See Details
