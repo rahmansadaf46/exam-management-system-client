@@ -35,7 +35,7 @@ const StudentDashboard = () => {
     useEffect(() => {
         setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
         setIsStudent(JSON.parse(localStorage.getItem("studentAccess")) || {});
-        setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
+        setSemester(JSON.parse(localStorage.getItem("semesterData")) || {});
     }, [])
     console.log(student)
     return (

@@ -272,17 +272,19 @@ const Login = () => {
                             // localStorage.setItem('admin', JSON.stringify(data));
                             // setIsAdmin(data);
                         });
-                    fetch('http://localhost:5000/isStudent', {
+                    fetch(BASE_URL + '/isStudent', {
                         method: 'POST',
                         headers: { 'content-type': 'application/json' },
                         body: JSON.stringify({ email: email })
                     })
                         .then(res => res.json())
                         .then(data => {
-                            if (data.length > 0) {
+                            console.log(data.semester)
+                            if (data.semester !== null) {
                                 console.log(data)
                                 localStorage.setItem('studentAccess', true);
                                 localStorage.setItem('studentData', JSON.stringify(data));
+                                localStorage.setItem("semesterData", JSON.stringify(data.semester));
                             }
                             // localStorage.setItem('admin', JSON.stringify(data));
                             // setIsAdmin(data);

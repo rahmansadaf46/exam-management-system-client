@@ -42,7 +42,7 @@ const Exam = () => {
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
 
 
-        const semesterData = JSON.parse(localStorage.getItem("semesterData"))[0];
+        const semesterData = JSON.parse(localStorage.getItem("semesterData"));
         console.log(semesterData);
         fetch('http://localhost:5000/questionStudent', {
             method: 'POST',

@@ -6,7 +6,7 @@ import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
 import FillInTheBlanks from './FillInTheBlanks';
 import McqCategory from './McqCategory';
 import WrittenExam from './WrittenExam';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const CreateExam = () => {
 
@@ -142,26 +142,20 @@ const CreateExam = () => {
     useEffect(()=>{
         const semester = JSON.parse(localStorage.getItem("selectedSemester"));
         console.log(semester)
-        let studentData = {
-            department: semester.department,
-            session: semester.session
-        }
-        fetch('http://localhost:5000/studentsForExam', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: studentData })
-        })
+
+        fetch(BASE_URL +`/studentsForExam/${semester.department}/${semester.session}`)
             .then(response => response.json())
             .then(data => {
-                // console.log(data)
+                
                 // setStudents(data)
-                const studentData = data;
+                // const studentData = data;
                 let updateData = [];
-                studentData.forEach(student=>{
-                    updateData.push({...student, result:[]})
+                data.forEach(student=>{
+                    updateData.push({id:student.id})
                 })
-                setStudents(updateData)
                 console.log(updateData)
+                setStudents(updateData)
+                // console.log(updateData)
                 // if (roll.length === 0) {
                 //     setRollNF(true);
                 // }
@@ -248,7 +242,7 @@ const CreateExam = () => {
                 validation = false;
             }
             else {
-
+                data.mcqCategory = null;
                 data.question = writtenExamQuestion;
             }
         }
@@ -272,7 +266,7 @@ const CreateExam = () => {
                     validation = false;
                 }
                 else {
-    
+                    data.mcqCategory = null;
                     data.question = assignmentData;
                 }
             }
@@ -286,7 +280,7 @@ const CreateExam = () => {
                     validation = false;
                 }
                 else {
-    
+                    data.mcqCategory = null;
                     data.question = assignmentData;
                 }
             }
@@ -303,21 +297,22 @@ const CreateExam = () => {
                 validation = false;
             }
             else {
-
+                data.mcqCategory = null;
                 data.question = vivaData;
             }
         }
         data.teacherName = teacherData[0].name;
-        data.email = teacherData[0].email;
+        // data.email = teacherData[0].email;
         data.category = categoryValue;
 
         console.log(validation)
         if (validation) {
             console.log(data);
-            students.map(student => student.fullMark = data.question.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0))
+            // students.map(student => student.fullMark = data.question.map((data, index) => parseInt(data.mark)).reduce((partialSum, a) => partialSum + a, 0))
+            
+            data.students = students
             console.log(students)
-            // data.students = students
-            fetch('http://localhost:5000/addQuestion', {
+            fetch(BASE_URL +'/addQuestion', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

@@ -98,7 +98,7 @@ const EnrollStudent = () => {
         setIsAdmin(JSON.parse(localStorage.getItem("admin")) || {});
     }, [])
     useEffect(() => {
-        fetch('http://localhost:5000/sessions')
+        fetch(BASE_URL + '/sessions')
             .then(res => res.json())
             .then(data => {
                 console.log(data)

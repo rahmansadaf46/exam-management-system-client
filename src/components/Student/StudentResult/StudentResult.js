@@ -43,12 +43,12 @@ const StudentResult = () => {
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
 
 
-        const semesterData = JSON.parse(localStorage.getItem("semesterData"))[0];
+        const semesterData = JSON.parse(localStorage.getItem("semesterData"));
         console.log(semesterData);
         fetch('http://localhost:5000/resultStudent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ studentEmail: JSON.parse(localStorage.getItem("studentData"))[0].email })
+            body: JSON.stringify({ studentEmail: JSON.parse(localStorage.getItem("studentData")).email })
         })
             .then(res => res.json())
             .then(result => {

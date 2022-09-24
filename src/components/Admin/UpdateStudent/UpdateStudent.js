@@ -17,7 +17,7 @@ const customStyles = {
 const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
     const { register, handleSubmit, errors } = useForm();
     // let history = useHistory();
-    const [allSession, setAllSession] = useState('');
+    const [allSession, setAllSession] = useState([]);
     const [session, setSession] = useState([]);
     const [selectedSession, setSelectedSession] = useState(student.session);
     const [currentDepartment, setCurrentDepartment] = useState(student.department);
@@ -40,7 +40,7 @@ const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
 
     function MyComponent2() {
         useEffect(() => {
-            fetch('http://localhost:5000/departments')
+            fetch(BASE_URL + '/departments')
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
@@ -59,17 +59,18 @@ const UpdateStudent = ({ modalIsOpen, closeModal, student }) => {
         MyComponent2()
     }
     useEffect(() => {
-        fetch('http://localhost:5000/sessions')
+        fetch(BASE_URL + '/sessions')
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 setAllSession(data)
+                setSession(data.filter(el => el.department === student.department))
                 // if (data) {
                 //     localStorage.setItem('dept', JSON.stringify(data));
                 // }
                 // setDept(data)
             })
-    }, [])
+    }, [student])
     const onSubmit = data => {
         data.session = selectedSession;
         console.log(data.session)

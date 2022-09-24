@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../App';
 import logo from '../../../images/ICON/home.png';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const StudentHeader = () => {
     const [loggedInUser] = useContext(UserContext);
     // const [adminName, setAdminName] = useState([]);
@@ -30,7 +30,7 @@ const StudentHeader = () => {
                 </div>
                 <div className="col-md-3 mt-2">
                     <div className="mt-5   " style={{ color: '#7AB259' }}>
-                        {loggedInUser.email && <div className="d-flex justify-content-end "><p className="mt-1">{JSON.parse(localStorage.getItem("user")).name}</p> <img className="avatar mx-4" src={`http://localhost:5000/student/${JSON.parse(localStorage.getItem("studentData"))[0]?.image}`} alt="avatar" /></div>}
+                        {loggedInUser.email && <div className="d-flex justify-content-end "><p className="mt-1">{JSON.parse(localStorage.getItem("user")).name}</p> <img className="avatar mx-4" src={BASE_URL +`${JSON.parse(localStorage.getItem("studentData"))?.image}`} alt="avatar" /></div>}
                     </div>
                 </div>
             </section>

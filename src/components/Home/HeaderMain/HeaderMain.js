@@ -67,26 +67,26 @@ const HeaderMain = () => {
     }
     function MyComponent2() {
         useEffect(() => {
-            fetch('http://localhost:5000/isStudent', {
+            fetch(BASE_URL + '/isStudent', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ email: loggedInUser.email })
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.length > 0) {
+                    if (data.semester !== null) {
                         console.log(data);
                         // fetch(`http://localhost:5000/semester/${data}`)
                         // .then(res => res.json())
                         // .then(result => {
                         //    console.log(result);
                         // });
-                        fetch(`http://localhost:5000/semesterStudent/${data[0].session}/${data[0].department}`)
-                        .then(res => res.json())
-                        .then(result => {
-                           console.log(result);
-                           localStorage.setItem("semesterData", JSON.stringify(result));
-                        });
+                        // if (data.semester !== null) {
+                        //     console.log(data)
+                        //     localStorage.setItem('studentAccess', true);
+                        //     localStorage.setItem('studentData', JSON.stringify(data));
+                        //     localStorage.setItem("semesterData", JSON.stringify(data.semester));
+                        // }
                         setStudentButton(true);
                     }
                 });
