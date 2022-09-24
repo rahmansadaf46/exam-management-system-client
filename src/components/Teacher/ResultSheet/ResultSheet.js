@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const ResultSheet = () => {
     const [isTeacher, setIsTeacher] = useState(false);
@@ -19,20 +19,20 @@ const ResultSheet = () => {
         setIsTeacher(JSON.parse(localStorage.getItem("teacherAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("selectedSemester")) || {});
         const email = JSON.parse(localStorage.getItem("teacherData"))[0]?.email;
-        const semester = JSON.parse(localStorage.getItem("selectedSemester"))?.semester;
-        const department = JSON.parse(localStorage.getItem("selectedSemester"))?.department;
-        const session = JSON.parse(localStorage.getItem("selectedSemester"))?.session;
-        fetch('http://localhost:5000/teacherQuestion', {
+        const semester = JSON.parse(localStorage.getItem("selectedSemester"))?.id;
+        // const department = JSON.parse(localStorage.getItem("selectedSemester"))?.department;
+        // const session = JSON.parse(localStorage.getItem("selectedSemester"))?.session;
+        fetch(BASE_URL +'/teacherQuestion', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ email: email })
+            body: JSON.stringify({ email: email, semesterId: semester })
         })
             .then(res => res.json())
             .then(result => {
                 setLoading(false)
-                const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
-                console.log(filterResult)
-                setQuestionList(filterResult.reverse());
+                // const filterResult = result.filter(data => data.department === department && data.semester === semester && data.session === session);
+                // console.log(filterResult)
+                setQuestionList(result.reverse());
 
             });
     }, [])

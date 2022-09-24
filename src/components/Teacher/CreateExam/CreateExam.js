@@ -687,7 +687,7 @@ const CreateExam = () => {
                                                                     </>}
                                                                     {category === 'viva' && <div>
                                                                         <div style={{ fontSize: "20px" }} className="form-group text-center ">
-                                                                            <a className="text-success" target="blank" href="https://ist-online-viva.netlify.app/create">Generate a link</a>
+                                                                            <a className="text-success" target="blank" href="https://online-exam-hall.vercel.app/create">Generate a link</a>
                                                                         </div>
                                                                         <div className="form-group">
                                                                             <label htmlFor=""><b>Enter Attendance Link</b></label>
