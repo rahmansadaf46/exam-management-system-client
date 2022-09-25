@@ -210,6 +210,7 @@ const ExamPage = () => {
     const [loading, setLoading] = useState(true);
     const [timeUp, setTimeUp] = useState(false);
     const [result1, setResult1] = useState(true);
+    const [submitExam, setSubmitExam] = useState(false);
     const { id } = useParams();
     // console.log(id)
 
@@ -220,28 +221,53 @@ const ExamPage = () => {
         setStudent(JSON.parse(localStorage.getItem("studentData")) || {});
         setIsStudent(JSON.parse(localStorage.getItem("studentAccess")) || {});
         // setSemester(JSON.parse(localStorage.getItem("semesterData"))[0] || {});
-        fetch(BASE_URL +`/questionFind/${id}`)
+        fetch(BASE_URL + `/questionFind/${id}`)
             .then(res => res.json())
             .then(res => {
-                // console.log(res)
+                console.log(res)
+                fetch(BASE_URL + `/checkValidity/${id}/${JSON.parse(localStorage.getItem("studentData")).id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        // setLoading(false)
+                        if (res.validation === true) {
+                            setLoading(false)
+                            if (res.question.category !== 'viva') {
+                                if(data.check === false){
+                                    setQuestionData(res.question);
+                                    setCategory(res.question.category);
+                                    // console.log(res.question)
+                                    if (res.question.category === 'assignment') {
+                                        if (res.question.question[0].assignmentCategory === 'File Submission') {
+                                            setResult1(false)
+                                        }
+                                    }
+                                    setQuestion(shuffle(res.question.question));
+                                }
+                                else{
+                                    setSubmitExam(true)  
+                                }
+                            }
+                            else {
+                                // res.question.id = null;
+                                setQuestionData(res.question);
+                                setCategory(res.question.category);
+                                // console.log(res.question)
+                                if (res.question.category === 'assignment') {
+                                    if (res.question.question[0].assignmentCategory === 'File Submission') {
+                                        setResult1(false)
+                                    }
+                                }
+                                setQuestion(shuffle(res.question.question));
+                            }
 
-                // setLoading(false)
-                if (res.validation === true) {
-                    setLoading(false)
-                    setQuestionData(res.question);
-                    setCategory(res.question.category);
-                    // console.log(res.question)
-                    if (res.question.category === 'assignment') {
-                        if (res.question.question[0].assignmentCategory === 'File Submission') {
-                            setResult1(false)
                         }
-                    }
-                    setQuestion(shuffle(res.question.question));
-                }
-                else {
-                    setLoading(false)
-                    setTimeUp(true)
-                }
+                        else {
+                            setLoading(false)
+                            setTimeUp(true)
+                        }
+                    })
+
 
             })
 
@@ -265,9 +291,9 @@ const ExamPage = () => {
             }, filterTime);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [questionData.time, questionData.duration, questionData._id, answer])
+    }, [questionData.time, questionData.duration, questionData.id, answer])
 
-    const handleChange = (index, question, mark, number, category, ans) => {
+    const handleChange = (index, question, mark, number, category, ans, id) => {
         // console.log({
         //     index: index,
         //     questionNumber: number,
@@ -280,7 +306,8 @@ const ExamPage = () => {
             mark: parseInt(mark),
             questionNumber: number,
             category: category,
-            answer: ans
+            answer: ans,
+            questionId: id
         }
         if (answer.find(ans => ans.index === index + 1) === undefined) {
             const previousAnswer = [...answer, data]
@@ -303,21 +330,21 @@ const ExamPage = () => {
         setResult(true)
 
         if (result1) {
-            console.log({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
-            // fetch(BASE_URL +'/addResult1', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
-            // })
-            //     .then(response => response.json())
-            //     .then(data => {
+            console.log({ student: { id: student.id }, answer: answer, question: { id: questionData.id } })
+            fetch(BASE_URL + '/submitResult', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: null, student: { id: student.id }, answer: answer, question: { id: questionData.id } })
+            })
+                .then(response => response.json())
+                .then(data => {
 
-            //         if (data) {
-            //             window.alert('Exam Submitted successfully');
-            //             history.goBack()
-            //         }
+                    if (data) {
+                        window.alert('Exam Submitted successfully');
+                        history.goBack()
+                    }
 
-            //     })
+                })
 
             //     .catch(error => {
             //         console.error(error)
@@ -326,76 +353,57 @@ const ExamPage = () => {
         else {
             // console.log(answer, questionData, student)
 
-            let dataBody = {
-                questionId: questionData.id,
-                examName: questionData.examName,
-                category: questionData.category,
-                teacherName: questionData.teacherName,
-                teacherEmail: questionData.email,
-                time: questionData.time,
-                duration: questionData.duration,
-                semester: questionData.semester,
-                department: questionData.department,
-                session: questionData.session,
-                totalQuestion: null,
-                studentEmail: student.email,
-                studentName: student.name,
-                studentRoll: student.roll,
-                status: 'Not Checked',
-                totalMark: answer[0].mark,
-                obtainedMark: parseInt(0),
-                file: answer[0].answer,
-                assignmentCategory: answer[0].category,
-                assignmentDetails: answer[0].questionName
-               
-            }
-            console.log({file: answer[0].answer,question:{id: questionData.id},student:{id: student.id}});
+            // let dataBody = {
+            //     questionId: questionData.id,
+            //     examName: questionData.examName,
+            //     category: questionData.category,
+            //     teacherName: questionData.teacherName,
+            //     teacherEmail: questionData.email,
+            //     time: questionData.time,
+            //     duration: questionData.duration,
+            //     semester: questionData.semester,
+            //     department: questionData.department,
+            //     session: questionData.session,
+            //     totalQuestion: null,
+            //     studentEmail: student.email,
+            //     studentName: student.name,
+            //     studentRoll: student.roll,
+            //     status: 'Not Checked',
+            //     totalMark: answer[0].mark,
+            //     obtainedMark: parseInt(0),
+            //     file: answer[0].answer,
+            //     assignmentCategory: answer[0].category,
+            //     assignmentDetails: answer[0].questionName
+
+            // }
+            console.log({ file: answer[0].answer, question: { id: questionData.id }, student: { id: student.id } });
             const formData = new FormData()
             formData.append('file', answer[0].answer)
-            formData.append('question', {id: questionData.id})
-            formData.append('student', {id: student.id})
-            // formData.append('file', answer[0].answer);
-            // formData.append('assignmentDetails', dataBody.assignmentDetails);
-            // formData.append('assignmentCategory', dataBody.assignmentCategory);
-            // formData.append('obtainedMark', dataBody.obtainedMark);
-            // formData.append('totalMark', dataBody.totalMark);
-            // formData.append('status', dataBody.status);
-            // formData.append('studentRoll', dataBody.studentRoll);
-            // formData.append('studentName', dataBody.studentName);
-            // formData.append('questionId', dataBody.questionId);
-            // formData.append('examName', dataBody.examName);
-            // formData.append('category', dataBody.category);
-            // formData.append('teacherName', dataBody.teacherName);
-            // formData.append('teacherEmail', dataBody.teacherEmail);
-            // formData.append('time', dataBody.time);
-            // formData.append('duration', dataBody.duration);
-            // formData.append('semester', dataBody.semester);
-            // formData.append('department', dataBody.department);
-            // formData.append('session', dataBody.session);
-            // formData.append('totalQuestion', dataBody.totalQuestion);
-            // formData.append('studentEmail', dataBody.studentEmail);
+            formData.append('student', student.id)
+            formData.append('question', questionData.id)
             console.log(formData);
-            // fetch('http://localhost:5000/addResult2', {
-            //     method: 'POST',
-            //     body: formData
-            // })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         if (data) {
-            //             window.alert('Exam Submitted successfully');
-            //             history.goBack()
-            //         }
-            //     })
-    
-            //     .catch(error => {
-            //         console.error(error)
-            //     })
+            fetch(BASE_URL + '/submitFile', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        window.alert('Exam Submitted successfully');
+                        history.goBack()
+                    }
+                })
+
+                .catch(error => {
+                    console.error(error)
+                })
         }
 
 
     }
-    const handleViva = (index, question, mark, number, category, ans) => {
+    const handleViva = (index, question, mark, number, category, ans, id) => {
         let dataBody = {
+            questionId: id,
             index: index + 1,
             questionName: questionData.question[0].vivaDetails,
             mark: parseInt(questionData.question[0].mark),
@@ -404,47 +412,43 @@ const ExamPage = () => {
             answer: null
         }
         console.log(questionData)
-        console.log({ student: {id: student.id}, answer: dataBody, questionId: {id: questionData.id} })
-        // fetch('http://localhost:5000/resultViva', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ email: student[0].email, questionId: questionData._id })
-        // })
-        //     .then(response => response.json())
-        //     .then(result => {
-        //         // console.log(result)
-        //         if (result === false) {
-        //             // let dataBody = {
-        //             //     index: index + 1,
-        //             //     questionName: question,
-        //             //     mark: parseInt(mark),
-        //             //     questionNumber: number,
-        //             //     category: category,
-        //             //     answer: ans
-        //             // }
+        console.log({ student: { id: student.id }, answer: [dataBody], question: { id: questionData.id } })
+        fetch(BASE_URL + `/checkValidity/${questionData.id}/${student.id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if (result.check === false) {
+                    // let dataBody = {
+                    //     index: index + 1,
+                    //     questionName: question,
+                    //     mark: parseInt(mark),
+                    //     questionNumber: number,
+                    //     category: category,
+                    //     answer: ans
+                    // }
 
-        //             // console.log({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
-        //             // fetch('http://localhost:5000/addResult1', {
-        //             //     method: 'POST',
-        //             //     headers: { 'Content-Type': 'application/json' },
-        //             //     body: JSON.stringify({ student: student, answer: dataBody, question: questionData })
-        //             // })
-        //             //     .then(response => response.json())
-        //             //     .then(data => {
+                    //             // console.log({ student: {id: student.id}, answer: answer, question: {id: questionData.id} })
+                    fetch(BASE_URL + '/submitResult', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ student: { id: student.id }, answer: [dataBody], question: { id: questionData.id } })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
 
-        //             //         if (data) {
-        //             //             // window.alert('Exam Submitted successfully');
-        //             //             // history.goBack()
-        //             //         }
+                            if (data) {
+                                // window.alert('Exam Submitted successfully');
+                                // history.goBack()
+                            }
 
-        //             //     })
+                        })
 
-        //             //     .catch(error => {
-        //             //         console.error(error)
-        //             //     })
+                        .catch(error => {
+                            console.error(error)
+                        })
 
-        //         }
-        //     })
+                }
+            })
 
     }
     function shuffle(array) {
@@ -483,6 +487,7 @@ const ExamPage = () => {
                                 </div>
                                 <div style={{ backgroundColor: '#F4F7FC', minHeight: '87vh', height: 'auto', width: '100%' }} className=" pt-3">
                                     {loading && <h2 className='text-center mt-5 text-warning'>Loading...</h2>}
+                                    {submitExam && <h2 className='text-center mt-5 text-danger'>You have already attended this exam.</h2>}
 
                                     {timeUp && <div className='text-center mt-5 '><img src={timesUp} alt="" /></div>}
                                     {
@@ -524,7 +529,7 @@ const ExamPage = () => {
                                                                                         <div style={{ lineHeight: '0.5' }}>
                                                                                             <label className="rad-label">
                                                                                                 <input
-                                                                                                    onClick={() => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, answer.value)}
+                                                                                                    onClick={() => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, answer.value, question.id)}
                                                                                                     type="radio" className="rad-input" name="rad" />
                                                                                                 <div className="rad-design" />
                                                                                                 <div style={{ userSelect: 'none' }} className="rad-text">{answer.answer}</div>
@@ -535,7 +540,7 @@ const ExamPage = () => {
                                                                                 </> : question.category === 'fillInTheGaps' ? <>
                                                                                     <label >
                                                                                         <textArea
-                                                                                            onBlur={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
+                                                                                            onBlur={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value, question.id)}
                                                                                             style={{ width: '400px' }}
                                                                                             type="text" className="form-control" />
 
@@ -588,7 +593,7 @@ const ExamPage = () => {
                                                                     <label >
                                                                         <textArea
 
-                                                                            onBlur={(e) => handleChange(0, question[0].assignmentDetails, question[0].mark, 1, "Link Submission", e.target.value)}
+                                                                            onBlur={(e) => handleChange(0, question[0].assignmentDetails, question[0].mark, 1, "Link Submission", e.target.value, question[0].id)}
                                                                             style={{ width: '400px' }}
                                                                             placeholder="Enter Link Here"
                                                                             type="text" className="form-control" />
@@ -617,7 +622,7 @@ const ExamPage = () => {
                                                     <form action="#" method="post" style={{ fontSize: '20px', border: '1px solid white', padding: '40px', width: '100%', borderRadius: '10px', boxShadow: '5px 5px 20px gray', marginBottom: '50px' }}>
                                                         <fieldset >
                                                             <p className="font-weight-bold mb-4"><span style={{ userSelect: 'none' }} className="text-danger">{question[0].vivaDetails}</span></p>
-                                                            <p className="font-weight-bold mb-4">Attendance Link : <span style={{ userSelect: 'none' }} className="text-primary"><a target="blank" onClick={() => handleViva(0, question[0].vivaDetails, question[0].mark, 1, "viva", 'none')} href={`//${question[0]?.attendanceLink}`}>{question[0]?.attendanceLink}</a></span></p>
+                                                            <p className="font-weight-bold mb-4">Attendance Link : <span style={{ userSelect: 'none' }} className="text-primary"><a target="blank" onClick={() => handleViva(0, question[0].vivaDetails, question[0].mark, 1, "viva", 'none', question[0].id)} href={`${question[0]?.attendanceLink}`}>{question[0]?.attendanceLink}</a></span></p>
                                                         </fieldset>
                                                     </form>
                                                     <br />
@@ -638,7 +643,7 @@ const ExamPage = () => {
                                                                                 <p style={{ marginTop: '-12px' }} className='text-success'>Mark: <span>{question.mark}</span></p>
                                                                                 <label >
                                                                                     <textArea
-                                                                                        onChange={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value)}
+                                                                                        onChange={(e) => handleChange(index, question.questionName, question.mark, question.questionNumber, question.category, e.target.value, question.id)}
                                                                                         style={{ width: '400px', marginBottom: '-15px', height: '200px' }}
                                                                                         type="text" className="form-control" />
 

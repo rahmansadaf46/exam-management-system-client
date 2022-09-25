@@ -5,7 +5,7 @@ import Unauthorized from '../../NotAccess/Unauthorized/Unauthorized';
 import AddMarkViva from '../AddMarkViva/AddMarkViva';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const ResultPage = () => {
     const [isTeacher, setIsTeacher] = useState(false);
@@ -25,223 +25,203 @@ const ResultPage = () => {
         setIsOpen(false);
     }
     useEffect(() => {
-        fetch(`http://localhost:5000/question/${id}`)
+        fetch(BASE_URL+`/getResultSheet/${id}`)
             .then(res => res.json())
             .then(ques => {
+                console.log(ques)
                 window.scrollTo(0, 0);
-                ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                setQuestion(ques);
-                const semester = JSON.parse(localStorage.getItem("selectedSemester"));
-                let studentData = {
-                    department: semester.department,
-                    session: semester.session
-                }
-                fetch('http://localhost:5000/studentsForExam', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: studentData })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        fetch('http://localhost:5000/resultFind', {
-                            method: 'POST',
-                            headers: { 'content-type': 'application/json' },
-                            body: JSON.stringify({ questionId: id })
-                        })
-                            .then(res => res.json())
-                            .then(result => {
-                                if (ques.category === 'mcq') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        resultId: resultStudent._id,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
+                ques.question.endTime = new Date(new Date(ques.question.time).getTime() + ques.question.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                setQuestion(ques.question);
+                // const semester = JSON.parse(localStorage.getItem("selectedSemester"));
 
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
+                let result = ques.presentStudents
+                let data = ques.question.students;
+                if (ques.question.category === 'mcq') {
+                    let filterData = [];
+                    if (result.length > 0) {
+                        result.forEach(resultStudent => {
+                            data.forEach(student => {
+                                if (resultStudent.studentEmail === student.email) {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: resultStudent.obtainedMark,
+                                        resultId: resultStudent.id,
+                                        attendance: 'Present'
+                                    })
                                 }
-                                else if (ques.category === 'written') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        resultId: resultStudent._id,
-                                                        status: resultStudent.status,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
+                                else {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: 0,
 
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                }
-                                else if (ques.category === 'viva') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        resultData: resultStudent,
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        status: resultStudent.status,
-                                                        fullMark: result[0]?.totalMark,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
-
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                }
-                                else if (ques.category === 'assignment') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        resultData: resultStudent,
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        status: resultStudent.status,
-                                                        resultId: resultStudent._id,
-                                                        fullMark: result[0]?.totalMark,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
-
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
+                                        attendance: 'Absence'
+                                    })
                                 }
                             })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                    else {
+                        data.forEach(student => {
+                            filterData.push({
+                                name: student.name,
+                                roll: student.roll,
+                                email: student.email,
+                                obtainedMark: 0,
 
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
+                                attendance: 'Absence'
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                }
+                else if (ques.question.category === 'written') {
+                    let filterData = [];
+                    if (result.length > 0) {
+                        result.forEach(resultStudent => {
+                            data.forEach(student => {
+                                if (resultStudent.studentEmail === student.email) {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: resultStudent.obtainedMark,
+                                        resultId: resultStudent.id,
+                                        status: resultStudent.status,
+                                        attendance: 'Present'
+                                    })
+                                }
+                                else {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: 0,
+
+                                        attendance: 'Absence'
+                                    })
+                                }
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                    else {
+                        data.forEach(student => {
+                            filterData.push({
+                                name: student.name,
+                                roll: student.roll,
+                                email: student.email,
+                                obtainedMark: 0,
+
+                                attendance: 'Absence'
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                }
+                else if (ques.question.category === 'viva') {
+                    let filterData = [];
+                    if (result.length > 0) {
+                        result.forEach(resultStudent => {
+                            data.forEach(student => {
+                                if (resultStudent.studentEmail === student.email) {
+                                    filterData.push({
+                                        resultData: resultStudent,
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: resultStudent.obtainedMark,
+                                        status: resultStudent.answerData.answer[0].status,
+                                        fullMark: result[0]?.totalMark,
+                                        attendance: 'Present'
+                                    })
+                                }
+                                else {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: 0,
+
+                                        attendance: 'Absence'
+                                    })
+                                }
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                    else {
+                        data.forEach(student => {
+                            filterData.push({
+                                name: student.name,
+                                roll: student.roll,
+                                email: student.email,
+                                obtainedMark: 0,
+
+                                attendance: 'Absence'
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                }
+                else if (ques.question.category === 'assignment') {
+                    let filterData = [];
+                    if (result.length > 0) {
+                        result.forEach(resultStudent => {
+                            data.forEach(student => {
+                                if (resultStudent.studentEmail === student.email) {
+                                    filterData.push({
+                                        resultData: resultStudent,
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: resultStudent.obtainedMark,
+                                        status: resultStudent.status,
+                                        resultId: resultStudent.id,
+                                        fullMark: result[0]?.totalMark,
+                                        attendance: 'Present'
+                                    })
+                                }
+                                else {
+                                    filterData.push({
+                                        name: student.name,
+                                        roll: student.roll,
+                                        email: student.email,
+                                        obtainedMark: 0,
+
+                                        attendance: 'Absence'
+                                    })
+                                }
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                    else {
+                        data.forEach(student => {
+                            filterData.push({
+                                name: student.name,
+                                roll: student.roll,
+                                email: student.email,
+                                obtainedMark: 0,
+
+                                attendance: 'Absence'
+                            })
+                        })
+                        setLoading(false)
+                        setResultSheet(filterData);
+                    }
+                }
 
             })
 
@@ -251,177 +231,205 @@ const ResultPage = () => {
     const refresh = () => {
         setResultSheet([])
         setLoading(true)
-        fetch(`http://localhost:5000/question/${id}`)
-            .then(res => res.json())
-            .then(ques => {
-                window.scrollTo(0, 0);
-                ques.endTime = new Date(new Date(ques.time).getTime() + ques.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                setQuestion(ques);
-                const semester = JSON.parse(localStorage.getItem("selectedSemester"));
-                let studentData = {
-                    department: semester.department,
-                    session: semester.session
-                }
-                fetch('http://localhost:5000/studentsForExam', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: studentData })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        fetch('http://localhost:5000/resultFind', {
-                            method: 'POST',
-                            headers: { 'content-type': 'application/json' },
-                            body: JSON.stringify({ questionId: id })
+        fetch(BASE_URL+`/getResultSheet/${id}`)
+        .then(res => res.json())
+        .then(ques => {
+            console.log(ques)
+            window.scrollTo(0, 0);
+            ques.question.endTime = new Date(new Date(ques.question.time).getTime() + ques.question.duration * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            setQuestion(ques.question);
+            // const semester = JSON.parse(localStorage.getItem("selectedSemester"));
+
+            let result = ques.presentStudents
+            let data = ques.question.students;
+            if (ques.question.category === 'mcq') {
+                let filterData = [];
+                if (result.length > 0) {
+                    result.forEach(resultStudent => {
+                        data.forEach(student => {
+                            if (resultStudent.studentEmail === student.email) {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: resultStudent.obtainedMark,
+                                    resultId: resultStudent.id,
+                                    attendance: 'Present'
+                                })
+                            }
+                            else {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: 0,
+
+                                    attendance: 'Absence'
+                                })
+                            }
                         })
-                            .then(res => res.json())
-                            .then(result => {
-                                if (ques.category === 'mcq') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        resultId: resultStudent._id,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
-
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                }
-                                else if (ques.category === 'written') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        resultId: resultStudent._id,
-                                                        status: resultStudent.status,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
-
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                }
-                                else if (ques.category === 'viva') {
-                                    let filterData = [];
-                                    if (result.length > 0) {
-                                        result.forEach(resultStudent => {
-                                            data.forEach(student => {
-                                                if (resultStudent.studentEmail === student.email) {
-                                                    filterData.push({
-                                                        resultData: resultStudent,
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: resultStudent.obtainedMark,
-                                                        status: resultStudent.status,
-                                                        fullMark: result[0]?.totalMark,
-                                                        attendance: 'Present'
-                                                    })
-                                                }
-                                                else {
-                                                    filterData.push({
-                                                        name: student.name,
-                                                        roll: student.roll,
-                                                        email: student.email,
-                                                        obtainedMark: 0,
-
-                                                        attendance: 'Absence'
-                                                    })
-                                                }
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                    else {
-                                        data.forEach(student => {
-                                            filterData.push({
-                                                name: student.name,
-                                                roll: student.roll,
-                                                email: student.email,
-                                                obtainedMark: 0,
-
-                                                attendance: 'Absence'
-                                            })
-                                        })
-                                        setLoading(false)
-                                        setResultSheet(filterData);
-                                    }
-                                }
-                            })
-
                     })
-                    .catch(error => {
-                        console.error(error)
-                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+                else {
+                    data.forEach(student => {
+                        filterData.push({
+                            name: student.name,
+                            roll: student.roll,
+                            email: student.email,
+                            obtainedMark: 0,
 
-            })
+                            attendance: 'Absence'
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+            }
+            else if (ques.question.category === 'written') {
+                let filterData = [];
+                if (result.length > 0) {
+                    result.forEach(resultStudent => {
+                        data.forEach(student => {
+                            if (resultStudent.studentEmail === student.email) {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: resultStudent.obtainedMark,
+                                    resultId: resultStudent.id,
+                                    status: resultStudent.status,
+                                    attendance: 'Present'
+                                })
+                            }
+                            else {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: 0,
+
+                                    attendance: 'Absence'
+                                })
+                            }
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+                else {
+                    data.forEach(student => {
+                        filterData.push({
+                            name: student.name,
+                            roll: student.roll,
+                            email: student.email,
+                            obtainedMark: 0,
+
+                            attendance: 'Absence'
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+            }
+            else if (ques.question.category === 'viva') {
+                let filterData = [];
+                if (result.length > 0) {
+                    result.forEach(resultStudent => {
+                        data.forEach(student => {
+                            if (resultStudent.studentEmail === student.email) {
+                                filterData.push({
+                                    resultData: resultStudent,
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: resultStudent.obtainedMark,
+                                    status: resultStudent.answerData.answer[0].status,
+                                    fullMark: result[0]?.totalMark,
+                                    attendance: 'Present'
+                                })
+                            }
+                            else {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: 0,
+
+                                    attendance: 'Absence'
+                                })
+                            }
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+                else {
+                    data.forEach(student => {
+                        filterData.push({
+                            name: student.name,
+                            roll: student.roll,
+                            email: student.email,
+                            obtainedMark: 0,
+
+                            attendance: 'Absence'
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+            }
+            else if (ques.question.category === 'assignment') {
+                let filterData = [];
+                if (result.length > 0) {
+                    result.forEach(resultStudent => {
+                        data.forEach(student => {
+                            if (resultStudent.studentEmail === student.email) {
+                                filterData.push({
+                                    resultData: resultStudent,
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: resultStudent.obtainedMark,
+                                    status: resultStudent.status,
+                                    resultId: resultStudent.id,
+                                    fullMark: result[0]?.totalMark,
+                                    attendance: 'Present'
+                                })
+                            }
+                            else {
+                                filterData.push({
+                                    name: student.name,
+                                    roll: student.roll,
+                                    email: student.email,
+                                    obtainedMark: 0,
+
+                                    attendance: 'Absence'
+                                })
+                            }
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+                else {
+                    data.forEach(student => {
+                        filterData.push({
+                            name: student.name,
+                            roll: student.roll,
+                            email: student.email,
+                            obtainedMark: 0,
+
+                            attendance: 'Absence'
+                        })
+                    })
+                    setLoading(false)
+                    setResultSheet(filterData);
+                }
+            }
+
+        })
 
     }
     useEffect(() => {

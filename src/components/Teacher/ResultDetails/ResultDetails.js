@@ -6,7 +6,7 @@ import AddMarkModal from '../AddMarkModal/AddMarkModal';
 import TeacherHeader from '../TeacherHeader/TeacherHeader';
 import TeacherSidebar from '../TeacherSidebar/TeacherSidebar';
 // import UpdateQuestionDetails from '../UpdateQuestionDetails/UpdateQuestionDetails';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const ResultDetails = () => {
     const [isTeacher, setIsTeacher] = useState(false);
@@ -31,7 +31,7 @@ const ResultDetails = () => {
         setIsOpen(false);
     }
     useEffect(() => {
-        fetch(`http://localhost:5000/resultDetails/${id}`)
+        fetch(BASE_URL+`/resultDetails/${id}`)
             .then(res => res.json())
             .then(data => {
                 window.scrollTo(0, 0);
@@ -170,14 +170,14 @@ const ResultDetails = () => {
                                                 </div> : result?.category === 'assignment' ? <><div style={{ border: '3px solid gray', borderTop: 'none', backgroundColor:  result?.status === 'Not Checked' ? '#fff5f5' : '#dcffd2', textAlign: 'center', padding: '10px' }}>
                                                 { <div style={{  borderTop: 'none', textAlign: 'center', padding: '10px' }}>
                                                             {/* <h5 className="text-primary">Question Number: <span>{index + 1}</span></h5> */}
-                                                            {result?.answerData?.answer[0]?.category === "Link Submission" ? <><h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0].questionName}</span></h5>
+                                                            {result?.answerData?.answer[0]?.assignmentCategory === "Link Submission" ? <><h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0].assignmentDetails}</span></h5>
 
-                                                            <h5 className="text-success">Link: <a target="blank" href={result?.answerData?.answer[0].answer}>{result?.answerData?.answer[0].answer}</a></h5>
-                                                            <button onClick={() => openModal({ questionName: result?.answerData?.answer[0].questionName, questionNumber: result?.answerData?.answer[0].questionNumber, mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
+                                                            <h5 className="text-success">Link: <a target="blank" href={result?.answerData?.answer[0].givenAnswer}>{result?.answerData?.answer[0].givenAnswer}</a></h5>
+                                                            <button onClick={() => openModal({ questionName: result?.answerData?.answer[0].questionName, questionNumber: '1', mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
                                                             </> : <>
-                                                            <h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0]?.assignmentDetails}</span></h5>
+                                                            {/* <h5 className="text-warning">Assignment Details: <span>{result?.answerData?.answer[0]?.assignmentDetails}</span></h5> */}
 
-                                                            <h5 className="text-success">File: <a href={`http://localhost:5000/files/${result?.answerData?.answer[0].answer}`}>{result?.answerData?.answer[0].answer}</a></h5>
+                                                            <h5 className="text-success my-3"><a href={BASE_URL +`${result?.answerData?.answer[0].answer}`}>File Download Here</a></h5>
                                                             <button onClick={() => openModal({ questionName: '', questionNumber: '1', mark: result.totalMark,  obtainedMark: result?.obtainedMark })} className="btn btn-success" type="submit">Check</button>
                                                             </>}
                                                             
@@ -199,7 +199,7 @@ const ResultDetails = () => {
                                                             {/* <h5 className="text-success">Right Answer: <span>{data.rightAnswer}</span></h5> */}
                                                             <h5 className="text-danger">Given Answer: <span>{data.givenAnswer}</span></h5>
                                                             <h5 className="text-primary">Status: <span style={{ color: data.status === 'Not Checked' ? 'red' : 'green' }}>{data.status}</span></h5>
-                                                            <h5 style={{ color: '#f70d1a' }}>Obtained Mark: <span><span className={`${data.obtainedMark === 0 ? 'text-danger' : 'text-warning'} `}>{data.obtainedMark}</span>/<span className="text-success">{data.mark}</span></span></h5>
+                                                            <h5 style={{ color: '#f70d1a' }}>Obtained Mark: <span><span className={`${data.obtainedMark === undefined ? 'text-danger' : 'text-warning'} `}>{data.obtainedMark === undefined ? <>0</> : <>{data.obtainedMark}</>}</span>/<span className="text-success">{data.mark}</span></span></h5>
                                                             <button onClick={() => openModal({ questionName: data.questionName, questionNumber: data.questionNumber, mark: data.mark, index: index + 1, obtainedMark: data.obtainedMark })} className="btn btn-success" type="submit">Check</button>
 
                                                         </div>}

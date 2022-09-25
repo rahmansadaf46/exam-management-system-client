@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useForm } from "react-hook-form";
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const customStyles = {
     content: {
         top: '51%',
@@ -24,20 +24,63 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
         }
         else {
             if(result.category === 'assignment'){
-                result.obtainedMark = parseInt(mark);
-                result.status = "Checked";
-                fetch(`http://localhost:5000/updateResult/${result._id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(result)
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data) {
-                            setResult(result);
-                            closeModal();
-                        }
+                console.log(data)
+                if(result.answerData.answer[0].assignmentCategory === 'Link Submission'){
+                    result.obtainedMark = parseInt(mark);
+                    result.status = "Checked";
+                    result.answerData.answer[0].obtainedMark = parseInt(mark);
+                    result.answerData.answer[0].status = "Checked";
+                    // closeModal();
+                    let dataBody = {id:result.id, student: {id: result.studentId}, answer: result.answerData.answer, question: {id: result.questionId} }
+                    console.log(dataBody)
+                    fetch(BASE_URL+'/submitResult', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dataBody)
                     })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data) {
+                                setResult(result);
+                                closeModal();
+                            }
+                        })
+                }
+                else{
+                    result.obtainedMark = parseInt(mark);
+                    result.status = "Checked";
+                    result.answerData.answer[0].obtainedMark = parseInt(mark);
+                    result.answerData.answer[0].status = "Checked";
+                    // closeModal();
+                    let dataBody = { student: result.studentId,question: result.questionId, answer: result.answerData.answer[0].id,obtainedMark: parseInt(mark),status: "Checked" }
+                    console.log(dataBody)
+                    const formData = new FormData()
+                    formData.append('file', null)
+                    formData.append('resultId', result.id)
+                    formData.append('student', result.studentId)
+                    formData.append('question', result.questionId)
+                    formData.append('answer', result.answerData.answer[0].id)
+                    formData.append('obtainedMark', parseInt(mark))
+                    formData.append('status', "Checked")
+                    console.log(formData);
+                    fetch(BASE_URL + '/updateSubmittedFile', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data) {
+                                setResult(result);
+                                closeModal();
+                            }
+                        })
+        
+                        .catch(error => {
+                            console.error(error)
+                        })
+                
+                }
+               
             }
             else{
                 let answerData = result.answerData.answer;
@@ -51,13 +94,18 @@ const AddMarkModal = ({ modalIsOpen, closeModal, result,  answer, setResult }) =
                 if (allCheck.length === 0) {
                     result.status = "Checked";
                 }
-                let totalObtainMark = allAnswer.map(ans => ans.obtainedMark).reduce((a, b) => a + b, 0);
+                let totalObtainMark = allAnswer.map(ans => ans.obtainedMark).filter(data => data !== undefined).reduce((a, b) => a + b, 0);
                 result.answerData.answer = allAnswer;
                 result.obtainedMark = parseInt(totalObtainMark);
-                fetch(`http://localhost:5000/updateResult/${result._id}`, {
-                    method: 'PATCH',
+                // console.log(allAnswer.map(ans => ans.obtainedMark).filter(data => data !== undefined))
+                let dataBody = {id:result.id, student: {id: result.studentId}, answer: result.answerData.answer, question: {id: result.questionId} }
+                console.log(dataBody)
+                setResult(result);
+                closeModal();
+                fetch(BASE_URL+'/submitResult', {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(result)
+                    body: JSON.stringify(dataBody)
                 })
                     .then(res => res.json())
                     .then(data => {

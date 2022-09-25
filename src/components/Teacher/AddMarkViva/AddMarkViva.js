@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { useForm } from "react-hook-form";
 // import { useHistory } from 'react-router-dom';
-
+const BASE_URL = process.env.REACT_APP_API_URL;
 const customStyles = {
     content: {
         top: '51%',
@@ -14,7 +14,7 @@ const customStyles = {
     }
 };
 
-const AddMarkViva = ({ modalIsOpen, closeModal, resultSheet,  modalData, setResultSheet }) => {
+const AddMarkViva = ({ modalIsOpen, closeModal, resultSheet, modalData, setResultSheet }) => {
     const { register, handleSubmit, errors } = useForm();
     // let history = useHistory();
     // const [allSession, setAllSession] = useState('');
@@ -41,33 +41,48 @@ const AddMarkViva = ({ modalIsOpen, closeModal, resultSheet,  modalData, setResu
         }
         else {
             let result = modalData.resultData;
-            
+
             result.obtainedMark = parseInt(mark);
             result.status = 'Checked';
             console.log(result, resultSheet)
-            let filterData = resultSheet.filter(data=> data.email === modalData.email);
-            let filterOtherData = resultSheet.filter(data=> data.email !== modalData.email);
+            let filterData = resultSheet.filter(data => data.email === modalData.email);
+            let filterOtherData = resultSheet.filter(data => data.email !== modalData.email);
             console.log(filterData)
             filterData[0].obtainedMark = parseInt(mark);
             filterData[0].status = 'Checked';
-           
-            fetch(`http://localhost:5000/updateResult/${result._id}`, {
-                method: 'PATCH',
+            result.answerData.answer[0].obtainedMark = parseInt(mark);
+            result.answerData.answer[0].status = 'Checked';
+            let dataBody = { id: result.id, student: { id: result.studentId }, answer: result.answerData.answer, question: { id: result.questionId } }
+           console.log(dataBody)
+            fetch(BASE_URL + '/submitResult', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(result)
+                body: JSON.stringify(dataBody)
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
                         setResultSheet([...filterData, ...filterOtherData])
                         closeModal();
-                        // closeModal();
-                        // localStorage.removeItem("student");
-                        // window.location.reload();
-                        // history.goBack()
-                        // alert("Updated Successfully");
                     }
                 })
+            // fetch(`http://localhost:5000/updateResult/${result.id}`, {
+            //     method: 'PATCH',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(result)
+            // })
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         if (data) {
+            //             setResultSheet([...filterData, ...filterOtherData])
+            //             closeModal();
+            //             // closeModal();
+            //             // localStorage.removeItem("student");
+            //             // window.location.reload();
+            //             // history.goBack()
+            //             // alert("Updated Successfully");
+            //         }
+            //     })
 
 
             // let answerData = result.answerData.answer;
@@ -102,8 +117,8 @@ const AddMarkViva = ({ modalIsOpen, closeModal, resultSheet,  modalData, setResu
             //             // alert("Updated Successfully");
             //         }
             //     })
-           
-            
+
+
         }
         //   console.log( Object.values(data)[0])
 

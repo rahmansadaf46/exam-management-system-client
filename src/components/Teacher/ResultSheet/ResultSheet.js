@@ -54,9 +54,9 @@ const ResultSheet = () => {
                 <div>
                     <Link
                         className="btn btn-sm btn-info m-1"
-                        to={`/resultPage/${data._id}`}
+                        to={`/resultPage/${data.id}`}
                         onClick={() => {
-                            console.log(data._id);
+                            console.log(data.id);
                         }}
                     >
                         See Details
